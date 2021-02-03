@@ -22,8 +22,12 @@ namespace Bolt.Samples.Photon.Lobby
 
         private void Update()
         {
-            if (BoltNetwork.IsRunning && BoltMatchmaking.CurrentMetadata.ContainsKey("region"))
+            if (BoltNetwork.IsRunning)
             {
+                if (BoltMatchmaking.CurrentMetadata == null)
+                    return;
+                if (BoltMatchmaking.CurrentMetadata.ContainsKey("region"))
+                    return;
                 var region = BoltMatchmaking.CurrentMetadata["region"];
 
                 if (region != null)
