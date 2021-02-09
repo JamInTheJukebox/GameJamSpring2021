@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bolt_PlayerController : MonoBehaviour
+public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 {
     public float speed = 3f;
     // Update is called once per frame
@@ -24,13 +24,16 @@ public class Bolt_PlayerController : MonoBehaviour
     [Header("Debug Tools")]
     public bool DrawGroundCheck;
 
-    private void Awake()
+    public override void Attached() // start.
     {
         char_Controller = GetComponent<CharacterController>();
+        state.SetTransforms(state.PlayerTransform, transform);
     }
 
-    void Update()
+    // void update on owner's computer.
+    public override void SimulateOwner()
     {
+        if (!entity.IsOwner) { return; }
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
     }
@@ -39,12 +42,12 @@ public class Bolt_PlayerController : MonoBehaviour
     {
         isGrounded = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, groundMask);
         if (isGrounded) { Current_Y_Velocity.y = -2f; }
-        Current_Y_Velocity.y += Gravity * Time.deltaTime;
+        Current_Y_Velocity.y += Gravity * BoltNetwork.FrameDeltaTime;
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
         }
-        char_Controller.Move(Current_Y_Velocity * Time.deltaTime);
+        char_Controller.Move(Current_Y_Velocity * BoltNetwork.FrameDeltaTime);
         
     }
 
@@ -60,7 +63,7 @@ public class Bolt_PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, angle, 0);
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             moveDir = moveDir.normalized;
-            moveDir *= speed * Time.deltaTime;
+            moveDir *= speed * BoltNetwork.FrameDeltaTime;
             char_Controller.Move(moveDir);
         }
     }

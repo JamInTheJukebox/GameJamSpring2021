@@ -13,7 +13,8 @@ public class Menu : GlobalEventListener
 
     public override void BoltStartDone()
     {
-        BoltMatchmaking.CreateSession(sessionID: "test", sceneToLoad: "Game");       // name the session ID.
+        if(BoltNetwork.IsServer)
+            BoltMatchmaking.CreateSession(sessionID: "test", sceneToLoad: "Game");       // name the session ID.
     }
 
     public void StartClient()

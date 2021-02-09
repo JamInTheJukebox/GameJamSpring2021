@@ -17,10 +17,12 @@ public class MouseAxis
 
 public class AnimationTags
 {
+    public const string ATTACK = "Attack";
 
 }
 
 public class Tags
 {
     public const string PLAYER_TAG = "Player";
+    public const string ATTACK_TAG = "AttackHitbox";
 }
