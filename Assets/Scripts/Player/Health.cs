@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 {
+    // CONTAINS THE HEALTH AND COLLISION MANAGER
     private float m_PlayerHealth = 3;
     public float PlayerHealth
     {
@@ -56,6 +57,15 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
                 state.Health -= 1;
                 print("GOT HIT!!");
             }
+        }
+
+        else if(other.tag == Tags.WEAPON_TAG)
+        {
+            print("Got ITEM!!");
+            var new_Item = ItemPickedUpEvent.Create();
+            new_Item.PlayerEntity = GetComponent<BoltEntity>();
+            new_Item.ItemEntity = other.GetComponent<BoltEntity>();
+            new_Item.Send();
         }
 
     }

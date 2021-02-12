@@ -2,15 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponAttack : Bolt.EntityBehaviour<IMasterPlayerState>
+public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
 {
     [SerializeField] GameObject hitJoint;  // the location where the collider is expected to spawn.
     [SerializeField] Animator WeaponAnimator;
     bool ReadyToAttackAgain = true;
+    bool Collected;
 
     public override void Attached()
     {
+        transform.localScale = Vector3.one * 10;
+        /*WeaponAnimator = GetComponent<Animator>();
+        WeaponAnimator.enabled = true;
+        hitJoint = transform.GetChild(0).gameObject;
+        */
         state.OnAttack = AttackPlayer;
+        state.SetAnimator(WeaponAnimator);
+        //state.SetTransforms(state.WeaponPos, transform);
+        //         state.SetTransforms(state.PlayerTransform, transform);
     }
     public override void SimulateOwner()
     {
@@ -39,7 +48,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IMasterPlayerState>
     private void AttackPlayer()
     {
         ReadyToAttackAgain = false;
-        WeaponAnimator.SetTrigger(AnimationTags.ATTACK);   
+        state.Animator.SetTrigger(AnimationTags.ATTACK);   
         //mess with animator states here.
         // stop the player from moving if they attack.
     }

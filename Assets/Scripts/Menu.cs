@@ -6,6 +6,11 @@ using UdpKit;
 
 public class Menu : GlobalEventListener 
 {
+    public void OnSetUserNameValueChanged(string NewName)
+    {
+        PlayerPrefs.SetString("username", NewName);
+    }
+
     public void StartServer()
     {
         BoltLauncher.StartServer(); // start the server;

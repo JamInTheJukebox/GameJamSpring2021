@@ -47,7 +47,7 @@ MonoBehaviour:
   debugClientCount: 1
   debugStartPort: 50538
   debugBuildMode: 1
-  debugStartMapName: SimpleMoveAndShoot_Game
+  debugStartMapName: Game
   debugPlayAsServer: 1
   showDebugInfo: 1
   overrideTimeScale: 1

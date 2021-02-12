@@ -25,4 +25,6 @@ public class Tags
 {
     public const string PLAYER_TAG = "Player";
     public const string ATTACK_TAG = "AttackHitbox";
+    public const string WEAPON_TAG = "Weapon";
+    public const string GROUND_TAG = "Ground";
 }
