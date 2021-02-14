@@ -50,7 +50,6 @@ public class Menu : GlobalEventListener
             joinButtonClone.GetComponent<ServerBoxController>().SetServerName(PhotonSession.HostName);
             joinButtonClone.GetComponent<ServerBoxController>().SetServerCount(PhotonSession.ConnectionsCurrent);
             JoinServerBoxes.Add(joinButtonClone);
-
             /*
             if(PhotonSession.Source == UdpSessionSource.Photon)
             {

@@ -6,6 +6,7 @@ public class EventManager : Bolt.GlobalEventListener
     {
         if (BoltNetwork.IsServer)
         {
+            BoltNetwork.Instantiate(BoltPrefabs.GameManager);
             var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, new Vector3(0, 0.2f, 0), Quaternion.Euler(5.293f, -92.402f, 65.55f));
         }
     }

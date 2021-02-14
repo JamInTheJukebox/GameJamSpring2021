@@ -1,9 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Bolt;
+using Bolt.Matchmaking;
+using UdpKit;
+using System.Linq;
+
 [BoltGlobalBehaviour(BoltNetworkModes.Server)]
 public class GlobalEventManager : Bolt.GlobalEventListener
 {
+    static int MAX_PLAYERS = 10;
+
     List<string> PlayerMaterials = new List<string>();
 
     public override void OnEvent(GetPlayerPersonalizationEvent evnt)        // HANDLE ALL COSMETICS HERE!!
@@ -35,6 +42,31 @@ public class GlobalEventManager : Bolt.GlobalEventListener
         }
         //evnt.PlayerEntity.transform.Find("PlayerGFX").GetComponent<MeshRenderer>().material = Player_Colors.GetColor(evnt.PlayerColor);
     }
+
+    public override void ConnectRequest(UdpEndPoint endpoint, IProtocolToken token)         // reject the player if there are more than 10 players and if the game has started.
+    {
+        var connections = BoltNetwork.Connections.ToList();
+        // https://doc.photonengine.com/en-us/bolt/current/connection-and-authentication/accept-refuse-connection
+        if (connections.Count > MAX_PLAYERS | GameManager.instance.Game_Started)     // 10 players max; // reject if the game has started
+        {
+            BoltNetwork.Refuse(endpoint);
+            /*
+            BoltMatchmaking.UpdateSession(new PhotonRoomProperties()
+            {
+                IsOpen = false,
+                IsVisible = false,
+            });*/
+            return;
+        }
+
+        BoltNetwork.Accept(endpoint);
+    }
+
+    public override void SessionConnected(UdpSession session, IProtocolToken token)
+    {
+        BoltLog.Warn("WHAT");
+        Debug.LogWarning("VOILLA!");
+    }
 }
 [BoltGlobalBehaviour(BoltNetworkModes.Client)]
 public class GlobalEventManager_Everyone : Bolt.GlobalEventListener
@@ -49,6 +81,7 @@ public class GlobalEventManager_Everyone : Bolt.GlobalEventListener
         //evnt.PlayerEntity.transform.Find("PlayerGFX").GetComponent<MeshRenderer>().material = Player_Colors.GetColor(evnt.PlayerColor);
     }
 }
+
 public static class Color_Tags
 {
     public const string Directory = "Materials/PlayerColors/";
