@@ -7,6 +7,9 @@ public class ServerBoxController : MonoBehaviour
     [SerializeField] TextMeshProUGUI ServerNameText;
     [SerializeField] TextMeshProUGUI ServerCountText;
 
+    private Color ServerFull = Color.red;           // full
+    private Color CoolServer = Color.white;         // not full
+
     private string m_serverName;
     public string serverName
     {
@@ -15,6 +18,7 @@ public class ServerBoxController : MonoBehaviour
         }
         set
         {
+            m_serverName = value;
             ServerNameText.text = m_serverName;
         }
     }
@@ -28,9 +32,12 @@ public class ServerBoxController : MonoBehaviour
         }
         set
         {
+            m_serverCount = value;
             ServerCountText.text = m_serverCount;
+            ServerCountText.color = (ServerCountText.text == "10/10") ? ServerFull : CoolServer;
         }
     }
+
 
     public void SetServerName(string server_Name)
     {
