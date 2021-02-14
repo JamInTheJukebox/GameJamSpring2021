@@ -32,6 +32,9 @@ public class PlayerJoined : Bolt.EntityBehaviour<IMasterPlayerState>
             //var Players = GetComponent<>
             EntityCamera.gameObject.SetActive(true);
             CinematicCamera.SetActive(true);
+            var evntPly = GetPlayerPersonalizationEvent.Create();
+            evntPly.PlayerEntity = entity;
+            evntPly.Send();
         }
     }
 }

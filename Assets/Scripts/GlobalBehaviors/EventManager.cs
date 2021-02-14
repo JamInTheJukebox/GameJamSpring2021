@@ -29,11 +29,6 @@ public class EventManager : Bolt.GlobalEventListener
         Debug.LogWarning(evnt.Message);
     }
 
-    public override void OnEvent(SetPlayerPersonalizationEvent evnt)
-    {
-        
-    }
-
     public override void OnEvent(GetWeaponEvent evnt)
     {
         print(evnt.PlayerEntity.gameObject.name);

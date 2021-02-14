@@ -1222,6 +1222,7 @@ MonoBehaviour:
   NameTextbox: {fileID: 3421600286972352683}
   Target: {fileID: 0}
   PlayerIcon: {fileID: 7973536399031596770}
+  PlayerGraphics: {fileID: 1826604110221425827}
 --- !u!143 &1826604111500750344
 CharacterController:
   m_ObjectHideFlags: 0
