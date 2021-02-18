@@ -9,6 +9,11 @@ using System.Text.RegularExpressions;
 
 public class Menu : GlobalEventListener 
 {
+    private void Awake()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
 
     [SerializeField] GameObject Server_Box_Prefab;
     [SerializeField] Transform Server_List_Content;

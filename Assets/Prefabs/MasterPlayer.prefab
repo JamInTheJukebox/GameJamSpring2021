@@ -1422,6 +1422,7 @@ MonoBehaviour:
   RotationSpeed: 1
   Target: {fileID: 0}
   Player: {fileID: 0}
+  CameraSetting: {fileID: 1826604111563891293}
   MinAngleY: -20
   MaxAngleY: 60
 --- !u!114 &1826604111563891295

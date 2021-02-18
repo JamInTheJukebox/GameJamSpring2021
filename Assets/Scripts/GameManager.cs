@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Bolt;
 using UnityEngine.UI;
-
+using Bolt.Matchmaking;
+using UdpKit;
 public class GameManager : Bolt.EntityBehaviour<IGameManager> 
 { 
     public enum e_GamePhases
@@ -46,44 +47,19 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     public static GameManager instance;
     [HideInInspector] public bool Game_Started;
 
-    // temporary Variables
-    Button StartGameButton;
-
     public override void Attached()
     {
         instance = this;
-        if (BoltNetwork.IsServer)
-        {
-            transform.GetChild(0).gameObject.SetActive(true);
-            StartGameButton = GetComponentInChildren<Button>();
-        }
     }
 
-    public override void SimulateOwner()
-    {
-        if (Input.GetKeyDown(KeyCode.J))
-        {
-            FadeToColor(StartGameButton.colors.pressedColor);
-            StartGameButton.onClick.Invoke();
-        }
-        else if (Input.GetKeyUp(KeyCode.J))
-        {
-            FadeToColor(StartGameButton.colors.normalColor);
-        }
-    }
 
-    void FadeToColor(Color color)
-    { 
-       
-        Graphic graphic = GetComponentInChildren<Graphic>();
-        if(graphic == null) { return; }
-        graphic.CrossFadeColor(color, StartGameButton.colors.fadeDuration, true, true);
-
-    }
     public void StartCountDown()
     {
         // start the lobby countdown here.
         Game_Started = true;
+        var evnt = StartLobbyCounter.Create();
+        evnt.Message = "Starting the game...";
+        evnt.Send();
     }
 
     public void CancelCountdown()

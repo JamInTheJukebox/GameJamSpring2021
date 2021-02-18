@@ -11,6 +11,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     public GameObject PlayerIcon;
     public MeshRenderer PlayerGraphics;
 
+    Cinemachine.CinemachineFreeLook PlayerCamera;
     /// <summary>
     /// SYSTEM ERROR:
     /// When playing the game on the same system, unity will update the name if someone else has changed it. So if you try to join a game and someone else changes

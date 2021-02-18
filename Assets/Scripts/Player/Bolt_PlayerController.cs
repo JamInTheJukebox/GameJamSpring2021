@@ -21,6 +21,8 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     [SerializeField] LayerMask groundMask = 8;
     bool isGrounded;
 
+    Vector3 SpawnPosition = new Vector3(0,10,0);
+
     [Header("Debug Tools")]
     public bool DrawGroundCheck;
 
@@ -33,6 +35,8 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     // void update on owner's computer.
     public override void SimulateOwner()
     {
+        if (GameUI.UserInterface == null) { return; }       // when clients join the game, userinterface is sometimes not observed.
+        if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
         if (!entity.IsOwner) { return; }
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
@@ -74,5 +78,10 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(GroundCheck.position, GroundCheckRadius);
         }
+    }
+
+    public void MoveToGameRoom()
+    {
+        transform.position = transform.position + SpawnPosition;
     }
 }

@@ -35,4 +35,27 @@ public class EventManager : Bolt.GlobalEventListener
         print(evnt.PlayerEntity.gameObject.name);
         evnt.Weapon.transform.SetParent(evnt.PlayerEntity.transform.GetChild(1).Find("WeaponSlot"));
     }
+
+    public override void OnEvent(StartLobbyCounter evnt)
+    {
+        BoltLog.Info(evnt.Message);
+        var countdownObj = FindObjectOfType<Countdown>();
+        countdownObj.GetComponent<CanvasGroup>().alpha = 1;
+        countdownObj.StartingGame();
+    }
+
+    public override void OnEvent(StartGame evnt)            //teleport player to hub.
+    {
+        BoltLog.Info(evnt.Message);
+        var player = FindObjectOfType<ThirdPersonCamera>().GetComponentInParent<Bolt_PlayerController>();
+        player.MoveToGameRoom();
+    }
+
+    public override void Disconnected(BoltConnection connection)        // either the host or a player has left the game. If The host left, disconnect everyone
+    {
+        if(!BoltNetwork.IsServer)
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);      // go to main menu;
+    }
+
+
 }

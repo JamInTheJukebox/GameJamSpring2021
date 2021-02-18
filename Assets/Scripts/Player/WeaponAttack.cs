@@ -23,6 +23,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
     }
     public override void SimulateOwner()
     {
+        if (GameUI.UserInterface.Paused) { return; }                            // do not attack if paused.
         if (Input.GetMouseButtonDown(1) && ReadyToAttackAgain && entity.IsOwner)
         {
             state.Attack();
