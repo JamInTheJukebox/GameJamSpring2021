@@ -9,11 +9,10 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
 { 
     public enum e_GamePhases
     {
-        Lobby = 0,
-        StandBy = 1,
-        Wanring = 2,
-        Danger = 3,
-        End = 4
+        StandBy = 0,
+        Wanring = 1,
+        Danger = 2,
+        End = 3
     }
 
     private e_GamePhases m_GameState = 0;
@@ -32,7 +31,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     bool GameHasStarted;
     [Header("Lobby Phase")]
     [SerializeField][Range(2,10)] int MaxPlayersToStart = 2;    // max amount of players for the host to start the game.
-    [SerializeField] float Time_To_Start_Game = 5f;             // when the host presses start, this amount of time will pass to start the game
+    [SerializeField] int Time_To_Start_Game = 5;             // when the host presses start, this amount of time will pass to start the game
     [Header("Stand By Phase")]
     [SerializeField] float StandByPhaseTime = 10f;                    // time that passes while the players are running around in the standbyPhase.
     [Header("Warning Phase")]
@@ -49,11 +48,12 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
 
     public override void Attached()
     {
+        GetComponentInChildren<Countdown>().StartCounterInteger = Time_To_Start_Game;
         instance = this;
     }
 
 
-    public void StartCountDown()
+    public void StartCountDown()        // triggered by pressing J
     {
         // start the lobby countdown here.
         Game_Started = true;
@@ -61,6 +61,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
         evnt.Message = "Starting the game...";
         evnt.Send();
     }
+
 
     public void CancelCountdown()
     {

@@ -39,13 +39,6 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        // Manage Collisions Here;
-
-
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         // handle any damage here!

@@ -19,8 +19,10 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     [SerializeField] Transform GroundCheck;
     [SerializeField] float GroundCheckRadius = 5;
     [SerializeField] LayerMask groundMask = 8;
+    [Tooltip("Layer of platform that is falling.")]
+    [SerializeField] LayerMask FallingMask = 10;
     bool isGrounded;
-
+    bool isParented = false;        // called if you are on a falling platform
     Vector3 SpawnPosition = new Vector3(0,10,0);
 
     [Header("Debug Tools")]
@@ -45,14 +47,31 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     private void HandleYAxis()
     {
         isGrounded = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, groundMask);
+        /*
+        //isParented = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, FallingMask);
+        if (isParented)
+        {
+            HandleFallingPlatforms();
+        }
+        //else { transform.parent = null; }
+        */
         if (isGrounded) { Current_Y_Velocity.y = -2f; }
         Current_Y_Velocity.y += Gravity * BoltNetwork.FrameDeltaTime;
+        //if (isParented) { Current_Y_Velocity.y = 0; }
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
             Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
         }
+        Current_Y_Velocity.y = Mathf.Clamp(Current_Y_Velocity.y, -20f, 20f);
         char_Controller.Move(Current_Y_Velocity * BoltNetwork.FrameDeltaTime);
         
+    }
+
+    private void HandleFallingPlatforms()// if we are on a falling platform, we want the player to be able to jump
+    {
+        var Platform = Physics.OverlapSphere(GroundCheck.position, GroundCheckRadius, FallingMask);
+        if(Platform.Length == 0) { return; }
+        //transform.SetParent(Platform[0].transform);
     }
 
     void MovePlayer()
