@@ -2,10 +2,14 @@
 
 public class EventManager : Bolt.GlobalEventListener
 {
+    public static EventManager Instance;
+    [HideInInspector] public int Connections = 1;
+
     private void Awake()
     {
         if (BoltNetwork.IsServer)
         {
+            Instance = this;
             BoltNetwork.Instantiate(BoltPrefabs.GameManager);
             var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, new Vector3(0, 0.2f, 0), Quaternion.Euler(5.293f, -92.402f, 65.55f));
         }
@@ -24,7 +28,14 @@ public class EventManager : Bolt.GlobalEventListener
         }
     }
 
-   
+    public override void OnEvent(ChangeGameState evnt)
+    {
+        if(evnt.NewState == 3)
+        {
+            TileManager.instance.SetTilesSafe();
+        }
+    }
+
     public override void OnEvent(PlayerJoinedEvent evnt)
     {
         Debug.LogWarning(evnt.Message);
@@ -51,8 +62,15 @@ public class EventManager : Bolt.GlobalEventListener
         player.MoveToGameRoom();
     }
 
+    public override void Connected(BoltConnection connection)
+    {
+        if (BoltNetwork.IsServer)
+            Connections++;
+    }
     public override void Disconnected(BoltConnection connection)        // either the host or a player has left the game. If The host left, disconnect everyone
     {
+        if (BoltNetwork.IsServer)
+            Connections--;
         if(!BoltNetwork.IsServer)
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);      // go to main menu;
     }

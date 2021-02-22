@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
 {
+    /// <summary>
+    /// This script manages the warning and danger phase for each tile.
+    /// </summary>
+    /// 
     public static TileManager instance;
     public List<GameObject> TileLayers = new List<GameObject>();
     private List<List<Tile>> Tiles = new List<List<Tile>>();
     private List<Tile> AllTiles = new List<Tile>();
     private int NumberOfTilesInLastIndex;
 
-    public void Awake()
+    public delegate void TileDelegate();
+    private TileDelegate SafeTileDelegate;
+    private TileDelegate DangerTileDelegate;
+    
+    public void Awake()     // each player needs this.
     {
         foreach(var TileGroup in TileLayers)
         {
@@ -23,28 +31,18 @@ public class TileManager : MonoBehaviour
             }
             Tiles.Add(newTiles);
         }
-        CallDanger();
-        // StartCoroutine(Tester());
         instance = this;
     }
 
-    private void CallDanger()
+    public void SetTilesSafe()
     {
-        string newList = SelectIndices();
-        print(newList);
-        Tester2(newList);
-        Invoke("CancelDanger", 3f);
+        if(SafeTileDelegate == null) { return; }        // no tiles to set safe
+        SafeTileDelegate.Invoke();
+        SafeTileDelegate = null;
     }
 
-    private void CancelDanger()
-    {
-        for(int i = 0; i < AllTiles.Count; i++)
-        {
-            AllTiles[i].SetSafe();
-        }
-        Invoke("Tester", 2f);
-    }
-    public string SelectIndices()
+
+    public string SelectIndicesToMarkSafe()               // selects indices fo keep Safe.
     {
 
         int NumberOfIndicesToReturn = AllTiles.Count / 7 + 1;// add one to ensure this number is never 0.
@@ -64,12 +62,14 @@ public class TileManager : MonoBehaviour
             {
                 newNum = Random.Range(0, AllTiles.Count);
             }
+
             ChosenIndices.Add(newNum);
         }
         IndicesToSearch = string.Join(":", ChosenIndices);          // put a delimiter of ":" in between each number
         return IndicesToSearch;
     }
-    private void Tester2(string SafePieces = "1:2:3:4:5:6:7:8:9:10")
+
+    public void WarnPlayers(string SafePieces)
     {
         string[] SafeChar = SafePieces.Split(':');
         List<int> SafeIndices = new List<int>();
@@ -84,30 +84,38 @@ public class TileManager : MonoBehaviour
             if (SafeIndices.Contains(i)) { continue; }      // if a safe index is detected, move to the next index;
 
             AllTiles[i].SetDanger();        // otherwise, alert the player that something bad will happen.
+            SafeTileDelegate += AllTiles[i].SetSafe;
+            DangerTileDelegate += AllTiles[i].SpawnDanger;
         }
     }
-    private void Tester()        //
-    {
 
-        if(Tiles.Count == 1) { return; }
+    public int[] DeleteTileSelection()        //
+    {
+        int[] TileSelection = new int[2] { 0, 0 };
+        if(Tiles.Count == 1) { return TileSelection; }
         if(Tiles.Count == 5)        // only possible with enough players.
         {
             int TargetIndex = Random.Range(Tiles.Count-2, Tiles.Count);           // destroy any tile from the 3rd or 4th index.
-            Debug.LogWarning(TargetIndex);
             int RandomIndex = Random.Range(0, Tiles[TargetIndex].Count);
-            DeleteTile(TargetIndex, RandomIndex);
+            TileSelection[0] = TargetIndex; TileSelection[1] = RandomIndex; return TileSelection;
         }
         else
         {
             int TargetIndex = Random.Range(1, Tiles.Count);         // never discard index 0.
             int RandomIndex = Random.Range(0, Tiles[TargetIndex].Count);
-            DeleteTile(TargetIndex, RandomIndex);
+            TileSelection[0] = TargetIndex; TileSelection[1] = RandomIndex; return TileSelection;
         }
 
-        Invoke("CallDanger", 2f);
     }
 
-    private void DeleteTile(int LayerIndex, int PlatformIndex)
+    public void SpawnDanger()
+    {
+        if(DangerTileDelegate != null)
+            DangerTileDelegate.Invoke();
+        DangerTileDelegate = null;
+    }
+
+    public void DeleteTile(int LayerIndex, int PlatformIndex)
     {
         Tiles[LayerIndex][PlatformIndex].DiscardTile();
         AllTiles.Remove(Tiles[LayerIndex][PlatformIndex]);

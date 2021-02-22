@@ -1309,10 +1309,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxPlayersToStart: 2
   Time_To_Start_Game: 5
-  StandByPhaseTime: 0
-  WarningPhaseTime: 0
-  DangerTime: 0
-  DangerSpeed: 0
+  StandByPhaseTime: 10
+  WarningPhaseTime: 4
+  DangerTime: 2
+  DangerSpeed: 2
+  FallSpeed: 3
+  FallTime: 2
+  AmountofTilesToDiscard: 1
   LobbyRoom: {fileID: 0}
   Game_Started: 0
 --- !u!114 &3494651620193103478
@@ -1776,7 +1779,6 @@ GameObject:
   - component: {fileID: 4337045189705398544}
   - component: {fileID: 220491524784089521}
   - component: {fileID: 5840961278783674407}
-  - component: {fileID: 7347360221048519591}
   - component: {fileID: 1936760536472794444}
   - component: {fileID: 6397012413874930996}
   m_Layer: 0
@@ -1859,18 +1861,6 @@ MonoBehaviour:
   CountdownAnimation: {fileID: 1936760536472794444}
   CounterText: {fileID: 2718134987215942855}
   StartCounterInteger: 5
---- !u!114 &7347360221048519591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5445118926629067275}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf1f84bd2ffb2f847807602613040563, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!95 &1936760536472794444
 Animator:
   serializedVersion: 3

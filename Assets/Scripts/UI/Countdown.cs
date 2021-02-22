@@ -37,6 +37,7 @@ public class Countdown : Bolt.EntityBehaviour<GameManager>
             StartCoroutine(ShakeText());
             if (BoltNetwork.IsServer)
             {
+                GameManager.instance.Game_State = GameManager.e_GamePhases.StandBy;
                 Invoke("DisableCountdown", 5f);
                 var evnt = StartGame.Create();
                 evnt.Message = "Game Has Started!!!";

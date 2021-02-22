@@ -13,6 +13,9 @@ public class Tile : MonoBehaviour
     [SerializeField] float Drag = 0.3f;
     bool Is_Falling;
     float TimeBeforeItFallsFullSpeed = 2f;
+    [SerializeField] GameObject DangerVFX;
+    [SerializeField] Transform DangerLoc;
+
     public void DiscardTile()
     {
         TheTile.material = Danger_Tile_Material;
@@ -47,7 +50,13 @@ public class Tile : MonoBehaviour
         TheTile.material = Danger_Tile_Material;
     }
 
-    public void SetSafe()
+    public void SpawnDanger()
+    {
+        GameObject Danger_VFX = Instantiate(DangerVFX, DangerLoc.position, Quaternion.identity);
+        Destroy(Danger_VFX,5f);
+    }
+
+    public void SetSafe()           // add this to the delegate in the tile_manager.
     {
         TheTile.material = Safe_Tile_Material;
     }

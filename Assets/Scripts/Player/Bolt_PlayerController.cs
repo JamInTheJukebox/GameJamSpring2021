@@ -38,7 +38,6 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     public override void SimulateOwner()
     {
         if (GameUI.UserInterface == null) { return; }       // when clients join the game, userinterface is sometimes not observed.
-        if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
         if (!entity.IsOwner) { return; }
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
@@ -60,6 +59,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         //if (isParented) { Current_Y_Velocity.y = 0; }
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
+            if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
             Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
         }
         Current_Y_Velocity.y = Mathf.Clamp(Current_Y_Velocity.y, -20f, 20f);
@@ -76,6 +76,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 
     void MovePlayer()
     {
+        if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
         float hor = Input.GetAxisRaw(Axis.HORIZONTAL);
         float vert = Input.GetAxisRaw(Axis.VERTICAL);
         Vector3 playerMovement = new Vector3(hor, 0f, vert).normalized;
