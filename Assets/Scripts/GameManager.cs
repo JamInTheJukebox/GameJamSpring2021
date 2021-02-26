@@ -12,7 +12,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     {
         Lobby = 0,
         StandBy = 1,
-        Wanring = 2,
+        Warning = 2,
         Danger = 3,
         End = 4
     }
@@ -81,7 +81,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     public override void Attached()
     {
         state.AddCallback("SafeIndices", SafeIndiceCallback);            // we changed a state. When the state is changed, the server will call the callback on everyone's computer.
-        state.AddCallback("LayerOfIndice", LayerOfIndiceCallBack);
+        state.AddCallback("FallingIndice", LayerOfIndiceCallBack);
         GetComponentInChildren<Countdown>().StartCounterInteger = Time_To_Start_Game;
         instance = this;
     }
@@ -89,12 +89,23 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     #region Callbacks
     private void SafeIndiceCallback()           // phase 2
     {
+        if (state.SafeIndices == "") { return; }
+
         TileManager.instance.WarnPlayers(state.SafeIndices);
+        if (BoltNetwork.IsServer)
+        {
+            state.SafeIndices = "";
+        }
     }
 
     private void LayerOfIndiceCallBack()        // phase 4
     {
-        TileManager.instance.DeleteTile(state.LayerOfIndice, state.FallingIndice);          // delete the tile.
+        if(state.FallingIndice == "") { return; }
+        TileManager.instance.DeleteTile(state.FallingIndice);          // delete the tile.
+        if (BoltNetwork.IsServer)
+        {
+            state.FallingIndice = "";
+        }
     }
 
     #endregion
@@ -163,11 +174,10 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
             }
             else if((int) Game_State == 4)
             {
-                int[] PlatformToDestroy = TileManager.instance.DeleteTileSelection();
-                if (PlatformToDestroy[0] != 0 && PlatformToDestroy[1] != 0)     // center platform
+                string PlatformsToDestroy = TileManager.instance.DeleteTileSelection();
+                if (PlatformsToDestroy != "")     // center platform
                 {
-                    state.FallingIndice = PlatformToDestroy[1];
-                    state.LayerOfIndice = PlatformToDestroy[0];                 // initiate callback
+                    state.FallingIndice = PlatformsToDestroy;
                 }
             }
             Game_State = (Game_State == e_GamePhases.End) ? (e_GamePhases.StandBy) : (Game_State + 1);      // if you are at the last phase, move to phase 1, otherwise, keep going up by one.
