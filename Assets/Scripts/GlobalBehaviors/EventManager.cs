@@ -30,9 +30,21 @@ public class EventManager : Bolt.GlobalEventListener
 
     public override void OnEvent(ChangeGameState evnt)
     {
-        if(evnt.NewState == 3)
+        if(evnt.NewState == 1)
+        {
+            TileManager.instance.WarnPlayers(evnt.SafeIndices);
+        }
+        if (evnt.NewState == 2)
+        {
+            TileManager.instance.SpawnDanger();
+        }
+        if (evnt.NewState == 3)
         {
             TileManager.instance.SetTilesSafe();
+        }
+        if(evnt.NewState == 4)
+        {
+            TileManager.instance.DeleteTile(evnt.FallingIndices);          // delete the tile.
         }
     }
 

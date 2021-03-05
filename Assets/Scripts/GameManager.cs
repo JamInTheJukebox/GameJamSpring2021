@@ -80,35 +80,9 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     #region Built-In Methods
     public override void Attached()
     {
-        state.AddCallback("SafeIndices", SafeIndiceCallback);            // we changed a state. When the state is changed, the server will call the callback on everyone's computer.
-        state.AddCallback("FallingIndice", LayerOfIndiceCallBack);
         GetComponentInChildren<Countdown>().StartCounterInteger = Time_To_Start_Game;
         instance = this;
     }
-
-    #region Callbacks
-    private void SafeIndiceCallback()           // phase 2
-    {
-        if (state.SafeIndices == "") { return; }
-
-        TileManager.instance.WarnPlayers(state.SafeIndices);
-        if (BoltNetwork.IsServer)
-        {
-            state.SafeIndices = "";
-        }
-    }
-
-    private void LayerOfIndiceCallBack()        // phase 4
-    {
-        if(state.FallingIndice == "") { return; }
-        TileManager.instance.DeleteTile(state.FallingIndice);          // delete the tile.
-        if (BoltNetwork.IsServer)
-        {
-            state.FallingIndice = "";
-        }
-    }
-
-    #endregion
 
     public void StartCountDown()        // triggered by pressing J
     {
@@ -152,23 +126,24 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
         if(TemporaryTimer < 0)      // End of the Phase. Proceed to next event
         {
             Debug.Log("Ending State: " + Game_State);
-            var nextEvent = ChangeGameState.Create();
+            var evnt = ChangeGameState.Create();
+            evnt.NewState = state.Game_State;
             if ((int)Game_State == 1) // transition from standby to warning phase. Get the indices to warn the players.
             {
                 string SafeIndices = TileManager.instance.SelectIndicesToMarkSafe();
                 state.SafeIndices = SafeIndices;
+                evnt.SafeIndices = state.SafeIndices;
+                evnt.Send();
             }
 
             else if((int)Game_State == 2)
             {
+                evnt.Send();
                 // attack the players here.. The trigger from stage 2 to 3 should mark an effect that damages players.
-                TileManager.instance.SpawnDanger();
             }
 
             else if ((int)Game_State == 3)          // end of damage phase. Mark all tiles as safe.
             {
-                var evnt = ChangeGameState.Create();
-                evnt.NewState = state.Game_State;
                 evnt.Send();
                 //TileManager.instance.SetTilesSafe();
             }
@@ -178,10 +153,11 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
                 if (PlatformsToDestroy != "")     // center platform
                 {
                     state.FallingIndice = PlatformsToDestroy;
+                    evnt.FallingIndices = state.FallingIndice;
+                    evnt.Send();
                 }
             }
             Game_State = (Game_State == e_GamePhases.End) ? (e_GamePhases.StandBy) : (Game_State + 1);      // if you are at the last phase, move to phase 1, otherwise, keep going up by one.
-
         }
     }
         public void SpawnRandomTrap()

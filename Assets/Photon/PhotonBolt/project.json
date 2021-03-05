@@ -858,7 +858,7 @@
           }
         },
         {
-          "Name": "LayerIndex",
+          "Name": "SafeIndices",
           "Enabled": true,
           "Expanded": true,
           "ReplicationMode": 1,
@@ -872,7 +872,7 @@
           }
         },
         {
-          "Name": "PlatformIndex",
+          "Name": "FallingIndices",
           "Enabled": true,
           "Expanded": true,
           "ReplicationMode": 1,
