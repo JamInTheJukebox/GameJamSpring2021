@@ -52,4 +52,6 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         Target = target.transform;
     }
+
+
 }

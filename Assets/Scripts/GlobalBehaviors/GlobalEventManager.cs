@@ -47,7 +47,7 @@ public class GlobalEventManager : Bolt.GlobalEventListener
     {
         var connections = BoltNetwork.Connections.ToList();
         // https://doc.photonengine.com/en-us/bolt/current/connection-and-authentication/accept-refuse-connection
-        if (connections.Count > MAX_PLAYERS | GameManager.instance.Game_Started)     // 10 players max; // reject if the game has started
+        if (connections.Count > MAX_PLAYERS | GameManager.instance.Game_Counter_Started)     // 10 players max; // reject if the game has started
         {
             BoltNetwork.Refuse(endpoint);
             /*

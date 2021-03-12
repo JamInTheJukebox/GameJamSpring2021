@@ -12,6 +12,7 @@ public class EventManager : Bolt.GlobalEventListener
             Instance = this;
             BoltNetwork.Instantiate(BoltPrefabs.GameManager);
             var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, new Vector3(0, 0.2f, 0), Quaternion.Euler(5.293f, -92.402f, 65.55f));
+            var entity2 = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(5, 0, 5), Quaternion.Euler(5.293f, -92.402f, 65.55f));
         }
     }
     public override void OnEvent(ItemPickedUpEvent evnt)
@@ -71,7 +72,9 @@ public class EventManager : Bolt.GlobalEventListener
     {
         BoltLog.Info(evnt.Message);
         var player = FindObjectOfType<ThirdPersonCamera>().GetComponentInParent<Bolt_PlayerController>();
+        player.GetComponent<Health>().InitializeHealthUI();
         player.MoveToGameRoom();
+        GameManager.instance.Game_Started = true;
     }
 
     public override void Connected(BoltConnection connection)

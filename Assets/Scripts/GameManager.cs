@@ -72,6 +72,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     [SerializeField] Transform LobbyRoom;
 
     public static GameManager instance;
+    [HideInInspector] public bool Game_Counter_Started;
     [HideInInspector] public bool Game_Started;
     #endregion
 
@@ -93,7 +94,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
             return;
         }*/
         // start the lobby countdown here.
-        Game_Started = true;
+        Game_Counter_Started = true;
         var evnt = StartLobbyCounter.Create();
         evnt.Message = "Starting the game...";
         evnt.Send();

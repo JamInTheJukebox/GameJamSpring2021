@@ -27,4 +27,6 @@ public class Tags
     public const string ATTACK_TAG = "AttackHitbox";
     public const string WEAPON_TAG = "Weapon";
     public const string GROUND_TAG = "Ground";
+    public const string DEATHZONE_TAG = "DeathZone";
+    public const string GRAVITYFIELD_TAG = "GravityField";
 }

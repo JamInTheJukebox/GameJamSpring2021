@@ -6,7 +6,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 {
     [SerializeField] Transform Hammer_Transform;
 
-    public void SpawnWeapon()
+    public void SpawnWeapon() // Equip The Weapon
     {
         if (entity.IsOwner)
         {

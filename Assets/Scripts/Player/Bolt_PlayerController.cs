@@ -21,6 +21,8 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     [SerializeField] LayerMask groundMask = 8;
     [Tooltip("Layer of platform that is falling.")]
     [SerializeField] LayerMask FallingMask = 10;
+    [SerializeField] CapsuleCollider TemporaryCollider;     // temporary collider to attach when falling to the black hole.
+
     bool isGrounded;
     bool isParented = false;        // called if you are on a falling platform
     Vector3 SpawnPosition = new Vector3(0,10,0);
@@ -95,13 +97,56 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         if (DrawGroundCheck)
         {
-            Gizmos.color = Color.red;
+            Gizmos.color = (isGrounded) ? Color.green : Color.red;
             Gizmos.DrawSphere(GroundCheck.position, GroundCheckRadius);
+ 
         }
     }
 
     public void MoveToGameRoom()
     {
-        transform.position = transform.position + SpawnPosition;
+        Vector3 spawnPos = SpawnPositionManager.instance.GameSpawnPosition.position;
+        spawnPos += new Vector3(UnityEngine.Random.Range(-8, 8), 1, UnityEngine.Random.Range(-8, 8));
+        transform.position = spawnPos;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!entity.IsOwner) { return; }
+        if (other.tag == Tags.GRAVITYFIELD_TAG)
+        {
+            print("GETTING SUCCED!");
+            LoseMovementPattern();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (!entity.IsOwner) { return; }
+        if (other.tag == Tags.GRAVITYFIELD_TAG)
+        {
+            print("FREED! YOU ALSO LOST THE GAME!");
+            ReturnMovementPattern();
+        }
+    }
+
+    public void LoseMovementPattern()           // when entering the black hole,  players will  not be able to move.
+    {
+        char_Controller.enabled = false;
+        if(!GetComponent<Rigidbody>())
+            gameObject.AddComponent<Rigidbody>();
+        TemporaryCollider.enabled = true;
+    }
+
+    public void ReturnMovementPattern()
+    {
+        char_Controller.enabled = true;
+        var vel = GetComponent<Rigidbody>();
+        if (vel)
+        {
+            vel.velocity = new Vector3(0, -1, 0);
+            Destroy(GetComponent<Rigidbody>());
+        }
+        TemporaryCollider.enabled = false;
     }
 }

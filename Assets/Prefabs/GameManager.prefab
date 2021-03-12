@@ -167,7 +167,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &752387949
 RectTransform:
   m_ObjectHideFlags: 0
@@ -788,7 +788,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5119636115270903751
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1141,7 +1141,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4532141896484455139
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1464,7 +1464,10 @@ MonoBehaviour:
   CameraSettings: {fileID: 0}
   PauseMenu: {fileID: 4490967210107120179}
   Paused: 0
+  HealthUI: {fileID: 426288166}
+  ShieldUI: {fileID: 282995432}
   Mouse_Y_Toggle: {fileID: 0}
+  Update_Health_Duration: 0.4
 --- !u!1 &3420751718768021934
 GameObject:
   m_ObjectHideFlags: 0
