@@ -1697,6 +1697,7 @@ MonoBehaviour:
   FallTime: 2
   AmountofTilesToDiscard: 1
   LobbyRoom: {fileID: 0}
+  Game_Counter_Started: 0
   Game_Started: 0
 --- !u!114 &3494651620193103478
 MonoBehaviour:

@@ -6,7 +6,9 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 {
     // CONTAINS THE HEALTH AND COLLISION MANAGER
     public float PlayerHealth = 3;
-
+    public float StunTime = 1.5f;
+    [HideInInspector] public bool Hit = false;        // Stunned to provide i frames
+ 
 
     public override void Attached()
     {
@@ -28,16 +30,15 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         if(GameManager.instance.Game_Started && entity.IsOwner)       // if the game has started and you are the owner, change the health
         {
             state.Health += Delta;              // take away health with Delta < 0
-
+            if (state.Health <= 0)     // run this code if the health is less than 0 and the player has not lost the game yet.
+                LoseGame();
             print("LOSING HEALTH!!");
         }
     }
 
     private void HealthCallback()
     {
-        if (state.LostGame) { return; }
-        if (state.Health <= 0)     // run this code if the health is less than 0 and the player has not lost the game yet.
-            LoseGame();
+        if (state.LostGame) { return; }                     // do not update anything if the player has already lost the game
         if (entity.IsOwner)
         {
             if(GameUI.UserInterface != null)
@@ -45,26 +46,23 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         }
     }
 
-    public override void SimulateOwner()
-    {
-        if (Input.GetKeyDown(KeyCode.K))
-            ChangeHealth(-1);
-    }
-
     private void OnTriggerEnter(Collider other)
     {
         // handle any damage here!
         if (!entity.IsOwner) { return; }
-        if(other.tag == Tags.ATTACK_TAG)
+        if (other.tag == Tags.ATTACK_TAG)
         {
-            if (!other.transform.IsChildOf(transform))
+
+            if (!other.transform.IsChildOf(transform) && !Hit)          // line to not hurt yourself. Also, do not run this code if you have already been hurt.
             {
+                Hit = true;
                 ChangeHealth(-1);
+                Invoke("ResetHit",StunTime);
                 print("GOT HIT!!");
             }
         }
 
-        else if(other.tag == Tags.WEAPON_TAG)
+        else if(other.tag == Tags.WEAPON_TAG && state.Weapon == null)               // pick up an item if you have no weapon or trap.
         {
             print("Got ITEM!!");
             var new_Item = ItemPickedUpEvent.Create();
@@ -79,13 +77,21 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 
     }
 
+    private void ResetHit()     // reset invisibility-frames.
+    {
+        Hit = false;
+    }
+
     public void LoseGame()
     {
         if (!entity.IsOwner) { return; }
         print("LOST THE GAME!");
         state.LostGame = true;
         // disable the UI here.
-        transform.position = SpawnPositionManager.instance.LobbySpawnPosition.position; 
         GameUI.UserInterface.HealthUI.transform.parent.gameObject.SetActive(false);                 // disable the health bar if you lost!
+
+        var evnt = LoseGameEvent.Create();
+        evnt.Player = GetComponent<BoltEntity>();
+        evnt.Send();
     }
 }

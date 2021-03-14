@@ -19,7 +19,7 @@ public class EventManager : Bolt.GlobalEventListener
     {
         if (BoltNetwork.IsServer)
         {
-            BoltNetwork.Destroy(evnt.ItemEntity);
+            BoltNetwork.Destroy(evnt.ItemEntity);                   // only the server can spawn item entities
         }
 
         if (evnt.FromSelf)
@@ -54,12 +54,11 @@ public class EventManager : Bolt.GlobalEventListener
         Debug.LogWarning(evnt.Message);
     }
 
-    public override void OnEvent(GetWeaponEvent evnt)
+    public override void OnEvent(LoseGameEvent evnt)
     {
-        print(evnt.PlayerEntity.gameObject.name);
-        evnt.Weapon.transform.SetParent(evnt.PlayerEntity.transform.GetChild(1).Find("WeaponSlot"));
-    }
+        evnt.Player.transform.position = SpawnPositionManager.instance.LobbySpawnPosition.position;
 
+    }
     public override void OnEvent(StartLobbyCounter evnt)
     {
         BoltLog.Info(evnt.Message);

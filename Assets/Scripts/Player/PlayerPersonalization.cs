@@ -12,6 +12,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     public MeshRenderer PlayerGraphics;
 
     Cinemachine.CinemachineFreeLook PlayerCamera;
+
     /// <summary>
     /// SYSTEM ERROR:
     /// When playing the game on the same system, unity will update the name if someone else has changed it. So if you try to join a game and someone else changes
@@ -24,9 +25,21 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
             MaterialCallBack();
         }
         state.AddCallback("UserColor", MaterialCallBack);            // we changed a state. When the state is changed, the server will call the callback on everyone's computer.
-
+        Invoke("SearchForTarget", 0.01f);        // search for target in 0.1f seconds
     }
 
+    void SearchForTarget()
+    {
+        var Cam = FindObjectOfType<Camera>();
+        if(Cam == null)
+        {
+            Invoke("SearchForTarget", 0.1f);        // search for target in 0.1f seconds
+        }
+        else
+        {
+            SetCameraTarget(Cam);
+        }
+    }
     private void MaterialCallBack()
     {
         PlayerGraphics.material = Player_Colors.GetColor(state.UserColor);        // player colors gets any color material based off a string

@@ -6,6 +6,7 @@ using UnityEngine;
 public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 {
     public float speed = 3f;
+    private float OriginalSpeed;
     // Update is called once per frame
     [Header("Basic Movement")]
     private CharacterController char_Controller;
@@ -32,6 +33,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public override void Attached() // start.
     {
+        OriginalSpeed = speed;
         char_Controller = GetComponent<CharacterController>();
         state.SetTransforms(state.PlayerTransform, transform);
     }
