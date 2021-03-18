@@ -13,22 +13,23 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
      */
     public override void Attached()
     {
-        if(entity.IsOwner)
+        if (entity.IsOwner)
         {
             state.WeaponIndex = "0";            // spawn with nothing but fists!
         }
-        state.AddCallback("WeaponIndex", SetWeapon);              // spawn the weapon when 
+        state.AddCallback("Weapon", SetWeapon);              // spawn the weapon when 
     }
 
-    public void SpawnWeapon() // Equip The Weapon
+    public void InitializeItem(string ItemID)                       // initialize only weapons and traps
     {
         if (entity.IsOwner)
         {
-            var Entity = BoltNetwork.Instantiate(BoltPrefabs.hammer, Hammer_Transform.position, Hammer_Transform.rotation);
-            state.WeaponIndex = "1.1";
+            Bolt.PrefabId ItemPrefab = c_Item_Types.GetItem(ItemID);
+            var Entity = BoltNetwork.Instantiate(ItemPrefab, Hammer_Transform.position, Hammer_Transform.rotation);
             state.Weapon = Entity;      // reference for the weapon.
+            state.WeaponIndex = ItemID;
             Entity.transform.SetParent(transform);
-            Entity.transform.localPosition = Hammer_Transform.localPosition;
+            Entity.transform.localPosition = Hammer_Transform.localPosition;        // varies from item to item.
             /*
             var evnt = GetWeaponEvent.Create();
             evnt.Weapon = Entity;
@@ -39,10 +40,51 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
     }
 
+    private BoltEntity GetItem(string Weapon_Index)          // get Item from weaponIndex
+    {
+        switch (Weapon_Index)
+        {
+
+            default:
+                return null;
+        }
+    }
     public void SetWeapon()
     {
         if(state.Weapon == null | state.WeaponIndex == "0")
         { return; }
         state.Weapon.transform.SetParent(transform);
+    }
+}
+
+public class c_Item_Types
+{
+    public const string Default = "0";
+    // weapons
+    public const string Hammer = "1.1";
+    public const string Bat = "1.2";
+    // 
+    public const string ElectricTrap = "2.1";
+
+    public static Dictionary<Item_Type, string> Items = new Dictionary<Item_Type, string>
+    {
+        [Item_Type.Bat] = Bat,
+        [Item_Type.Hammer] = Hammer,
+        [Item_Type.Electric_Trap] = ElectricTrap
+    };
+
+    public static Bolt.PrefabId GetItem(string Item)
+    {
+        switch (Item)
+        {
+            case "1.1":
+                return BoltPrefabs.hammer;
+            case "1.2":
+            //return BoltPrefabs.bat;
+            case "2.1":
+                return BoltPrefabs.ElectricTrap;
+            default:
+                return BoltPrefabs.hammer;
+        }
     }
 }

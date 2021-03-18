@@ -11,7 +11,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
 
     public override void Attached()
     {
-        transform.localScale = Vector3.one * 10;
+        //transform.localScale = Vector3.one * 10;
         /*WeaponAnimator = GetComponent<Animator>();
         WeaponAnimator.enabled = true;
         hitJoint = transform.GetChild(0).gameObject;

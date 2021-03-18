@@ -1214,6 +1214,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerHealth: 3
+  MaxPlayerShield: 2
+  StunTime: 1.5
+  Hit: 0
 --- !u!114 &6105932165704386869
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1262,7 +1265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 48f35f5f-bd9d-4542-b0ff-3a388513b3cb
-  _prefabId: 5
+  _prefabId: 6
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1

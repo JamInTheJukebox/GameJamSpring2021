@@ -2,20 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Item_Type
+{
+    Hammer, Bat, Shield, Electric_Trap
+}
+
 public class Hover : Bolt.EntityBehaviour<IWeapon>
 {
     #region Variables
+    public Item_Type TypeOfItem;
     [Header("Hover Properties")]
-    public float HoverAmplitude = 3f;
-    public float HoverSpeed = 1f;
-    public float torqueSpeed = 4f;
+    public float HoverAmplitude = 0.9f;
+    public float HoverSpeed = 3f;
+    public float torqueSpeed = 100f;
     float TimeSinceStartup;
     Vector3 StartPosition;
     #endregion
 
     public override void Attached()
     {
-        transform.localScale = Vector3.one * 10;
+        //transform.localScale = Vector3.one * 10;
         state.SetTransforms(state.WeaponPos, transform);
 
         if (entity.IsOwner)

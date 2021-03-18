@@ -13,9 +13,13 @@ public class EventManager : Bolt.GlobalEventListener
             BoltNetwork.Instantiate(BoltPrefabs.GameManager);
             var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, new Vector3(0, 0.2f, 0), Quaternion.Euler(5.293f, -92.402f, 65.55f));
             var entity2 = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(5, 0, 5), Quaternion.Euler(5.293f, -92.402f, 65.55f));
+            var entity3 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90,0,0));
+            var entity4 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90, 0, 0));
+            var entity5 = BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(10 , 0, 10), Quaternion.Euler(-90, 0, 0));
+
         }
     }
-    public override void OnEvent(ItemPickedUpEvent evnt)
+    public override void OnEvent(ItemPickedUpEvent evnt)            // all clients and server must understand that the player has oicked up an item.
     {
         if (BoltNetwork.IsServer)
         {
@@ -24,7 +28,8 @@ public class EventManager : Bolt.GlobalEventListener
 
         if (evnt.FromSelf)
         {
-            evnt.PlayerEntity.GetComponentInChildren<WeaponManager>().SpawnWeapon();
+            if(evnt.ItemType == "" | evnt.ItemType == null) { return; }     // return if the item type is a shield or something that is not a weapon/trap.
+            evnt.PlayerEntity.GetComponentInChildren<WeaponManager>().InitializeItem(evnt.ItemType);
             //BoltNetwork.Instantiate(BoltPrefabs.hammer_low, new Vector3(0,0.2f,0))
         }
     }
@@ -88,6 +93,5 @@ public class EventManager : Bolt.GlobalEventListener
         if(!BoltNetwork.IsServer)
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);      // go to main menu;
     }
-
 
 }

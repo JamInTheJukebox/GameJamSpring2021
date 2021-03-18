@@ -6,6 +6,9 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 {
     // CONTAINS THE HEALTH AND COLLISION MANAGER
     public float PlayerHealth = 3;
+    public float MaxPlayerShield = 2;      // 
+
+    private float CurrentShield;
     public float StunTime = 1.5f;
     [HideInInspector] public bool Hit = false;        // Stunned to provide i frames
  
@@ -29,9 +32,18 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         if(GameManager.instance.Game_Started && entity.IsOwner)       // if the game has started and you are the owner, change the health
         {
-            state.Health += Delta;              // take away health with Delta < 0
-            if (state.Health <= 0)     // run this code if the health is less than 0 and the player has not lost the game yet.
-                LoseGame();
+            if(CurrentShield > 0)               // shield
+            {
+                CurrentShield += Delta;
+                GameUI.UserInterface.UpdateShield(CurrentShield);
+            }
+            else
+            {
+                state.Health += Delta;              // take away health with Delta < 0
+                if (state.Health <= 0)     // run this code if the health is less than 0 and the player has not lost the game yet.
+                    LoseGame();
+            }
+
             print("LOSING HEALTH!!");
         }
     }
@@ -52,7 +64,6 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         if (!entity.IsOwner) { return; }
         if (other.tag == Tags.ATTACK_TAG)
         {
-
             if (!other.transform.IsChildOf(transform) && !Hit)          // line to not hurt yourself. Also, do not run this code if you have already been hurt.
             {
                 Hit = true;
@@ -61,19 +72,36 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
                 print("GOT HIT!!");
             }
         }
+        else if(other.tag == Tags.SHIELD_TAG)
+        {
+            print("Got ITEM!!");
+            var new_Item = ItemPickedUpEvent.Create();
+            new_Item.PlayerEntity = GetComponent<BoltEntity>();     
+            new_Item.ItemEntity = other.GetComponent<BoltEntity>();
+            new_Item.Send();
+            CurrentShield = MaxPlayerShield;
+            GameUI.UserInterface.InitializeShield(CurrentShield);
+            // add callback here.
+            // run shield here.
+        }
 
         else if(other.tag == Tags.WEAPON_TAG && state.Weapon == null)               // pick up an item if you have no weapon or trap.
         {
             print("Got ITEM!!");
             var new_Item = ItemPickedUpEvent.Create();
-            new_Item.PlayerEntity = GetComponent<BoltEntity>();
-            new_Item.ItemEntity = other.GetComponent<BoltEntity>();
+            new_Item.PlayerEntity = GetComponent<BoltEntity>();                                     // get the player who picked up the  entity.
+            new_Item.ItemEntity = other.GetComponent<BoltEntity>();                                 // get Itembox for the host to destroy
+            new_Item.ItemType = c_Item_Types.Items[other.GetComponent<Hover>().TypeOfItem];         // get Item ID
             new_Item.Send();
         }
         else if(other.tag == Tags.DEATHZONE_TAG)
         {
             LoseGame();
         }
+    }
+
+    private void GiveShield()
+    {
 
     }
 

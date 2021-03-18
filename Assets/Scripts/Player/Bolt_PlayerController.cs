@@ -33,7 +33,6 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public override void Attached() // start.
     {
-        OriginalSpeed = speed;
         char_Controller = GetComponent<CharacterController>();
         state.SetTransforms(state.PlayerTransform, transform);
     }

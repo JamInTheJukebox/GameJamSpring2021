@@ -53,8 +53,19 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         if (tmp_Duration > 0)
         {
             tmp_Duration -= BoltNetwork.FrameDeltaTime;
-            float Current_Ratio = Mathf.MoveTowards(HealthUI.fillAmount, TargetRatio, Health_Fade_Time * BoltNetwork.FrameDeltaTime);
-            HealthUI.fillAmount = Current_Ratio;
+            if (ShieldUI.fillAmount > 0 | TargetShieldRatio > 0)
+            {
+                float Current_Ratio = Mathf.MoveTowards(ShieldUI.fillAmount, TargetShieldRatio, Health_Fade_Time * BoltNetwork.FrameDeltaTime);
+                HealthUI.fillAmount = TargetHealthRatio;        // incase you get hit.
+                ShieldUI.fillAmount = Current_Ratio;
+
+            }
+            else
+            {
+                float Current_Ratio = Mathf.MoveTowards(HealthUI.fillAmount, TargetHealthRatio, Health_Fade_Time * BoltNetwork.FrameDeltaTime);
+                HealthUI.fillAmount = Current_Ratio;
+            }
+
         }
     }
 
@@ -112,11 +123,13 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     }
 
     private float TotalHealth;      // ratio: Current Health / Total health and assign this ratio as the slider value.
+    private float TotalSheild = 2;
     [Tooltip("Amount of time it takes to update the health")]
     [SerializeField] float Update_Health_Duration = 0.4f;
     float tmp_Duration = 0;
     float Health_Fade_Time;
-    private float TargetRatio;
+    private float TargetHealthRatio = 1;        // separate these. Do not link them.
+    private float TargetShieldRatio;    
 
 
     public void InitializeHealth(float total_Health)
@@ -125,13 +138,29 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         TotalHealth = total_Health;
     }
 
+    public void InitializeShield(float total_Shield)
+    {
+        TotalSheild = total_Shield;
+        ShieldUI.gameObject.SetActive(true);        // set the shield active if the totalShield is not 0.
+        UpdateShield(TotalSheild);
+    }
     public void UpdateHealth_UI(float Target_Health)
     {
         if (TotalHealth == 0 | HealthUI == null) { return; }                            // return if the health is 0 or the health object is null
         if (Update_Health_Duration == 0) { Update_Health_Duration = 0.5f; }
         tmp_Duration = Update_Health_Duration;
-        TargetRatio = Target_Health / TotalHealth;
-        Health_Fade_Time = (HealthUI.fillAmount - TargetRatio) / tmp_Duration;
+        TargetHealthRatio = Target_Health / TotalHealth;
+        Health_Fade_Time = Mathf.Abs(HealthUI.fillAmount - TargetHealthRatio) / tmp_Duration;
+        print("Myman");
+    }
+
+    public void UpdateShield(float Target_Shield)
+    {
+        if (ShieldUI == null) { return; }                            // return if the health is 0 or the health object is null
+        if (Update_Health_Duration == 0) { Update_Health_Duration = 0.5f; }
+        tmp_Duration = Update_Health_Duration;
+        TargetShieldRatio = Target_Shield / TotalSheild;
+        Health_Fade_Time = Mathf.Abs(ShieldUI.fillAmount - TargetShieldRatio) / tmp_Duration;
     }
 
 }

@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 5437889781974899986}
   m_LocalRotation: {x: -0.36343792, y: -0.6235214, z: 0.40230057, w: 0.5632835}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.3825681, y: 2.3825684, z: 2.3825681}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 874962467256553151}
   m_Father: {fileID: 0}
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: febf3213-6aca-459a-b238-6405243deada
-  _prefabId: 3
+  _prefabId: 4
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -172,7 +172,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6966907649475497600}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.134, y: -0.023, z: 0.005}
+  m_LocalPosition: {x: 1.332, y: -0.486, z: -0.009}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5437889781974466866}
@@ -189,5 +189,5 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.08172733
+  m_Radius: 0.23
   m_Center: {x: 0, y: 0, z: 0}
