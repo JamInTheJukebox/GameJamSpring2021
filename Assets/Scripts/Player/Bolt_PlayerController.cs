@@ -37,6 +37,11 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         state.SetTransforms(state.PlayerTransform, transform);
     }
 
+    public Transform GetGroundCheckTransform()
+    {
+        return GroundCheck;
+    }
+
     // void update on owner's computer.
     public override void SimulateOwner()
     {

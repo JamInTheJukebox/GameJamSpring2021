@@ -49,7 +49,7 @@ MonoBehaviour:
   debugBuildMode: 1
   debugStartMapName: Game
   debugPlayAsServer: 1
-  showDebugInfo: 1
+  showDebugInfo: 0
   overrideTimeScale: 1
   debugEditorMode: 0
   consoleToggleKey: 9

@@ -5767,7 +5767,7 @@ GameObject:
   - component: {fileID: 596492240}
   - component: {fileID: 596492239}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: HurtSphere
   m_TagString: AttackHitbox
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10691,6 +10691,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5649853}
     m_Modifications:
+    - target: {fileID: 4057256215790219091, guid: 92162be0a04f40047a08fb7b1dc51986, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 5027018738189768586, guid: 92162be0a04f40047a08fb7b1dc51986, type: 3}
       propertyPath: m_Name
       value: Platform2 (23)

@@ -30,6 +30,10 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             state.WeaponIndex = ItemID;
             Entity.transform.SetParent(transform);
             Entity.transform.localPosition = Hammer_Transform.localPosition;        // varies from item to item.
+            if(ItemID == "2.1")
+            {
+                Entity.GetComponent<TrapAttack>().InitializeTrapSystem();
+            }
             /*
             var evnt = GetWeaponEvent.Create();
             evnt.Weapon = Entity;

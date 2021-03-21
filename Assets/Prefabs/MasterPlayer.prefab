@@ -1265,7 +1265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 48f35f5f-bd9d-4542-b0ff-3a388513b3cb
-  _prefabId: 6
+  _prefabId: 8
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1
@@ -1589,7 +1589,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6909344347767974008}
   - component: {fileID: 1093811918536941758}
-  - component: {fileID: 5742465791837889616}
   - component: {fileID: 433590726192808537}
   m_Layer: 0
   m_Name: Post-ProcessingCamera
@@ -1597,7 +1596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6909344347767974008
 Transform:
   m_ObjectHideFlags: 0
@@ -1655,14 +1654,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &5742465791837889616
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3171238476993129602}
-  m_Enabled: 1
 --- !u!114 &433590726192808537
 MonoBehaviour:
   m_ObjectHideFlags: 0

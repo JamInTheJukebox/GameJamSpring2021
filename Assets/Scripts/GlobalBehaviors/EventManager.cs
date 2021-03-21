@@ -16,7 +16,7 @@ public class EventManager : Bolt.GlobalEventListener
             var entity3 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90,0,0));
             var entity4 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90, 0, 0));
             var entity5 = BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(10 , 0, 10), Quaternion.Euler(-90, 0, 0));
-
+            BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(10, 0, 10), Quaternion.Euler(-90, 0, 0));
         }
     }
     public override void OnEvent(ItemPickedUpEvent evnt)            // all clients and server must understand that the player has oicked up an item.
@@ -94,4 +94,11 @@ public class EventManager : Bolt.GlobalEventListener
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);      // go to main menu;
     }
 
+    public override void OnEvent(ToggleAreaEffectorEvent evnt)      // either destroy the trap, or assign a player to own the guarded tile.
+    {
+        if(evnt.TrapEntity != null)
+        {
+            evnt.TrapEntity.GetComponent<TrapPlacement>().DestroyTrap();
+        }
+    }
 }

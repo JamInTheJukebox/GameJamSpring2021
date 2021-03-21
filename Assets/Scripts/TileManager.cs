@@ -187,4 +187,20 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    public void TryToSpawnGuardedTile()
+    {
+        if(AllTiles.Count == 1) { return; }             // do not spawn guarded tiles anymore
+
+        for(int i = 0; i < 5; i++)      // try to a guarded tile at least 5 times. if no successes, fail to spawn a guarded tile.
+        {
+            var GuardedTileIndex = Random.Range(0, AllTiles.Count);
+            bool Occupied = AllTiles[GuardedTileIndex].GetComponentInChildren<AreaEffector>().CheckForPlacements();
+            if (!Occupied)      // if the space is not occupied, spawn a guarded tile.
+            {
+                AllTiles[GuardedTileIndex].GetComponentInChildren<AreaEffector>().PlaceDownGuardedTile(BoltPrefabs.GuardedTile);       // can input any generic guarded tile in the future.
+                break;
+            }
+        }
+    }
+
 }

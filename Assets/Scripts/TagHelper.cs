@@ -31,4 +31,5 @@ public class Tags
     public const string DEATHZONE_TAG = "DeathZone";
     public const string GRAVITYFIELD_TAG = "GravityField";
     public const string TRAP_TAG = "Trap";
+
 }

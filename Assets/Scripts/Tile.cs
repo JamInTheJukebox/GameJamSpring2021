@@ -25,6 +25,7 @@ public class Tile : MonoBehaviour
         PlatformMotion.drag = Drag;   // tile will fall
         PlatformMotion.isKinematic = true;
         Is_Falling = true;
+        GetComponentInChildren<AreaEffector>().RemoveEntityOnFall();
     }
 
     private void Update()

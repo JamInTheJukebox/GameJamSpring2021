@@ -157,6 +157,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
                     evnt.FallingIndices = state.FallingIndice;
                     evnt.Send();
                 }
+                TileManager.instance.TryToSpawnGuardedTile();
             }
             Game_State = (Game_State == e_GamePhases.End) ? (e_GamePhases.StandBy) : (Game_State + 1);      // if you are at the last phase, move to phase 1, otherwise, keep going up by one.
         }

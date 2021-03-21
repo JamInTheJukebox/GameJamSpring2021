@@ -100,9 +100,14 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         }
     }
 
-    private void GiveShield()
+    public void StunnedByTrap(float damage) // group of players can get stunned by a trap.
     {
+        if (!entity.IsOwner) { return; }
+        Hit = true;
+        ChangeHealth(-damage);
 
+        Invoke("ResetHit", StunTime);
+        print("GOT HIT!!");
     }
 
     private void ResetHit()     // reset invisibility-frames.
