@@ -16,6 +16,9 @@ public class Tile : MonoBehaviour
     [SerializeField] ParticleSystem DangerVFX;
     [SerializeField] Transform DangerLoc;
 
+    [SerializeField] SphereCollider RangedAttackCollider;           // collider to damage players
+    [SerializeField] bool EnableDamage = true;                      // debug variable. It gets annoying walking around and getting damaged.
+
     public void DiscardTile()
     {
         TheTile.material = Danger_Tile_Material;
@@ -30,7 +33,6 @@ public class Tile : MonoBehaviour
 
     private void Update()
     {
-
         if (Is_Falling)
         {
             transform.position = transform.position + Vector3.down * 1 * BoltNetwork.FrameDeltaTime;
@@ -53,11 +55,14 @@ public class Tile : MonoBehaviour
 
     public void SpawnDanger()
     {
+        if(EnableDamage)
+            RangedAttackCollider.enabled = true;
         DangerVFX.Play();
     }
 
     public void SetSafe()           // add this to the delegate in the tile_manager.
     {
+        RangedAttackCollider.enabled = false;
         TheTile.material = Safe_Tile_Material;
     }
 

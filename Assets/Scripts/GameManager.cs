@@ -74,6 +74,8 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     public static GameManager instance;
     [HideInInspector] public bool Game_Counter_Started;
     [HideInInspector] public bool Game_Started;
+
+    [HideInInspector] public List<BoltEntity> AllPlayers = new List<BoltEntity>();      // when this list has only one player left, stop the game and tell the players who won.
     #endregion
 
 
@@ -85,6 +87,24 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
         instance = this;
     }
 
+    public void InitializePlayerList()
+    {
+        var players = FindObjectsOfType<Health>();
+        foreach(var player in players)
+        {
+            AllPlayers.Add(player.GetComponent<BoltEntity>());
+        }
+    }
+
+    public void PlayerLost(BoltEntity LosingPlayer)
+    {
+        AllPlayers.Remove(LosingPlayer);
+        if(AllPlayers.Count == 1)
+        {
+            // player won!
+            print("YOU WIN!!!");
+        }
+    }
     public void StartCountDown()        // triggered by pressing J
     {
         // if there are not enough players, DO NOT START THE GAME!!
@@ -157,12 +177,12 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
                     evnt.FallingIndices = state.FallingIndice;
                     evnt.Send();
                 }
-                TileManager.instance.TryToSpawnGuardedTile();
             }
             Game_State = (Game_State == e_GamePhases.End) ? (e_GamePhases.StandBy) : (Game_State + 1);      // if you are at the last phase, move to phase 1, otherwise, keep going up by one.
         }
     }
-        public void SpawnRandomTrap()
+
+    public void SpawnRandomTrap()
     {
 
     }

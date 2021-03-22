@@ -43,6 +43,10 @@ public class AreaEffector : MonoBehaviour
             {
                 AreaEntity.GetComponent<TrapPlacement>().DestroyTrap();
             }
+            else if(AreaEntity.GetComponent<GuardedTilePlacement>() != null)
+            {
+                AreaEntity.GetComponent<GuardedTilePlacement>().DestroyGuardedTile();
+            }
         }
     }
 

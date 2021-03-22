@@ -51,6 +51,8 @@ public class EventManager : Bolt.GlobalEventListener
         if(evnt.NewState == 4)
         {
             TileManager.instance.DeleteTile(evnt.FallingIndices);          // delete the tile.
+            if(BoltNetwork.IsServer)
+                TileManager.instance.TryToSpawnGuardedTile();
         }
     }
 
@@ -59,10 +61,13 @@ public class EventManager : Bolt.GlobalEventListener
         Debug.LogWarning(evnt.Message);
     }
 
-    public override void OnEvent(LoseGameEvent evnt)
+    public override void OnEvent(LoseGameEvent evnt)        // called whenever a player loses!
     {
         evnt.Player.transform.position = SpawnPositionManager.instance.LobbySpawnPosition.position;
-
+        if (BoltNetwork.IsServer)
+        {
+            GameManager.instance.PlayerLost(evnt.Player);
+        }
     }
     public override void OnEvent(StartLobbyCounter evnt)
     {
@@ -79,6 +84,10 @@ public class EventManager : Bolt.GlobalEventListener
         player.GetComponent<Health>().InitializeHealthUI();
         player.MoveToGameRoom();
         GameManager.instance.Game_Started = true;
+        if (BoltNetwork.IsServer)
+        {
+            GameManager.instance.InitializePlayerList();
+        }
     }
 
     public override void Connected(BoltConnection connection)

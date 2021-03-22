@@ -10,8 +10,9 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 
     private float CurrentShield;
     public float StunTime = 1.5f;
+    public float WeakStunTime = 0.3f;       // damage you take when you are in fields of damage.
     [HideInInspector] public bool Hit = false;        // Stunned to provide i frames
- 
+    private bool AreaEffectorHit = false;
 
     public override void Attached()
     {
@@ -100,15 +101,44 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         }
     }
 
-    public void StunnedByTrap(float damage) // group of players can get stunned by a trap.
+    private void OnTriggerStay(Collider other)
     {
         if (!entity.IsOwner) { return; }
+        if (other.tag == Tags.AREA_EFF_TAG && !AreaEffectorHit)
+        {
+            print("Getting Hurt by tiles");
+            AreaEffectorHit = true;
+            ChangeHealth(-0.1f);
+            Invoke("ResetEffectorHit", WeakStunTime);       // reset hit variable to get attacked again
+        }
+    }
+
+    private void ResetEffectorHit()
+    {
+        AreaEffectorHit = false;
+    }
+    public void StunnedByTrap(float damage) // group of players can get stunned by a trap.
+    {
+        if (!entity.IsOwner) { return; }    // getting hit by a trap will guarantee damage to you. However, it gives you some i-frames for some other attacks such as hamemrs. YOu can't just get hit by something and try to set off all the traps!.
         Hit = true;
         ChangeHealth(-damage);
 
         Invoke("ResetHit", StunTime);
         print("GOT HIT!!");
     }
+
+    public void DamagedByAreaEffector(float damage)
+    {
+        if (!entity.IsOwner) { return; }    // getting hit by a trap will guarantee damage to you. However, it gives you some i-frames for some other attacks such as hamemrs. YOu can't just get hit by something and try to set off all the traps!.
+        if (Hit) { return; }
+        Hit = true;
+        ChangeHealth(-damage);
+
+        Invoke("ResetHit", WeakStunTime);
+        print("In area effector!!");
+    }
+
+    
 
     private void ResetHit()     // reset invisibility-frames.
     {
