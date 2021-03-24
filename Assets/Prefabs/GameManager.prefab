@@ -436,8 +436,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Go Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
+  m_sharedMaterial: {fileID: -4974215258205284209, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -570,7 +570,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: Go Back
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -634,7 +634,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1388228205582624490
@@ -704,8 +704,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Settings
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
+  m_sharedMaterial: {fileID: -4974215258205284209, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -913,8 +913,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quit
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
+  m_sharedMaterial: {fileID: -4974215258205284209, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1699,6 +1699,15 @@ MonoBehaviour:
   LobbyRoom: {fileID: 0}
   Game_Counter_Started: 0
   Game_Started: 0
+  AllPlayers: []
+  MaxWaitTimeForItems: 60
+  MinWaitTimeForItems: 25
+  MaxItems: 3
+  ItemBox:
+  - Value: 7
+  - Value: 10
+  - Value: 9
+  ProbabilityToSpawnGuardedTile: 0.3
 --- !u!114 &3494651620193103478
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1795,15 +1804,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'J : Start Game'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
+  m_sharedMaterial: {fileID: -4974215258205284209, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4281479730
-  m_fontColor: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+    rgba: 4292542521
+  m_fontColor: {r: 0.22238085, g: 0, b: 0.8584906, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2637,8 +2646,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 5
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 436b45a893ef4e74f982bdc15580da59, type: 2}
+  m_sharedMaterial: {fileID: 6454491055069696044, guid: 436b45a893ef4e74f982bdc15580da59, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

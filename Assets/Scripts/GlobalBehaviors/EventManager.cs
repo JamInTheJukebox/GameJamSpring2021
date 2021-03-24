@@ -69,6 +69,17 @@ public class EventManager : Bolt.GlobalEventListener
             GameManager.instance.PlayerLost(evnt.Player);
         }
     }
+    public override void OnEvent(SuccessfulAttackEvent evnt)        // for sender, get the attack and call the damage function in health.cs. For weapon owner, subtract 1 from their uses.
+    {
+        if(evnt.FromSelf)       // caller
+        {
+            FindObjectOfType<Camera>().GetComponentInParent<Health>().DamagedByWeapon(evnt.WeaponDamage);
+        }
+        else if (evnt.WeaponEntity.IsOwner)
+        {
+            evnt.WeaponEntity.GetComponent<WeaponAttack>().UseAttacK();     // decrease 1 from their available weapon uses.
+        }
+    }
     public override void OnEvent(StartLobbyCounter evnt)
     {
         BoltLog.Info(evnt.Message);

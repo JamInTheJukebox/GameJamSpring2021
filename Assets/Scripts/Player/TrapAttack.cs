@@ -8,6 +8,7 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     [SerializeField] GameObject TrapToSpawn;
     [SerializeField] float GroundCheckDistance = 5f;
     [SerializeField] LayerMask GroundLayer;
+    [SerializeField] int NumberOfUses = 3;
     private GameObject m_CurrentTile;
     public GameObject CurrentTile
     {
@@ -56,7 +57,11 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
                 {
                     var areaEffector = CurrentTile.GetComponent<AreaEffector>();
                     if (areaEffector)
+                    {
                         areaEffector.PlaceDownTrap(BoltPrefabs.ElectricTrapPlacement);
+                        NumberOfUses -= 1;
+                        if(NumberOfUses <= 0) { BoltNetwork.Destroy(gameObject); }      // if the item has been used more than x amount of times, destroy it.
+                    }
                 }
             }
         }

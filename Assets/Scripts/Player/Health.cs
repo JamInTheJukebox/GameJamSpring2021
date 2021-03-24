@@ -67,10 +67,10 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             if (!other.transform.IsChildOf(transform) && !Hit)          // line to not hurt yourself. Also, do not run this code if you have already been hurt.
             {
-                Hit = true;
-                ChangeHealth(-1);
-                Invoke("ResetHit",StunTime);
-                print("GOT HIT!!");
+                var evnt = SuccessfulAttackEvent.Create();      // successfully attacked!
+                evnt.WeaponDamage = other.transform.parent.GetComponent<WeaponAttack>().Damage;
+                evnt.WeaponEntity = other.transform.parent.GetComponent<BoltEntity>();
+                evnt.Send();
             }
         }
         else if(other.tag == Tags.SHIELD_TAG)
@@ -138,7 +138,13 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         print("In area effector!!");
     }
 
-    
+    public void DamagedByWeapon(float damage)
+    {
+        Hit = true;
+        ChangeHealth(-1);
+        Invoke("ResetHit", StunTime);
+        print("GOT HIT!!");
+    }
 
     private void ResetHit()     // reset invisibility-frames.
     {

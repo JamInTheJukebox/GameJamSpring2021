@@ -7,8 +7,11 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
     [SerializeField] GameObject hitJoint;  // the location where the collider is expected to spawn.
     [SerializeField] Animator WeaponAnimator;
     bool ReadyToAttackAgain = true;
-    bool Collected;
-
+    // in case you hit more than 1 person with one attack.
+    int NumberOfHitsLeft = 2;
+    bool ToggleHitsLeft = false;
+    float HitCoolDown = 0.1f;
+    public float Damage = 2;
     public override void Attached()
     {
         //transform.localScale = Vector3.one * 10;
@@ -28,6 +31,23 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         {
             state.Attack();
             print("Is Attacking");
+        }
+    }
+
+    public void UseAttacK()     // toggle only when you successfully hit someone.
+    {
+        if (ToggleHitsLeft) { return; }
+        ToggleHitsLeft = true;
+        NumberOfHitsLeft -= 1;
+        Invoke("ResetHitsLeft", HitCoolDown);
+    }
+
+    private void ResetHitsLeft()
+    {
+        ToggleHitsLeft = false;
+        if (NumberOfHitsLeft <= 0)
+        {
+            BoltNetwork.Destroy(gameObject);
         }
     }
 

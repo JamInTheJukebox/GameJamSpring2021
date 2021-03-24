@@ -76,6 +76,17 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     [HideInInspector] public bool Game_Started;
 
     [HideInInspector] public List<BoltEntity> AllPlayers = new List<BoltEntity>();      // when this list has only one player left, stop the game and tell the players who won.
+
+    [Header("Game Attributes")]
+    public float MaxWaitTimeForItems = 60;
+    public float MinWaitTimeForItems = 25;
+    private float WaitCounterForItems = 3;          // depends on # of players
+    public int MaxItems;
+    public Bolt.PrefabId[] ItemBox = new Bolt.PrefabId[3]{
+        BoltPrefabs.Hammer_ItemBlock, BoltPrefabs.Trap_ItemBox,BoltPrefabs.Shield_ItemBlock
+    };
+    // only 3 items so far: hammer, shield, and trap
+    public float ProbabilityToSpawnGuardedTile = 0.3f;
     #endregion
 
 
@@ -85,6 +96,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     {
         GetComponentInChildren<Countdown>().StartCounterInteger = Time_To_Start_Game;
         instance = this;
+        WaitCounterForItems = Random.Range(MinWaitTimeForItems, MaxPlayersToStart);
     }
 
     public void InitializePlayerList()
@@ -122,8 +134,25 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
 
     public override void SimulateOwner()
     {
+
         if((int)Game_State != 0)
+        {
+            WaitCounterForItems -= BoltNetwork.FrameDeltaTime;
             HandleGameState();
+            if(WaitCounterForItems <= 0)
+            {
+                // spawn item
+                int NumItems = Random.Range(1, MaxItems);
+                Bolt.PrefabId[] randomItems = new Bolt.PrefabId[NumItems];
+                for(int i = 0; i < NumItems; i++)
+                {
+                    int randomItem = Random.Range(0, ItemBox.Length);
+                    randomItems[i] = ItemBox[randomItem];
+                }
+                TileManager.instance.SpawnItems(randomItems);
+                WaitCounterForItems = Random.Range(MinWaitTimeForItems, MaxPlayersToStart);
+            }
+        }
     }
 
     public void HandleGameState()

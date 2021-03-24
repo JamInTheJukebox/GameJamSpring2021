@@ -203,4 +203,13 @@ public class TileManager : MonoBehaviour
         }
     }
 
+    public void SpawnItems(Bolt.PrefabId[] ItemsToSpawn)            // spawn items during game
+    {
+        foreach(Bolt.PrefabId item in ItemsToSpawn)
+        {
+            Transform tile = AllTiles[Random.Range(0, AllTiles.Count)].transform;
+            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 2, 0), Quaternion.identity);
+        }
+    }
+
 }

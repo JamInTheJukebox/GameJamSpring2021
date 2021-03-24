@@ -1058,6 +1058,51 @@
       "Groups": [
         "samples"
       ]
+    },
+    {
+      "$type": "Bolt.Compiler.EventDefinition, bolt.compiler",
+      "Properties": [
+        {
+          "Name": "WeaponDamage",
+          "Enabled": true,
+          "Expanded": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Bolt.Compiler.PropertyTypeFloat, bolt.compiler",
+            "Compression": {
+              "MinValue": -2048,
+              "MaxValue": 2048,
+              "Accuracy": 0.01,
+              "Pack": 100.0,
+              "Read": 0.01,
+              "Shift": 2048.0,
+              "BitsRequired": 19
+            }
+          },
+          "AssetSettings": {
+            "$type": "Bolt.Compiler.PropertyEventSettings, bolt.compiler"
+          }
+        },
+        {
+          "Name": "WeaponEntity",
+          "Enabled": true,
+          "Expanded": true,
+          "ReplicationMode": 1,
+          "Priority": 1,
+          "PropertyType": {
+            "$type": "Bolt.Compiler.PropertyTypeEntity, bolt.compiler"
+          },
+          "AssetSettings": {
+            "$type": "Bolt.Compiler.PropertyEventSettings, bolt.compiler"
+          }
+        }
+      ],
+      "Name": "SuccessfulAttackEvent",
+      "Guid": "3c5c0a1b-fe8f-4c02-b8eb-4ea7c150a356",
+      "Groups": [
+        "samples"
+      ]
     }
   ],
   "ActiveGroup": "samples"
