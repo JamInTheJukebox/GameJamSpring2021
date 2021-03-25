@@ -96,7 +96,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     {
         GetComponentInChildren<Countdown>().StartCounterInteger = Time_To_Start_Game;
         instance = this;
-        WaitCounterForItems = Random.Range(MinWaitTimeForItems, MaxPlayersToStart);
+        WaitCounterForItems = Random.Range(MinWaitTimeForItems, MaxWaitTimeForItems);
     }
 
     public void InitializePlayerList()
@@ -150,7 +150,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
                     randomItems[i] = ItemBox[randomItem];
                 }
                 TileManager.instance.SpawnItems(randomItems);
-                WaitCounterForItems = Random.Range(MinWaitTimeForItems, MaxPlayersToStart);
+                WaitCounterForItems = Random.Range(MinWaitTimeForItems, MaxWaitTimeForItems);
             }
         }
     }

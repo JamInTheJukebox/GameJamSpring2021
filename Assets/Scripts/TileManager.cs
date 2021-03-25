@@ -208,8 +208,17 @@ public class TileManager : MonoBehaviour
         foreach(Bolt.PrefabId item in ItemsToSpawn)
         {
             Transform tile = AllTiles[Random.Range(0, AllTiles.Count)].transform;
-            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 2, 0), Quaternion.identity);
+            Quaternion ItemRot = GetitemRotation(item);
+
+            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 5, 0), ItemRot);       // get a spawn function in the tile itself.
         }
     }
 
+    public Quaternion GetitemRotation(Bolt.PrefabId item)
+    {
+        if (item == BoltPrefabs.Hammer_ItemBlock)
+            return Quaternion.Euler(5.293f, -92.402f, 65.55f);
+        else
+            return Quaternion.Euler(-90, 0, 0);
+    }
 }
