@@ -118,7 +118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitJoint: {fileID: 6966907649475497600}
   WeaponAnimator: {fileID: 1914564606119534266}
-  Damage: 2
+  Damage: 0.2
 --- !u!114 &6601464282548622920
 MonoBehaviour:
   m_ObjectHideFlags: 0

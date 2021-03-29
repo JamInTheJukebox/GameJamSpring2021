@@ -12,6 +12,7 @@ TagManager:
   - Shield
   - Trap
   - AreaEffector
+  - Push
   layers:
   - Default
   - TransparentFX

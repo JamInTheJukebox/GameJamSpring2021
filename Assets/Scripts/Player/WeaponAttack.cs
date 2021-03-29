@@ -12,6 +12,9 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
     bool ToggleHitsLeft = false;
     float HitCoolDown = 0.1f;
     public float Damage = 2;
+    private MeshRenderer Model;
+    private WeaponManager ItemUI;
+
     public override void Attached()
     {
         //transform.localScale = Vector3.one * 10;
@@ -19,11 +22,27 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         WeaponAnimator.enabled = true;
         hitJoint = transform.GetChild(0).gameObject;
         */
+
+        Model = GetComponent<MeshRenderer>();
+
+        state.OnToggleWeapon = Toggleweapon;
+        if (entity.IsOwner)
+        {
+            state.InUse = true;
+        }
+
         state.OnAttack = AttackPlayer;
         state.SetAnimator(WeaponAnimator);
         //state.SetTransforms(state.WeaponPos, transform);
         //         state.SetTransforms(state.PlayerTransform, transform);
     }
+
+    public void InitializeUI(WeaponManager wepManager)
+    {
+        ItemUI = wepManager;
+        ItemUI.UpdateItemCount(NumberOfHitsLeft.ToString());
+    }
+
     public override void SimulateOwner()
     {
         if (GameUI.UserInterface != null && GameUI.UserInterface.Paused) { return; }                            // do not attack if paused.
@@ -39,6 +58,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         if (ToggleHitsLeft) { return; }
         ToggleHitsLeft = true;
         NumberOfHitsLeft -= 1;
+        ItemUI.UpdateItemCount(NumberOfHitsLeft.ToString());
         Invoke("ResetHitsLeft", HitCoolDown);
     }
 
@@ -73,5 +93,15 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         //mess with animator states here.
         // stop the player from moving if they attack.
     }
-    
+
+    private void Toggleweapon()
+    {
+        bool newVal = !this.enabled;
+        Model.enabled = newVal;
+        this.enabled = newVal;
+        if (entity.IsOwner)
+        {
+            state.InUse = newVal;
+        }
+    }
 }

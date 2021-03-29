@@ -43,6 +43,10 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     private void MaterialCallBack()
     {
         PlayerGraphics.material = Player_Colors.GetColor(state.UserColor);        // player colors gets any color material based off a string
+        if (entity.IsOwner)
+        {
+            FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);
+        }
     }
     private void Update()
     {
@@ -59,6 +63,11 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         state.Username = PlayerPrefs.GetString("username");
         PlayerIcon.SetActive(true);
+    }
+
+    public string GetName()
+    {
+        return state.Username;
     }
 
     public void SetCameraTarget(Camera target)

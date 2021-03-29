@@ -11,19 +11,74 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
      * 1.2: Bat
      * 2.1: Trap 1
      */
+    // if you do not have a weapon, default to a push.
+    // fists
+    public BoxCollider Fist;   // make this a generic collider for the animations to "enable" when attacking.
+    public bool CanPushAgain = true;
+
+    private TrapAttack trap_attack;
+    private WeaponAttack wep_attack;
+
+    private Inventory PlayerInventory;
+
+    // switching weapons
+    private bool CanSwitchWeaponsAgain = true;
     public override void Attached()
     {
         if (entity.IsOwner)
         {
             state.WeaponIndex = "0";            // spawn with nothing but fists!
+            PlayerInventory = FindObjectOfType<Inventory>();
         }
         state.AddCallback("Weapon", SetWeapon);              // spawn the weapon when 
+        state.OnAttack = PushPlayer;
+        state.OnChangeWeapon = ToggleWeapon;
+        
     }
 
+    public override void SimulateOwner()
+    {
+        if (Input.GetMouseButtonDown(0) && CanPushAgain && state.OnAttack != null)     // do not try to punch if the player has a weapon.
+        {
+            state.Attack();
+        }
+        
+
+        if (state.Weapon != null && Input.GetAxis("Mouse ScrollWheel") != 0 && CanSwitchWeaponsAgain)       // change weapons if you have one and you can switch weapons(Avoid spam).
+        {
+            PlayerInventory.ChangeItem();       // change item in UI;
+            print("SwitchingWeapon");
+            CanSwitchWeaponsAgain = false;
+            Invoke("EnableSwitchingWeapons", 0.3f);            /// make this dependent on a collider.
+            state.ChangeWeapon();   // change weapons.
+        }
+        // if scrolling and have another weapon, change weapon.
+    }
+
+    private void PushPlayer()
+    {
+        print("Pushing That guy");
+        Fist.enabled = true;
+        CanPushAgain = false;
+        Invoke("DisablePushCollider", 0.1f);            /// make this dependent on a collider.
+    }
+
+    private void DisablePushCollider()
+    {
+        Fist.enabled = false;
+        CanPushAgain = true;
+    }
+
+    private void EnableSwitchingWeapons()
+    {
+        CanSwitchWeaponsAgain = true;
+    }
     public void InitializeItem(string ItemID)                       // initialize only weapons and traps
     {
         if (entity.IsOwner)
         {
+            PlayerInventory.ChangeItem();
+            PlayerInventory.InitializeInventory(ItemID);
             Bolt.PrefabId ItemPrefab = c_Item_Types.GetItem(ItemID);
             var Entity = BoltNetwork.Instantiate(ItemPrefab, Hammer_Transform.position, Hammer_Transform.rotation);
             state.Weapon = Entity;      // reference for the weapon.
@@ -32,7 +87,14 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             Entity.transform.localPosition = Hammer_Transform.localPosition;        // varies from item to item.
             if(ItemID == "2.1")
             {
-                Entity.GetComponent<TrapAttack>().InitializeTrapSystem();
+                var trap = Entity.GetComponent<TrapAttack>();
+                trap.InitializeTrapSystem();
+                trap.InitializeUI(this);
+            }
+            else if (ItemID == "1.1")
+            {
+                var wep = Entity.GetComponent<WeaponAttack>();
+                wep.InitializeUI(this);
             }
             /*
             var evnt = GetWeaponEvent.Create();
@@ -41,24 +103,60 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             evnt.Send();
             */
         }
-
     }
 
-    private BoltEntity GetItem(string Weapon_Index)          // get Item from weaponIndex
+    public void UpdateItemCount(string Count)       // tell the user how many hits they have left.
     {
-        switch (Weapon_Index)
-        {
-
-            default:
-                return null;
-        }
+        PlayerInventory.UpdateCounter(Count);
     }
     public void SetWeapon()
     {
+        print("Got a new Item");
         if(state.Weapon == null | state.WeaponIndex == "0")
-        { return; }
+        {
+            if (entity.IsOwner)
+            {
+                PlayerInventory.ChangeItem();
+                PlayerInventory.DeInitializeInventory();
+            }
+
+            state.WeaponIndex = "0";
+            state.OnAttack = PushPlayer;        // go back to default attack.
+            return; }
+
         state.Weapon.transform.SetParent(transform);
+        // add state.onattack.
+        state.OnAttack = null;
     }
+
+    public void ToggleWeapon()     // incase the user wants to change weapons.
+    {
+        if(state.Weapon == null)
+        {
+            // do nothing
+            state.OnAttack = PushPlayer;
+        }
+        else
+        {
+            state.Weapon.GetState<IWeapon>().ToggleWeapon();
+            if (!state.Weapon.GetState<IWeapon>().InUse)
+            {
+                Debug.LogWarning("Attacking with item");
+                state.OnAttack = null;
+            }
+            else
+            {
+                Debug.LogWarning("Attacking with fists!");
+                state.OnAttack = PushPlayer;
+            }
+        }
+    }
+
+    public void ResetWeapon()
+    {
+        state.Weapon = null;
+    }
+
 }
 
 public class c_Item_Types

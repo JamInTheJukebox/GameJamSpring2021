@@ -3960,7 +3960,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Join Server
+  m_text: Host Server
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}
   m_sharedMaterial: {fileID: -4974215258205284209, guid: 2076c07021a4aed449cd76ee1466f72e, type: 2}

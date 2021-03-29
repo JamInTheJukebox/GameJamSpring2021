@@ -13,9 +13,11 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     public float WeakStunTime = 0.3f;       // damage you take when you are in fields of damage.
     [HideInInspector] public bool Hit = false;        // Stunned to provide i frames
     private bool AreaEffectorHit = false;
+    Bolt_PlayerController PlayerController;
 
     public override void Attached()
     {
+        PlayerController = GetComponent<Bolt_PlayerController>();
         if (entity.IsOwner)
         {
             state.Health = PlayerHealth;
@@ -71,6 +73,15 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
                 evnt.WeaponDamage = other.transform.parent.GetComponent<WeaponAttack>().Damage;
                 evnt.WeaponEntity = other.transform.parent.GetComponent<BoltEntity>();
                 evnt.Send();
+            }
+        }
+        else if (other.tag == Tags.PUSH_TAG)
+        {
+            if (!other.transform.IsChildOf(transform) && !Hit)          // line to not hurt yourself. Also, do not run this code if you have already been hurt.
+            {
+                Hit = true;
+                Invoke("ResetHit", StunTime);
+                PlayerController.PlayerStunned();
             }
         }
         else if(other.tag == Tags.SHIELD_TAG)

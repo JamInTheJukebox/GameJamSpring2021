@@ -32,6 +32,8 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     private void OnTriggerEnter(Collider other)         // test with other.
     {
         if (!ReadyToAttack) { return; }     // if not ready to attack, go back
+        if (!other.GetComponentInParent<Health>()) { return; }
+
         GetComponent<SphereCollider>().radius = 2;
         print("In blast Range. Taking Damage!");
         other.GetComponentInParent<Health>().StunnedByTrap(Damage);

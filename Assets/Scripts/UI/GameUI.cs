@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 public class GameUI : Bolt.EntityBehaviour<IGameManager>
 {
     GameManager Manager;
@@ -9,6 +10,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     [HideInInspector] public Cinemachine.CinemachineFreeLook CameraSettings;
 
     [Header("UI")]
+    public TextMeshProUGUI WinnerText;
     public GameObject PauseMenu;
     Button StartGameButton;
     public bool Paused = false;
@@ -16,6 +18,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     public Image HealthUI;
     public Image ShieldUI;
     [Header("Settings")]
+    public float EndgameCounter = 5;            // amount of time the lobby will stay open at the end of the game until all players move to the main menu.
     public Toggle Mouse_Y_Toggle;
 
     public override void Attached()
@@ -84,6 +87,10 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         {
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
+        else
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);      // go to main menu;
+        }
         BoltLauncher.Shutdown();
     }
 
@@ -105,7 +112,19 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         Paused = false;                             // enables movement
     }
 
+    public void AnnounceWinner(string winnerName)           // end the game.
+    {       
+        WinnerText.transform.parent.gameObject.SetActive(true);
+        WinnerText.text = winnerName;
+        StartCoroutine(endgameCounter());
+        // initiate EndGame Counter here.
+    }
 
+    IEnumerator endgameCounter()
+    {
+        yield return new WaitForSeconds(EndgameCounter);
+        QuitGame();
+    }
     /// <summary>
     /// SETTINGS
     /// SETTINGS

@@ -18,13 +18,15 @@ public class AreaEffector : MonoBehaviour
         TrapHollogram.SetActive(state);
     }
 
-    public void PlaceDownTrap(Bolt.PrefabId EntityToSpawn)
+    public bool PlaceDownTrap(Bolt.PrefabId EntityToSpawn)
     {
         if(AreaEntity == null && !CheckForPlacements())                                                          // if there is nothing currently occupying this area, place down trap.
         {
             ToggleAreaEntity(false);        // successfully placed down trap;
             AreaEntity = BoltNetwork.Instantiate(EntityToSpawn, TrapHollogram.transform.position, Quaternion.identity).gameObject;
+            return true;
         }
+        return false;
     }
     public void PlaceDownGuardedTile(Bolt.PrefabId EntityToSpawn)            
     {

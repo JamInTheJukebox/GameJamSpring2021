@@ -28,6 +28,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     bool isParented = false;        // called if you are on a falling platform
     Vector3 SpawnPosition = new Vector3(0,10,0);
 
+    private bool stunned = false;
     [Header("Debug Tools")]
     public bool DrawGroundCheck;
 
@@ -47,6 +48,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         if (GameUI.UserInterface == null) { return; }       // when clients join the game, userinterface is sometimes not observed.
         if (!entity.IsOwner) { return; }
+        if (stunned) { return; }    // do not move the player if they are stunned.
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
     }
@@ -99,6 +101,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             char_Controller.Move(moveDir);
         }
     }
+
     private void OnDrawGizmosSelected()
     {
         if (DrawGroundCheck)
@@ -107,6 +110,17 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             Gizmos.DrawSphere(GroundCheck.position, GroundCheckRadius);
  
         }
+    }
+
+    public void PlayerStunned()     // getting pushed back or setting off a trap. Make this an animation.
+    {
+        stunned = true;
+        Invoke("UndoStun", 2f);
+    }
+
+    private void UndoStun()
+    {
+        stunned = false;
     }
 
     public void MoveToGameRoom()

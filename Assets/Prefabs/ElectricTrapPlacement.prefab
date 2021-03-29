@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35e0b81cd19b5854792d10fafea575ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damage: 2
+  Damage: 0.4
   DestructionVFX: {fileID: 0}
   WaitTimeToInitializeTrap: 1
   ReadyToAttack: 0

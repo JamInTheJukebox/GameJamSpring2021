@@ -9,6 +9,7 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     [SerializeField] float GroundCheckDistance = 5f;
     [SerializeField] LayerMask GroundLayer;
     [SerializeField] int NumberOfUses = 3;
+    private MeshRenderer Model;
     private GameObject m_CurrentTile;
     public GameObject CurrentTile
     {
@@ -26,6 +27,8 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
             }
         }
     }
+
+    private WeaponManager ItemUI;
     private void ToggleAreaEntity(bool entitystate)         // Turns on and off the hologram so the player knows where they will place a trap.
     {
         if(CurrentTile != null)
@@ -42,6 +45,22 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
         player = GetComponentInParent<Bolt_PlayerController>().GetGroundCheckTransform();
     }
 
+    public override void Attached()
+    {
+        Model = GetComponent<MeshRenderer>();
+        
+        state.OnToggleWeapon = Toggleweapon;
+        if (entity.IsOwner)
+        {
+            state.InUse = true;
+        }
+    }
+
+    public void InitializeUI(WeaponManager wepManager)
+    {
+        ItemUI = wepManager;
+        ItemUI.UpdateItemCount(NumberOfUses.ToString());
+    }
     public override void SimulateOwner()
     {
         if (!player) { return; }
@@ -58,17 +77,35 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
                     var areaEffector = CurrentTile.GetComponent<AreaEffector>();
                     if (areaEffector)
                     {
-                        areaEffector.PlaceDownTrap(BoltPrefabs.ElectricTrapPlacement);
+                        var successful = areaEffector.PlaceDownTrap(BoltPrefabs.ElectricTrapPlacement);
+                        if (!successful) { return; }
+                        // subtract one from the count here.
                         NumberOfUses -= 1;
-                        if(NumberOfUses <= 0) { BoltNetwork.Destroy(gameObject); }      // if the item has been used more than x amount of times, destroy it.
+                        ItemUI.UpdateItemCount(NumberOfUses.ToString());
+                        if (NumberOfUses <= 0) {
+                            GetComponentInParent<WeaponManager>().ResetWeapon();
+                            BoltNetwork.Destroy(gameObject);
+                        }      // if the item has been used more than x amount of times, destroy it.
                     }
                 }
             }
         }
     }
 
+    private void Toggleweapon()
+    {
+        bool newVal = !this.enabled;
+        Model.enabled = newVal;
+        ToggleAreaEntity(newVal);
+        this.enabled = newVal;
+        if (entity.IsOwner)
+        {
+            state.InUse = newVal;
+        }
+    }
     private void OnDisable()
     {
         CurrentTile = null;     // turn off all holograms when the trap is deactivated.
     }
+
 }

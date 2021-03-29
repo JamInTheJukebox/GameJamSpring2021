@@ -70,7 +70,6 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
 
     [Header("Extra")]
     [SerializeField] Transform LobbyRoom;
-
     public static GameManager instance;
     [HideInInspector] public bool Game_Counter_Started;
     [HideInInspector] public bool Game_Started;
@@ -114,9 +113,13 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
         if(AllPlayers.Count == 1)
         {
             // player won!
-            print("YOU WIN!!!");
+            var name = AllPlayers[0].GetComponent<PlayerPersonalization>().GetName();
+            var evnt = GameEnded.Create();
+            evnt.WinnerName = name;
+            evnt.Send();
         }
     }
+
     public void StartCountDown()        // triggered by pressing J
     {
         // if there are not enough players, DO NOT START THE GAME!!
