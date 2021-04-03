@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class BlackHoleCollision : MonoBehaviour
 {
+    public bool LobbyCollider;      // If this is a lobby collider, just teleport the player to the lobby. Otherwise, make them lose!
     private void OnTriggerEnter(Collider other)
     {
-        print(other.gameObject.name);
-        if(other.tag == Tags.GROUND_TAG)
+
+        if(other.tag == Tags.GROUND_TAG && !LobbyCollider)
         {
             // play effect here.
             Destroy(other.transform.parent.gameObject);         // destroy the parent
@@ -15,7 +16,12 @@ public class BlackHoleCollision : MonoBehaviour
         
         else if(other.tag == Tags.PLAYER_TAG)
         {
-            other.GetComponent<Health>().LoseGame();
+            if(!LobbyCollider)
+                other.GetComponent<Health>().LoseGame();
+            else
+            {
+                other.GetComponent<Bolt_PlayerController>().Teleport(SpawnPositionManager.instance.LobbySpawnPosition.position);
+            }
         }
     }
 }

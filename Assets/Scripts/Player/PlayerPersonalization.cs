@@ -47,6 +47,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);
         }
+        LobbyTiles.AddPlayer(gameObject, PlayerGraphics.material.color);
     }
     private void Update()
     {
@@ -75,5 +76,8 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         Target = target.transform;
     }
 
-
+    private void OnTriggerEnter(Collider other)
+    {
+        print(gameObject.name);
+    }
 }

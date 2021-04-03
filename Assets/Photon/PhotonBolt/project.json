@@ -157,7 +157,7 @@
             "ExtrapolationErrorTolerance": 0.25,
             "_ExtrapolationCorrectionFrames": 6,
             "ExtrapolationMaxFrames": 9,
-            "SnapMagnitude": 10.0
+            "SnapMagnitude": 100.0
           }
         },
         {

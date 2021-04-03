@@ -27,7 +27,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     bool isGrounded;
     bool isParented = false;        // called if you are on a falling platform
     Vector3 SpawnPosition = new Vector3(0,10,0);
-
+    bool teleporting;
     private bool stunned = false;
     [Header("Debug Tools")]
     public bool DrawGroundCheck;
@@ -48,7 +48,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         if (GameUI.UserInterface == null) { return; }       // when clients join the game, userinterface is sometimes not observed.
         if (!entity.IsOwner) { return; }
-        if (stunned) { return; }    // do not move the player if they are stunned.
+        if (stunned | teleporting) { return; }    // do not move the player if they are stunned.
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
     }
@@ -138,6 +138,11 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             print("GETTING SUCCED!");
             LoseMovementPattern();
         }
+
+        else if(other.tag == Tags.BUTTON_TAG)      // if you enter a button tag object and are moving down, push the button down and claim ownership.
+        {
+            other.GetComponentInParent<Test1>().ClaimTile();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -168,5 +173,13 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             Destroy(GetComponent<Rigidbody>());
         }
         TemporaryCollider.enabled = false;
+    }
+
+    public void Teleport(Vector3 newPosition)
+    {
+        if(!entity.IsOwner) { return; }
+        char_Controller.enabled = false;
+        transform.position = newPosition;
+        char_Controller.enabled = true;
     }
 }

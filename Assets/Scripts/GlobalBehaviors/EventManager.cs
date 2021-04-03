@@ -65,7 +65,7 @@ public class EventManager : Bolt.GlobalEventListener
 
     public override void OnEvent(LoseGameEvent evnt)        // called whenever a player loses!
     {
-        evnt.Player.transform.position = SpawnPositionManager.instance.LobbySpawnPosition.position;
+        evnt.Player.GetComponent<Bolt_PlayerController>().Teleport(SpawnPositionManager.instance.LobbySpawnPosition.position);
         if (BoltNetwork.IsServer)
         {
             GameManager.instance.PlayerLost(evnt.Player);

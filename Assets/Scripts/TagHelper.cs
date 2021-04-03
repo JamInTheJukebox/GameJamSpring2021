@@ -33,4 +33,5 @@ public class Tags
     public const string TRAP_TAG = "Trap";
     public const string AREA_EFF_TAG = "AreaEffector";
     public const string PUSH_TAG = "Push";
+    public const string BUTTON_TAG = "Button";
 }
