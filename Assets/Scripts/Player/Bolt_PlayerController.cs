@@ -56,6 +56,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     private void HandleYAxis()
     {
         isGrounded = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, groundMask);
+        Debug.LogWarning(isGrounded);
         /*
         //isParented = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, FallingMask);
         if (isParented)
@@ -64,14 +65,18 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         }
         //else { transform.parent = null; }
         */
-        if (isGrounded) { Current_Y_Velocity.y = -2f; }
-        Current_Y_Velocity.y += Gravity * BoltNetwork.FrameDeltaTime;
-        //if (isParented) { Current_Y_Velocity.y = 0; }
-        if(Input.GetButtonDown("Jump") && isGrounded)
-        {
-            if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
-            Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
+        Current_Y_Velocity.y += Gravity * BoltNetwork.FrameDeltaTime;   // acceleration is always pointing down.
+
+        if (isGrounded && Current_Y_Velocity.y <= 0) {
+            Current_Y_Velocity.y = -2f;             // if you are grounded, keep moving down at a velocity of 2.
+
+            if (Input.GetButtonDown("Jump"))        // if you are grounded and you press jump, JUMP!
+            {
+                if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
+                Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
+            }
         }
+      
         Current_Y_Velocity.y = Mathf.Clamp(Current_Y_Velocity.y, -20f, 20f);
         char_Controller.Move(Current_Y_Velocity * BoltNetwork.FrameDeltaTime);
         

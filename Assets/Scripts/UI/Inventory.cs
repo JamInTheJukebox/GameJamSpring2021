@@ -103,7 +103,9 @@ public class Inventory : MonoBehaviour
         var temp = Slot1.transform.parent;
         Slot1.transform.SetParent(Slot2.transform.parent);
         Slot1.transform.localPosition = Vector3.zero;
+        Slot1.transform.SetAsFirstSibling();
         Slot2.transform.SetParent(temp);
         Slot2.transform.localPosition = Vector3.zero;
+        Slot2.transform.SetAsFirstSibling();
     }
 }
