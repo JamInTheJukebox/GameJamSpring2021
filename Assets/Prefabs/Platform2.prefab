@@ -14847,10 +14847,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GuardedTileHologram
       objectReference: {fileID: 0}
-    - target: {fileID: 1126631118904030040, guid: 1b0671d5624e0f44d9315db278c6cef7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1126631118904030044, guid: 1b0671d5624e0f44d9315db278c6cef7, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -14861,7 +14857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1126631118904030044, guid: 1b0671d5624e0f44d9315db278c6cef7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.674
+      value: 1.168
       objectReference: {fileID: 0}
     - target: {fileID: 1126631118904030044, guid: 1b0671d5624e0f44d9315db278c6cef7, type: 3}
       propertyPath: m_LocalPosition.z

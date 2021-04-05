@@ -77,6 +77,10 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         if (entity.IsOwner)
         {
+            if(PlayerInventory == null)
+            {
+                PlayerInventory = FindObjectOfType<Inventory>();
+            }
             PlayerInventory.ChangeItem();
             PlayerInventory.InitializeInventory(ItemID);
             Bolt.PrefabId ItemPrefab = c_Item_Types.GetItem(ItemID);
@@ -138,7 +142,9 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         }
         else
         {
-            state.Weapon.GetState<IWeapon>().ToggleWeapon();
+            if(entity.IsOwner)
+                state.Weapon.GetState<IWeapon>().ToggleWeapon();
+            
             if (!state.Weapon.GetState<IWeapon>().InUse)
             {
                 Debug.LogWarning("Attacking with item");

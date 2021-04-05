@@ -197,7 +197,7 @@ public class TileManager : MonoBehaviour
             bool Occupied = AllTiles[GuardedTileIndex].GetComponentInChildren<AreaEffector>().CheckForPlacements();
             if (!Occupied)      // if the space is not occupied, spawn a guarded tile.
             {
-                AllTiles[GuardedTileIndex].GetComponentInChildren<AreaEffector>().PlaceDownGuardedTile(BoltPrefabs.GuardedTile);       // can input any generic guarded tile in the future.
+                AllTiles[GuardedTileIndex].GetComponentInChildren<AreaEffector>().PlaceDownGuardedTile(BoltPrefabs.PlayerGuardTile);       // can input any generic guarded tile in the future.
                 break;
             }
         }

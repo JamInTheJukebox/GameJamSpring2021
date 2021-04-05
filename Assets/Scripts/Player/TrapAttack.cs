@@ -48,8 +48,8 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     public override void Attached()
     {
         Model = GetComponent<MeshRenderer>();
-        
         state.OnToggleWeapon = Toggleweapon;
+
         if (entity.IsOwner)
         {
             state.InUse = true;

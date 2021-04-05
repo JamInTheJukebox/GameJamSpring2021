@@ -26,6 +26,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         Model = GetComponent<MeshRenderer>();
 
         state.OnToggleWeapon = Toggleweapon;
+
         if (entity.IsOwner)
         {
             state.InUse = true;

@@ -7,10 +7,10 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     // player should walk to guarded tile to take control of it.
     // will copy the material of the player.
     // deals small damage to players overtime if they are on it.
-
+    #region Claimed
     public GameObject DestroyVFX;
     public float Damage = 0.3f;
-    public float CooldownTime;
+    public float CooldownTime = 0.1f;
     private SphereCollider AreaOfAttack;
 
     public override void Attached()
@@ -22,8 +22,15 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
 
     private void InitializeGuardedTile()        // copy the owner's material.
     {
-        Material GuardedMaterial = state.EntityOwner.GetComponent<PlayerPersonalization>().PlayerGraphics.material;
-        GetComponent<Renderer>().material = GuardedMaterial;
+        if(PlayerDetector != null)
+        {
+            Destroy(PlayerDetector.gameObject);
+        }
+
+        Color GuardedMaterialColor = state.EntityOwner.GetComponent<PlayerPersonalization>().PlayerGraphics.material.color;
+        ButtonRender.material.color = GuardedMaterialColor*3;
+        print("I am now claimed!");
+        ButtonAnim.Play(AnimHashID);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -31,14 +38,11 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         {
             if(state.EntityOwner == null)       // if nobody owns the tile, assign ownership
             {
-                print("Claiming Tile!");
-                if (BoltNetwork.IsServer)            // only server can assign ownership
-                    state.EntityOwner = other.GetComponent<BoltEntity>();
-                
+                return;     // do nothing if there is no owner. 
             }
             else
             {
-                BoltEntity player = other.GetComponent<BoltEntity>();
+                BoltEntity player = other.GetComponent<BoltEntity>();   // fix this.
                 if (!player.IsOwner) { return; }
                 if(state.EntityOwner == player)     // owned guard tile
                 {
@@ -68,4 +72,24 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
             BoltNetwork.Destroy(gameObject);
         }
     }
+    #endregion
+    #region claimed
+    // initial part of script where the tile has no owner.
+    private Animator ButtonAnim;
+    private int AnimHashID;
+    public Renderer ButtonRender;
+    public MeshCollider PlayerDetector;
+    public Material OwnedMaterial;      // material to assign when Player owns the material.
+    private void Awake()
+    {
+        ButtonAnim = GetComponent<Animator>();
+        AnimHashID = Animator.StringToHash("Pushed");
+    }
+    public void ClaimTile(BoltEntity PlayerEntity)
+    {
+        print("Claiming Tile!");
+        if (BoltNetwork.IsServer)            // only server can assign ownership
+            state.EntityOwner = PlayerEntity;
+    }
+    #endregion
 }

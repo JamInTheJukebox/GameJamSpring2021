@@ -32,6 +32,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     [Header("Debug Tools")]
     public bool DrawGroundCheck;
 
+    
     public override void Attached() // start.
     {
         char_Controller = GetComponent<CharacterController>();
@@ -56,7 +57,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     private void HandleYAxis()
     {
         isGrounded = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, groundMask);
-        Debug.LogWarning(isGrounded);
+
         /*
         //isParented = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, FallingMask);
         if (isParented)
@@ -146,7 +147,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 
         else if(other.tag == Tags.BUTTON_TAG)      // if you enter a button tag object and are moving down, push the button down and claim ownership.
         {
-            other.GetComponentInParent<Test1>().ClaimTile();
+            other.GetComponentInParent<GuardedTilePlacement>().ClaimTile(entity);
         }
     }
 
