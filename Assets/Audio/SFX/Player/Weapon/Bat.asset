@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720e0d2407105a14297cc842241d2091, type: 3}
+  m_Name: Bat
+  m_EditorClassIdentifier: 
+  Source_volume: 1
+  SFX_Sounds:
+  - {fileID: 8300000, guid: 0eb08afb5a22d434d8855e2f4927ec47, type: 3}
+  - {fileID: 8300000, guid: 940c0bc2bb0172943b2af552922a5894, type: 3}
+  - {fileID: 8300000, guid: 89479d8719495e444adc03a44a96858d, type: 3}
+  - {fileID: 8300000, guid: a8df4673e5ec326419f0182c0e3bc8c6, type: 3}
+  - {fileID: 8300000, guid: 731dece9cf60f8640ba28d8783302aa1, type: 3}
+  - {fileID: 8300000, guid: a014cc329339608428b63c9aa7650ae6, type: 3}
+  - {fileID: 8300000, guid: 9519bba3ccdf8894caeb99969b46f481, type: 3}
+  - {fileID: 8300000, guid: 7a5df29dfa6bdf2438fbedfa4da8cf3a, type: 3}
+  - {fileID: 8300000, guid: 7c62d905b591b7e43a37c50d06ee80b8, type: 3}

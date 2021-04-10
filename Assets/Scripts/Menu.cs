@@ -95,4 +95,14 @@ public class Menu : GlobalEventListener
         BoltNetwork.Shutdown();
     }
 
+
+    public void ChangeInvertY(bool newY)
+    {
+        PlayerSettings.On_Y_Invert_Changed(newY);
+    }
+
+    public void ChangeToolTips(bool newTool)
+    {
+        PlayerSettings.On_ToolTip_Changed(newTool);
+    }
 }

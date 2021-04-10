@@ -83,7 +83,7 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void ChangeItem()
+    public void ChangeItem()        // UI only.
     {
         if (initialized)
         {

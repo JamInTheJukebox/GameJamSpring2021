@@ -22,6 +22,7 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
 
     public void DestroyTrap()
     {
+
         // instantiate destruction vfx
         if (entity.IsOwner)
         {
@@ -33,7 +34,7 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     {
         if (!ReadyToAttack) { return; }     // if not ready to attack, go back
         if (!other.GetComponentInParent<Health>()) { return; }
-
+        Instantiate(DestructionVFX, transform.position, Quaternion.identity);
         GetComponent<SphereCollider>().radius = 2;
         print("In blast Range. Taking Damage!");
         other.GetComponentInParent<Health>().StunnedByTrap(Damage);

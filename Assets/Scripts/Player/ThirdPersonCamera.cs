@@ -22,7 +22,7 @@ public class ThirdPersonCamera : Bolt.EntityBehaviour<IMasterPlayerState>
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    private void SetCamera()
+    private void SetCamera()                // figure out a better way to do this.
     {
         FindObjectOfType<GameUI>().CameraSettings = CameraSetting;      
     }

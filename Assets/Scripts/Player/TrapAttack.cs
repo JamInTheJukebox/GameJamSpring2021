@@ -48,7 +48,8 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     public override void Attached()
     {
         Model = GetComponent<MeshRenderer>();
-        state.OnToggleWeapon = Toggleweapon;
+        //state.OnToggleWeapon = Toggleweapon;
+        state.AddCallback("InUse", Toggleweapon);
 
         if (entity.IsOwner)
         {
@@ -92,16 +93,16 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
         }
     }
 
-    private void Toggleweapon()
+    private void Toggleweapon()     // function for setting player attack visuals.
     {
-        bool newVal = !this.enabled;
-        Model.enabled = newVal;
-        ToggleAreaEntity(newVal);
-        this.enabled = newVal;
+        bool newVal = state.InUse;
+        Model.enabled = state.InUse;
+        this.enabled = state.InUse;
+        /*
         if (entity.IsOwner)
         {
-            state.InUse = newVal;
-        }
+        // set this outside    state.InUse = newVal;
+        }*/
     }
     private void OnDisable()
     {

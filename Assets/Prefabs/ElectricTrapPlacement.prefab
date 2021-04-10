@@ -139,6 +139,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 0.4
-  DestructionVFX: {fileID: 0}
+  DestructionVFX: {fileID: 3915921871996795725, guid: 3b6b88d8326a7a74b86e719a98da0175, type: 3}
   WaitTimeToInitializeTrap: 1
   ReadyToAttack: 0

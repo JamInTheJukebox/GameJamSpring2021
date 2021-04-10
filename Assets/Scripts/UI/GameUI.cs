@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 public class GameUI : Bolt.EntityBehaviour<IGameManager>
 {
+    #region Variables
     GameManager Manager;
     public static GameUI UserInterface;                                             // static instance
     [HideInInspector] public Cinemachine.CinemachineFreeLook CameraSettings;
@@ -20,13 +21,15 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     [Header("Settings")]
     public float EndgameCounter = 5;            // amount of time the lobby will stay open at the end of the game until all players move to the main menu.
     public Toggle Mouse_Y_Toggle;
+    public Toggle ToolTip_Toggle;
+    #endregion
 
+    #region BuiltInFunctions
     public override void Attached()
     {
         Manager = GetComponentInParent<GameManager>();                              // reference to GameManager.
         UserInterface = this;
         PauseMenu.SetActive(false);
-
         if (BoltNetwork.IsServer)
         {
             transform.GetChild(0).gameObject.SetActive(true);
@@ -53,7 +56,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         if (Input.GetKeyDown(KeyCode.P) && CameraSettings != null)
             PauseGame();
 
-        if (tmp_Duration > 0)
+        if (tmp_Duration > 0)       // update health and Shield UI.
         {
             tmp_Duration -= BoltNetwork.FrameDeltaTime;
             if (ShieldUI.fillAmount > 0 | TargetShieldRatio > 0)
@@ -71,7 +74,9 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
 
         }
     }
+    #endregion
 
+    #region BasicSettings
     void FadeToColor(Color color)           // fade for buttons
     {
 
@@ -125,20 +130,19 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         yield return new WaitForSeconds(EndgameCounter);
         QuitGame();
     }
-    /// <summary>
-    /// SETTINGS
-    /// SETTINGS
-    /// SETTINGS
-    /// </summary>
+    #endregion
+
+    #region Settings
     public void Change_MouseY_Settings(bool newValue)
     {
         PlayerSettings.Mouse_Y_Invert = newValue;
-        CameraSettings.m_YAxis.m_InvertInput = newValue;
+        CameraSettings.m_YAxis.m_InvertInput = newValue;        // do initialize in camera
     }
 
     void InitializePlayerSettings()
     {
-        Change_MouseY_Settings(PlayerSettings.Mouse_Y_Invert);
+        Mouse_Y_Toggle.isOn = PlayerSettings.Mouse_Y_Invert;        // leads to callback Change_MouseY
+        ToolTip_Toggle.isOn = PlayerSettings.ToolTip;
     }
 
     private float TotalHealth;      // ratio: Current Health / Total health and assign this ratio as the slider value.
@@ -148,9 +152,10 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     float tmp_Duration = 0;
     float Health_Fade_Time;
     private float TargetHealthRatio = 1;        // separate these. Do not link them.
-    private float TargetShieldRatio;    
+    private float TargetShieldRatio;
+    #endregion
 
-
+    #region  Health
     public void InitializeHealth(float total_Health)
     {
         HealthUI.transform.parent.gameObject.SetActive(true);           // enable the whole health bar
@@ -181,5 +186,6 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         TargetShieldRatio = Target_Shield / TotalSheild;
         Health_Fade_Time = Mathf.Abs(ShieldUI.fillAmount - TargetShieldRatio) / tmp_Duration;
     }
+    #endregion
 
 }

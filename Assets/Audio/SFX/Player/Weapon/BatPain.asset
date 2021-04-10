@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 720e0d2407105a14297cc842241d2091, type: 3}
+  m_Name: BatPain
+  m_EditorClassIdentifier: 
+  Source_volume: 1
+  SFX_Sounds:
+  - {fileID: 8300000, guid: 6974c50b8fc573348a5c99c2e4cc9379, type: 3}
+  - {fileID: 8300000, guid: 31478a3eec45ba44f9da7323881d7693, type: 3}
+  - {fileID: 8300000, guid: 0240568866ecbda428913707479b3125, type: 3}
+  - {fileID: 8300000, guid: e1532a3746ae43e48965d975f7e29eed, type: 3}
+  - {fileID: 8300000, guid: 262b9fea28df44745a369419f6eba4fb, type: 3}
+  - {fileID: 8300000, guid: c8cc4c6093a33674f9574200f930ebfd, type: 3}
+  - {fileID: 8300000, guid: 65a8ec4d737aa214e99f207f2c104905, type: 3}
+  - {fileID: 8300000, guid: d4399cee63f09e347b5077f7354d13a7, type: 3}
+  - {fileID: 8300000, guid: 90cc3b3c03238b1429b03b2010dc32cb, type: 3}

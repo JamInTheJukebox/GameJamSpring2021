@@ -32,7 +32,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         }
         state.AddCallback("Weapon", SetWeapon);              // spawn the weapon when 
         state.OnAttack = PushPlayer;
-        state.OnChangeWeapon = ToggleWeapon;
+        //state.OnChangeWeapon = ToggleWeapon;
         
     }
 
@@ -49,8 +49,9 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             PlayerInventory.ChangeItem();       // change item in UI;
             print("SwitchingWeapon");
             CanSwitchWeaponsAgain = false;
-            Invoke("EnableSwitchingWeapons", 0.3f);            /// make this dependent on a collider.
-            state.ChangeWeapon();   // change weapons.
+            Invoke("EnableSwitchingWeapons", 0.5f);            /// make this dependent on a collider.
+            ToggleWeapon();
+            //state.ChangeWeapon();   // change weapons.
         }
         // if scrolling and have another weapon, change weapon.
     }
@@ -81,7 +82,6 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             {
                 PlayerInventory = FindObjectOfType<Inventory>();
             }
-            PlayerInventory.ChangeItem();
             PlayerInventory.InitializeInventory(ItemID);
             Bolt.PrefabId ItemPrefab = c_Item_Types.GetItem(ItemID);
             var Entity = BoltNetwork.Instantiate(ItemPrefab, Hammer_Transform.position, Hammer_Transform.rotation);
@@ -115,12 +115,13 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     }
     public void SetWeapon()
     {
+        if(entity.IsOwner)
+            PlayerInventory.ChangeItem();
         print("Got a new Item");
         if(state.Weapon == null | state.WeaponIndex == "0")
         {
             if (entity.IsOwner)
             {
-                PlayerInventory.ChangeItem();
                 PlayerInventory.DeInitializeInventory();
             }
 
@@ -135,17 +136,19 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public void ToggleWeapon()     // incase the user wants to change weapons.
     {
-        if(state.Weapon == null)
+
+        if(state.Weapon == null)        // if no weapon, just change attack to default attack.
         {
             // do nothing
             state.OnAttack = PushPlayer;
         }
         else
         {
-            if(entity.IsOwner)
-                state.Weapon.GetState<IWeapon>().ToggleWeapon();
+            var wep = state.Weapon.GetState<IWeapon>();
+            if (entity.IsOwner)
+                wep.InUse = !wep.InUse;
             
-            if (!state.Weapon.GetState<IWeapon>().InUse)
+            if (wep.InUse)
             {
                 Debug.LogWarning("Attacking with item");
                 state.OnAttack = null;

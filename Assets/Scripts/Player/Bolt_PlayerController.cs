@@ -58,14 +58,6 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         isGrounded = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, groundMask);
 
-        /*
-        //isParented = Physics.CheckSphere(GroundCheck.position, GroundCheckRadius, FallingMask);
-        if (isParented)
-        {
-            HandleFallingPlatforms();
-        }
-        //else { transform.parent = null; }
-        */
         Current_Y_Velocity.y += Gravity * BoltNetwork.FrameDeltaTime;   // acceleration is always pointing down.
 
         if (isGrounded && Current_Y_Velocity.y <= 0) {
@@ -74,6 +66,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             if (Input.GetButtonDown("Jump"))        // if you are grounded and you press jump, JUMP!
             {
                 if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
+                //GetComponent<PlayerAnimation>().TestJump();
                 Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
             }
         }
@@ -105,6 +98,8 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             moveDir = moveDir.normalized;
             moveDir *= speed * BoltNetwork.FrameDeltaTime;
             char_Controller.Move(moveDir);
+            //if(isGrounded)
+                //GetComponent<PlayerAnimation>().TestWalk();
         }
     }
 
