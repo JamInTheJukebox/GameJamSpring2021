@@ -5674,9 +5674,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd8bff03d2dbc6046b8335546f9bbc79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DestroyVFX: {fileID: 0}
   Damage: 0.3
   CooldownTime: 1
+  DestroyVFX: {fileID: 0}
+  BoltVFX: {fileID: 6928492411007976858}
+  BoltVFX2: {fileID: 2136901515526080351}
   ButtonRender: {fileID: 5889996468167760986}
   PlayerDetector: {fileID: 797401749726292286}
   OwnedMaterial: {fileID: 2100000, guid: 704a06d98572da443a6c05ba46430532, type: 2}
@@ -5689,7 +5691,7 @@ SphereCollider:
   m_GameObject: {fileID: 7847411240623765785}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 2.3
   m_Center: {x: 0, y: 0, z: 0}
@@ -5757,6 +5759,11 @@ PrefabInstance:
 --- !u!4 &6928492411007976857 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9043579589097298109, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
+  m_PrefabInstance: {fileID: 2136901515124727076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &6928492411007976858 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9043579589097298110, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
   m_PrefabInstance: {fileID: 2136901515124727076}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6928492412213075937
@@ -5884,6 +5891,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
+--- !u!198 &2136901515526080351 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 9043579589097298110, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
+  m_PrefabInstance: {fileID: 6928492412213075937}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2136901515526080348 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9043579589097298109, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}

@@ -8,15 +8,23 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     // will copy the material of the player.
     // deals small damage to players overtime if they are on it.
     #region Claimed
-    public GameObject DestroyVFX;
     public float Damage = 0.3f;
     public float CooldownTime = 0.1f;
     private SphereCollider AreaOfAttack;
+
+    public GameObject DestroyVFX;
+    public ParticleSystem BoltVFX;
+    public ParticleSystem BoltVFX2;
+    // add destroy method for when it has been on the board for too long.
+    List<GameObject> players = new List<GameObject>();
+    private IEnumerator coroutineGuardTile;
 
     public override void Attached()
     {
         state.AddCallback("EntityOwner", InitializeGuardedTile);
         AreaOfAttack = GetComponent<SphereCollider>();
+        BoltVFX.Stop();
+        BoltVFX2.Stop();
     }
 
 
@@ -32,6 +40,7 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         print("I am now claimed!");
         ButtonAnim.Play(AnimHashID);
     }
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.tag == Tags.PLAYER_TAG)
@@ -40,34 +49,59 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
             {
                 return;     // do nothing if there is no owner. 
             }
+            if (players.Contains(other.gameObject))
+            {
+                return;
+            }
             else
             {
-                BoltEntity player = other.GetComponent<BoltEntity>();   // fix this.
-                if (!player.IsOwner) { return; }
+                BoltVFX.Play();
+                BoltVFX2.Play();
+                players.Add(other.gameObject);
+                BoltEntity player = other.GetComponent<BoltEntity>();  
+                if (!player.IsOwner) { return; }            // only continue for local machine here. not a server based event.
+                // apply damage recursion function here.
                 if(state.EntityOwner == player)     // owned guard tile
                 {
+                    if (coroutineGuardTile == null)
+                        coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(Damage, CooldownTime);
+                    StartCoroutine(coroutineGuardTile);
                     print("This is your guarded tile. Enjoy!!");        // possibly heal player here in random event?
                 }
                 else// tile that is not owned
                 {
-                    AreaOfAttack.enabled = false;
-                    player.GetComponent<Health>().DamagedByAreaEffector(Damage);
-                    Invoke("ResetCollider", 5);     // needs to be about the same as "Weak stun time"
+                    if (coroutineGuardTile == null)
+                        coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(-Damage, CooldownTime);
+                    StartCoroutine(coroutineGuardTile);
+                    
                 }
             }
-
+            // cancel the invoke with on-trigger-exit.
         }
     }
 
-    public BoltEntity FindOutOwner()
+    private void OnTriggerExit(Collider other)
     {
-        return state.EntityOwner;
+        if (other.tag == Tags.PLAYER_TAG && state.EntityOwner != null)
+        {
+            if (players.Contains(other.gameObject))       // if nobody owns the tile, assign ownership
+            {
+                // stop when the list is 0, or when
+                players.Remove(other.gameObject);
+                if(players.Count == 0)
+                {
+                    BoltVFX.Stop();
+                    BoltVFX2.Stop();
+                }
+                BoltEntity player = other.GetComponent<BoltEntity>();
+                if (!player.IsOwner) { return; }
+                // cancel damage here.
+                StopCoroutine(coroutineGuardTile);
+            }
+        }
     }
 
-    private void ResetCollider()
-    {
-        AreaOfAttack.enabled = true;            // re-enable collider to strike players again
-    }
+
 
     public void DestroyGuardedTile()
     {
@@ -77,8 +111,9 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
             BoltNetwork.Destroy(gameObject);
         }
     }
+
     #endregion
-    #region claimed
+    #region BeforeClaimed
     // initial part of script where the tile has no owner.
     private Animator ButtonAnim;
     private int AnimHashID;
@@ -92,9 +127,13 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     }
     public void ClaimTile(BoltEntity PlayerEntity)
     {
+        AreaOfAttack.enabled = true;
+        PlayerDetector.enabled = false;
+        if (state.EntityOwner != null) { return; }       // do not reassign ownership if someone has claimed this tile.
         print("Claiming Tile!");
-        if (BoltNetwork.IsServer)            // only server can assign ownership
+        if (BoltNetwork.IsServer)            // only server can assign ownership        // handle this in the guarded tile!
             state.EntityOwner = PlayerEntity;
+
     }
     #endregion
 }

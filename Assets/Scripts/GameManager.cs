@@ -81,7 +81,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     public float MinWaitTimeForItems = 25;
     private float WaitCounterForItems = 3;          // depends on # of players
     public int MaxItems;
-    public Bolt.PrefabId[] ItemBox = new Bolt.PrefabId[3]{
+    private Bolt.PrefabId[] ItemBox = new Bolt.PrefabId[3]{
         BoltPrefabs.Hammer_ItemBlock, BoltPrefabs.Trap_ItemBox,BoltPrefabs.Shield_ItemBlock
     };
     // only 3 items so far: hammer, shield, and trap

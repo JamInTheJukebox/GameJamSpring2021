@@ -33,7 +33,8 @@ public class AreaEffector : MonoBehaviour
         if (AreaEntity == null && !CheckForPlacements())                                                          // if there is nothing currently occupying this area, place down trap.
         {
             ToggleAreaEntity(false);        // successfully placed down trap;
-            AreaEntity = BoltNetwork.Instantiate(EntityToSpawn, GuardedHologram.transform.position, Quaternion.identity).gameObject;
+            Debug.LogWarning(transform.parent.name);
+            AreaEntity = BoltNetwork.Instantiate(EntityToSpawn, GuardedHologram.transform.position, new Quaternion(0,0,0,0)).gameObject;
         }
     }
 

@@ -11,7 +11,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     private float CurrentShield;
     public float StunTime = 1.5f;
     public float WeakStunTime = 0.3f;       // damage you take when you are in fields of damage.
-    [HideInInspector] public bool Hit = false;        // Stunned to provide i frames
+    [HideInInspector] public bool Hit = false;        // Stunned to provide i frames for x seconds. i frames will only work against actual weapons and the push. No protection against traps or guard tile at this time(But it is easy to add).
     private bool AreaEffectorHit = false;
     Bolt_PlayerController PlayerController;
 
@@ -114,6 +114,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 
     private void OnTriggerStay(Collider other)
     {
+        if (!entity.IsAttached) { return; }
         if (!entity.IsOwner) { return; }
         if (other.tag == Tags.AREA_EFF_TAG && !AreaEffectorHit)
         {
@@ -138,16 +139,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         print("GOT HIT!!");
     }
 
-    public void DamagedByAreaEffector(float damage)
-    {
-        if (!entity.IsOwner) { return; }    // getting hit by a trap will guarantee damage to you. However, it gives you some i-frames for some other attacks such as hamemrs. YOu can't just get hit by something and try to set off all the traps!.
-        if (Hit) { return; }
-        Hit = true;
-        ChangeHealth(-damage);
 
-        Invoke("ResetHit", WeakStunTime);
-        print("In area effector!!");
-    }
 
     public void DamagedByWeapon(float damage)
     {
@@ -173,5 +165,14 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         var evnt = LoseGameEvent.Create();
         evnt.Player = GetComponent<BoltEntity>();
         evnt.Send();
+    }
+
+    public IEnumerator AreaEffectorDeltaHealth(float delta, float restTime)         // can be used to heal or damage players. Depends on what the guarded tile placement says! Fixed when you leave the collider.
+    {
+        while (true)
+        {
+            ChangeHealth(delta);
+            yield return new WaitForSeconds(restTime);
+        }
     }
 }
