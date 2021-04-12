@@ -52,11 +52,16 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 {
                     AreaOfAttack.enabled = false;
                     player.GetComponent<Health>().DamagedByAreaEffector(Damage);
-                    Invoke("ResetCollider", CooldownTime);     // needs to be about the same as "Weak stun time"
+                    Invoke("ResetCollider", 5);     // needs to be about the same as "Weak stun time"
                 }
             }
 
         }
+    }
+
+    public BoltEntity FindOutOwner()
+    {
+        return state.EntityOwner;
     }
 
     private void ResetCollider()

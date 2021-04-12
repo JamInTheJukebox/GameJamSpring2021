@@ -133,8 +133,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!entity.IsOwner) { return; }
-        if (other.tag == Tags.GRAVITYFIELD_TAG)
+        if (other.tag == Tags.GRAVITYFIELD_TAG && entity.IsOwner)
         {
             print("GETTING SUCCED!");
             LoseMovementPattern();

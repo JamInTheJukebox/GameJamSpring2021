@@ -18,7 +18,13 @@ public class Menu : GlobalEventListener
     [SerializeField] GameObject Server_Box_Prefab;
     [SerializeField] Transform Server_List_Content;
     private List<GameObject> JoinServerBoxes = new List<GameObject>();
+    // used for initializing settings.
+    public Toggle Y_Toggle;
 
+    private void Start()
+    {
+        Y_Toggle.isOn = PlayerSettings.Mouse_Y_Invert;
+    }
     public void OnSetUserNameValueChanged(string NewName)
     {
         PlayerPrefs.SetString("username", NewName);
@@ -26,6 +32,7 @@ public class Menu : GlobalEventListener
 
     public void StartServer()
     {
+        // error: Trying to connect to session then trying to host game.
         BoltLauncher.StartServer(); // start the server;
     }
 

@@ -14,9 +14,10 @@ public class ThirdPersonCamera : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public override void Attached()
     {
+        CameraSetting.m_YAxis.m_InvertInput = PlayerSettings.Mouse_Y_Invert;
         if (entity.IsOwner)
         {
-            Invoke("SetCamera", 1f);
+            SetCamera();
         }
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
@@ -24,8 +25,11 @@ public class ThirdPersonCamera : Bolt.EntityBehaviour<IMasterPlayerState>
 
     private void SetCamera()                // figure out a better way to do this.
     {
-        FindObjectOfType<GameUI>().CameraSettings = CameraSetting;      
+
+        GameUI.UserInterface.CameraSettings = CameraSetting;
+        
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape))

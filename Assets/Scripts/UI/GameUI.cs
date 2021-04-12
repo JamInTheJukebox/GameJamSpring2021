@@ -30,6 +30,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         Manager = GetComponentInParent<GameManager>();                              // reference to GameManager.
         UserInterface = this;
         PauseMenu.SetActive(false);
+        Change_MouseY_Settings(PlayerSettings.Mouse_Y_Invert);
         if (BoltNetwork.IsServer)
         {
             transform.GetChild(0).gameObject.SetActive(true);
@@ -133,18 +134,38 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     #endregion
 
     #region Settings
-    public void Change_MouseY_Settings(bool newValue)
+    bool m_MouseY;
+    public bool MouseY
     {
-        PlayerSettings.Mouse_Y_Invert = newValue;
-        CameraSettings.m_YAxis.m_InvertInput = newValue;        // do initialize in camera
+        get { return m_MouseY; }
+        set
+        {
+            print(PlayerSettings.Mouse_Y_Invert);
+            m_MouseY = value;
+            PlayerSettings.On_Y_Invert_Changed(value);
+            Mouse_Y_Toggle.isOn = PlayerSettings.Mouse_Y_Invert;        // leads to callback Change_MouseY
+            // dont fuck with the camera here.
+            if (CameraSettings != null)
+                CameraSettings.m_YAxis.m_InvertInput = value;
+            
+        }
     }
 
+    public void Change_MouseY_Settings(bool newValue)
+    {
+        MouseY = newValue;
+    }
+    /*
     void InitializePlayerSettings()
     {
         Mouse_Y_Toggle.isOn = PlayerSettings.Mouse_Y_Invert;        // leads to callback Change_MouseY
         ToolTip_Toggle.isOn = PlayerSettings.ToolTip;
-    }
 
+    }*/
+
+    #endregion
+
+    #region  Health
     private float TotalHealth;      // ratio: Current Health / Total health and assign this ratio as the slider value.
     private float TotalSheild = 2;
     [Tooltip("Amount of time it takes to update the health")]
@@ -153,9 +174,8 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     float Health_Fade_Time;
     private float TargetHealthRatio = 1;        // separate these. Do not link them.
     private float TargetShieldRatio;
-    #endregion
 
-    #region  Health
+
     public void InitializeHealth(float total_Health)
     {
         HealthUI.transform.parent.gameObject.SetActive(true);           // enable the whole health bar
