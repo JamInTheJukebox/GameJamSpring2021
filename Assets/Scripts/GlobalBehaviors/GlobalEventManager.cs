@@ -17,11 +17,11 @@ public class GlobalEventManager : Bolt.GlobalEventListener
     {
         if (PlayerMaterials.Count == 0)     // no materials assigned.        Get a  list of all the possible colors. Remove them as you go.
         {
-            PlayerMaterials.Add(Color_Tags.BLACK); PlayerMaterials.Add(Color_Tags.BLUE);
-            PlayerMaterials.Add(Color_Tags.DARKGREEN); PlayerMaterials.Add(Color_Tags.DARKRED);
-            PlayerMaterials.Add(Color_Tags.GREEN); PlayerMaterials.Add(Color_Tags.LIGHTBLUE);
-            PlayerMaterials.Add(Color_Tags.ORANGE); PlayerMaterials.Add(Color_Tags.PINK);
+            PlayerMaterials.Add(Color_Tags.BLUE); PlayerMaterials.Add(Color_Tags.GREEN);
+            PlayerMaterials.Add(Color_Tags.GREY); PlayerMaterials.Add(Color_Tags.LIGHTBLUE);
+            PlayerMaterials.Add(Color_Tags.LIGHTGREEN); PlayerMaterials.Add(Color_Tags.ORANGE);
             PlayerMaterials.Add(Color_Tags.PURPLE); PlayerMaterials.Add(Color_Tags.RED);
+            PlayerMaterials.Add(Color_Tags.WHITE); PlayerMaterials.Add(Color_Tags.YELLOW);
         }
         int chosenIndex = Random.Range(0, PlayerMaterials.Count);
         string chosenColor = PlayerMaterials[chosenIndex];
@@ -85,16 +85,17 @@ public class GlobalEventManager_Everyone : Bolt.GlobalEventListener
 public static class Color_Tags
 {
     public const string Directory = "Materials/PlayerColors/";
-    public const string BLACK = "Black";
     public const string BLUE = "Blue";
-    public const string DARKGREEN = "DarkGreen";
-    public const string DARKRED = "DarkRed";
     public const string GREEN = "Green";
+    public const string GREY = "Grey";
     public const string LIGHTBLUE = "LightBlue";
+    public const string LIGHTGREEN = "LightGreen";
     public const string ORANGE = "Orange";
-    public const string PINK = "Pink";
     public const string PURPLE = "Purple";
     public const string RED = "Red";
+    public const string WHITE = "White";
+    public const string YELLOW = "Yellow";
+
 }
 
 public static class Player_Colors

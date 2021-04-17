@@ -15,7 +15,8 @@ public class AudioSFX : ScriptableObject            // used to manage each type 
 
     public AudioClip GetRandomSFXsound()
     {
-        return SFX_Sounds[Random.Range(0, SFX_Sounds.Count)];
+        var sfx = SFX_Sounds[Random.Range(0, SFX_Sounds.Count)];
+        return sfx;
     }
 
     public void PlayRandomSFX()

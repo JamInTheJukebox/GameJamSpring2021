@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Source_volume: 1
   SFX_Sounds:
-  - {fileID: 8300000, guid: c65fee87287ae974c8509cc8c231fe86, type: 3}
+  - {fileID: 8300000, guid: 8d2980fa327acc649a8205d801767cca, type: 3}
   - {fileID: 8300000, guid: b8bafc8a82160794f8d0e36d1a5c7e76, type: 3}
   - {fileID: 8300000, guid: 287a51a8d597ec3459ccb449884015ad, type: 3}
   - {fileID: 8300000, guid: 8d2980fa327acc649a8205d801767cca, type: 3}

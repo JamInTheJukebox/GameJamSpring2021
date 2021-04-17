@@ -14,12 +14,12 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     // if you do not have a weapon, default to a push.
     // fists
     public BoxCollider Fist;   // make this a generic collider for the animations to "enable" when attacking.
-    public bool CanPushAgain = true;
-
+    public bool IsAttacking;         // used for preventing walking/jumping when attacking.
     private TrapAttack trap_attack;
     private WeaponAttack wep_attack;
 
     private Inventory PlayerInventory;
+    public PlayerAnimation playerAnim;
 
     // switching weapons
     private bool CanSwitchWeaponsAgain = true;
@@ -38,7 +38,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public override void SimulateOwner()
     {
-        if (Input.GetMouseButtonDown(0) && CanPushAgain && state.OnAttack != null)     // do not try to punch if the player has a weapon.
+        if (Input.GetMouseButtonDown(0) && !IsAttacking && state.OnAttack != null)     // do not try to punch if the player has a weapon.
         {
             state.Attack();
         }
@@ -48,6 +48,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             PlayerInventory.ChangeItem();       // change item in UI;
             print("SwitchingWeapon");
+            
             CanSwitchWeaponsAgain = false;
             Invoke("EnableSwitchingWeapons", 0.5f);            /// make this dependent on a collider.
             ToggleWeapon();
@@ -59,15 +60,15 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     private void PushPlayer()
     {
         print("Pushing That guy");
+        playerAnim.ChangeAnimation(AnimationTags.PUNCH);
         Fist.enabled = true;
-        CanPushAgain = false;
-        Invoke("DisablePushCollider", 0.1f);            /// make this dependent on a collider.
+        IsAttacking = true;
     }
 
-    private void DisablePushCollider()
+    public void DisablePushCollider()
     {
         Fist.enabled = false;
-        CanPushAgain = true;
+        IsAttacking = false;    
     }
 
     private void EnableSwitchingWeapons()

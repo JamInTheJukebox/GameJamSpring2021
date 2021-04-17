@@ -7,10 +7,10 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
 {
     // handles any outfits/colors/ names for the player
     public TextMeshProUGUI NameTextbox;
-    public Transform Target;
+    public Transform Target;            // used by the camera to look at the characters UI.
     public GameObject PlayerIcon;
-    public MeshRenderer PlayerGraphics;
-
+    public Renderer PlayerGraphics;
+    public Renderer[] PlayerLimbs = new Renderer[10];
     Cinemachine.CinemachineFreeLook PlayerCamera;
 
     /// <summary>
@@ -42,7 +42,11 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     }
     private void MaterialCallBack()
     {
-        PlayerGraphics.material = Player_Colors.GetColor(state.UserColor);        // player colors gets any color material based off a string
+        var mat = Player_Colors.GetColor(state.UserColor);        // player colors gets any color material based off a string
+        foreach(var limb in PlayerLimbs)
+        {
+            limb.material = mat;
+        }
         if (entity.IsOwner)
         {
             FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);

@@ -23,6 +23,9 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     [Tooltip("Layer of platform that is falling.")]
     [SerializeField] LayerMask FallingMask = 10;
     [SerializeField] CapsuleCollider TemporaryCollider;     // temporary collider to attach when falling to the black hole.
+    [Header("Dependencies")]
+    [SerializeField] PlayerAnimation playerAnim;
+    [SerializeField] WeaponManager WepManager;
 
     bool isGrounded;
     bool isParented = false;        // called if you are on a falling platform
@@ -50,6 +53,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         if (GameUI.UserInterface == null) { return; }       // when clients join the game, userinterface is sometimes not observed.
         if (!entity.IsOwner) { return; }
         if (stunned | teleporting) { return; }    // do not move the player if they are stunned.
+        // if is grounded and you are not attacking, do moveplayer. Do not attack if you are NOT on the ground.
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
     }
@@ -63,14 +67,25 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         if (isGrounded && Current_Y_Velocity.y <= 0) {
             Current_Y_Velocity.y = -2f;             // if you are grounded, keep moving down at a velocity of 2.
 
-            if (Input.GetButtonDown("Jump"))        // if you are grounded and you press jump, JUMP!
+            if (Input.GetButtonDown("Jump") && !WepManager.IsAttacking)        // if you are grounded and you press jump, JUMP!
             {
                 if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
-                //GetComponent<PlayerAnimation>().TestJump();
                 Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
             }
         }
-      
+        if (!isGrounded && !WepManager.IsAttacking)
+        {
+            if (Current_Y_Velocity.y > 0)
+            {
+                playerAnim.ChangeAnimation(AnimationTags.JUMP);
+            }
+            else if(Current_Y_Velocity.y < 0)
+            {
+                playerAnim.ChangeAnimation(AnimationTags.FALL);
+            }
+        }
+
+
         Current_Y_Velocity.y = Mathf.Clamp(Current_Y_Velocity.y, -20f, 20f);
         char_Controller.Move(Current_Y_Velocity * BoltNetwork.FrameDeltaTime);
         
@@ -97,9 +112,15 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             moveDir = moveDir.normalized;
             moveDir *= speed * BoltNetwork.FrameDeltaTime;
+            if (WepManager.IsAttacking)
+                moveDir *= 0.7f;        // move slightly slower when attacking.
             char_Controller.Move(moveDir);
-            //if(isGrounded)
-                //GetComponent<PlayerAnimation>().TestWalk();
+            if(isGrounded && !WepManager.IsAttacking)
+                    playerAnim.ChangeAnimation(AnimationTags.WALK);
+            }
+        else if (!WepManager.IsAttacking && playerMovement.sqrMagnitude <= 0.01f && char_Controller.velocity.sqrMagnitude <= 0.01f)     // if there is no input and we are moving slightly slow, change to the idle animation. Do not change until you are no longer attacking
+        {
+            playerAnim.ChangeAnimation(AnimationTags.IDLE);
         }
     }
 

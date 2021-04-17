@@ -19,6 +19,16 @@ public class AnimationTags
 {
     public const string ATTACK = "Attack";
 
+    public const string IDLE = "Idle";
+    public const string MAJORDAMAGE = "MajorDamage";
+    public const string MINORDAMAGE = "MinorDamage";
+    public const string TRIP = "Trip";
+    public const string PUNCH = "Punch";
+    public const string SWING = "Swing";
+    public const string CHICKENSLAP = "ChickenSlap";
+    public const string FALL = "Fall";
+    public const string JUMP = "Jump";
+    public const string WALK = "Walk";
 }
 
 public class Tags
