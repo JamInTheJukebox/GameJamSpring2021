@@ -92,7 +92,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         IsAttacking = true;
     }
 
-    private void SwingHammer()      // swing your hammer
+    private void SwingHammer()      // swing your hammer.       // enable collider here.
     {
         print("Swinging Hammer");
         playerAnim.ChangeAnimation(AnimationTags.SWING);
@@ -124,10 +124,10 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             var Entity = BoltNetwork.Instantiate(ItemPrefab, Hammer.position, Hammer.rotation);
             state.Weapon = Entity;      // reference for the weapon.
             state.WeaponIndex = ItemID;
-            Entity.transform.SetParent(RightArm);
-            Entity.transform.localPosition = Hammer.localPosition;        // varies from item to item.
-            //Entity.transform.localScale = Hammer.localScale;        // ask about size
-            if(ItemID == "2.1")
+            Entity.transform.SetParent(SetWeaponParent());                         // spawn under the hammer to copy its animation.
+            Entity.transform.localPosition = Vector3.zero;                         // varies from item to item.
+
+            if (ItemID == "2.1")
             {
                 var trap = Entity.GetComponent<TrapAttack>();
                 trap.InitializeTrapSystem();
@@ -151,7 +151,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         PlayerInventory.UpdateCounter(Count);
     }
-    public void SetWeapon()
+    public void SetWeapon()         // used to set the weapon on the people who are not the owner of this weapon.
     {
 
         if(entity.IsOwner)
@@ -167,7 +167,18 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             state.WeaponIndex = "0";
             return; }
 
-        state.Weapon.transform.SetParent(RightArm);
+        state.Weapon.transform.SetParent(SetWeaponParent());
+    }
+
+    private Transform SetWeaponParent()     // add for chicken, and trap.
+    {
+        switch (state.WeaponIndex)
+        {
+            case "1.1":
+                return Hammer;
+            default:
+                return RightArm;
+        }
     }
 
     public IEnumerator DelayNextAttack()        // run when attacked or switching weapons.
