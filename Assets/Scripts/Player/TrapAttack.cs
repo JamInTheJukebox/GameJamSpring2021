@@ -84,7 +84,7 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
                         NumberOfUses -= 1;
                         ItemUI.UpdateItemCount(NumberOfUses.ToString());
                         if (NumberOfUses <= 0) {
-                            GetComponentInParent<WeaponManager>().ResetWeapon();
+                            GetComponentInParent<WeaponManager>().ResetWeapon();        // FIX THIS!!!!!
                             BoltNetwork.Destroy(gameObject);
                         }      // if the item has been used more than x amount of times, destroy it.
                     }

@@ -96,8 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66e1c109b03418443b546bc8e25f99a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ButtonRender: {fileID: 1952631825619087841}
-  OwnedMaterial: {fileID: 2100000, guid: 704a06d98572da443a6c05ba46430532, type: 2}
 --- !u!1 &3325911285953230055
 GameObject:
   m_ObjectHideFlags: 0

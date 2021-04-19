@@ -1654,10 +1654,6 @@ MonoBehaviour:
   MaxWaitTimeForItems: 60
   MinWaitTimeForItems: 25
   MaxItems: 3
-  ItemBox:
-  - Value: 7
-  - Value: 10
-  - Value: 9
   ProbabilityToSpawnGuardedTile: 0.3
 --- !u!114 &3494651620193103478
 MonoBehaviour:
@@ -1673,7 +1669,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: 174d54c0-c19d-4e0a-b9b0-bfd4425d3b52
-  _prefabId: 4
+  _prefabId: 3
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1

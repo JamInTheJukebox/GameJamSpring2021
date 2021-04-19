@@ -216,8 +216,8 @@ public class TileManager : MonoBehaviour
 
     public Quaternion GetitemRotation(Bolt.PrefabId item)
     {
-        if (item == BoltPrefabs.Hammer_ItemBlock)
-            return Quaternion.Euler(5.293f, -92.402f, 65.55f);
+        if (item == BoltPrefabs.Hammer_ItemBlock_Final)
+            return Quaternion.Euler(22.383f, 0,0);
         else
             return Quaternion.Euler(-90, 0, 0);
     }

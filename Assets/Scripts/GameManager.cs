@@ -82,7 +82,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     private float WaitCounterForItems = 3;          // depends on # of players
     public int MaxItems;
     private Bolt.PrefabId[] ItemBox = new Bolt.PrefabId[3]{
-        BoltPrefabs.Hammer_ItemBlock, BoltPrefabs.Trap_ItemBox,BoltPrefabs.Shield_ItemBlock
+        BoltPrefabs.Hammer_ItemBlock_Final, BoltPrefabs.Trap_ItemBox,BoltPrefabs.Shield_ItemBlock           // left to change: Trap and add chicken
     };
     // only 3 items so far: hammer, shield, and trap
     public float ProbabilityToSpawnGuardedTile = 0.3f;

@@ -12,8 +12,8 @@ public class EventManager : Bolt.GlobalEventListener
             Instance = this;
             BoltNetwork.Instantiate(BoltPrefabs.GameManager);
             
-            var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, new Vector3(0, 0.2f, 0), Quaternion.Euler(5.293f, -92.402f, 65.55f));
-            var entity2 = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(5, 0, 5), Quaternion.Euler(5.293f, -92.402f, 65.55f));
+            var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock_Final, new Vector3(0, 0.2f, 0), Quaternion.identity);
+            var entity2 = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock_Final, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(5, 0, 5), Quaternion.identity);
             var entity3 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90,0,0));
             var entity4 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90, 0, 0));
             var entity5 = BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(10 , 0, 10), Quaternion.Euler(-90, 0, 0));

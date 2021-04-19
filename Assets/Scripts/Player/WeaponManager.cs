@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 {
-    [SerializeField] Transform Hammer_Transform;
     /*
      * 0 :  Fist
      * 1.1: Hammer                1s are weapons
@@ -21,6 +20,8 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     private Inventory PlayerInventory;
     public PlayerAnimation playerAnim;
 
+    public Transform Hammer;
+    public Transform RightArm;
     // switching weapons
     private bool CanSwitchWeaponsAgain = true;
     public override void Attached()
@@ -38,9 +39,11 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public override void SimulateOwner()
     {
-        if (Input.GetMouseButtonDown(0) && !IsAttacking && state.OnAttack != null)     // do not try to punch if the player has a weapon.
+        if (GameUI.UserInterface != null && GameUI.UserInterface.Paused) { return; }                            // do not attack if paused.
+
+        if (Input.GetMouseButtonDown(0) && !IsAttacking)     // do not try to punch if the player has a weapon.
         {
-            state.Attack();
+            AttackThePlayer();         // change this. No callback needed anymore.
         }
         
 
@@ -57,13 +60,46 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         // if scrolling and have another weapon, change weapon.
     }
 
-    private void PushPlayer()
+    private void AttackThePlayer()          // if statements for trap, weapon, and push
+    {
+        if(state.Weapon == null)      // if u have no weapon, or you are NOT using your weapon, throw a punch instead.
+        {
+            PushPlayer();
+        }
+        else if(!state.Weapon.GetState<IWeapon>().InUse)    // if the weapon is not null, check whether we are using it. If we are not using it, push the player.
+        {
+            PushPlayer();
+        }
+        else
+        {
+            switch (state.WeaponIndex)          // if u continue to here, this means u either have a trap or a weapon.
+            {
+                case "1.1":
+                    SwingHammer();
+                    break;
+                default:
+                    PushPlayer();
+                    break;
+            }
+        }
+    }
+
+    private void PushPlayer()       // push player
     {
         print("Pushing That guy");
         playerAnim.ChangeAnimation(AnimationTags.PUNCH);
         Fist.enabled = true;
         IsAttacking = true;
     }
+
+    private void SwingHammer()      // swing your hammer
+    {
+        print("Swinging Hammer");
+        playerAnim.ChangeAnimation(AnimationTags.SWING);
+        IsAttacking = true;
+    }
+
+
 
     public void DisablePushCollider()
     {
@@ -85,11 +121,12 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             }
             PlayerInventory.InitializeInventory(ItemID);
             Bolt.PrefabId ItemPrefab = c_Item_Types.GetItem(ItemID);
-            var Entity = BoltNetwork.Instantiate(ItemPrefab, Hammer_Transform.position, Hammer_Transform.rotation);
+            var Entity = BoltNetwork.Instantiate(ItemPrefab, Hammer.position, Hammer.rotation);
             state.Weapon = Entity;      // reference for the weapon.
             state.WeaponIndex = ItemID;
-            Entity.transform.SetParent(transform);
-            Entity.transform.localPosition = Hammer_Transform.localPosition;        // varies from item to item.
+            Entity.transform.SetParent(RightArm);
+            Entity.transform.localPosition = Hammer.localPosition;        // varies from item to item.
+            //Entity.transform.localScale = Hammer.localScale;        // ask about size
             if(ItemID == "2.1")
             {
                 var trap = Entity.GetComponent<TrapAttack>();
@@ -116,6 +153,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     }
     public void SetWeapon()
     {
+
         if(entity.IsOwner)
             PlayerInventory.ChangeItem();
         print("Got a new Item");
@@ -127,24 +165,28 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             }
 
             state.WeaponIndex = "0";
-            state.OnAttack = PushPlayer;        // go back to default attack.
             return; }
 
-        state.Weapon.transform.SetParent(transform);
-        // add state.onattack.
-        state.OnAttack = null;
+        state.Weapon.transform.SetParent(RightArm);
     }
 
+    public IEnumerator DelayNextAttack()        // run when attacked or switching weapons.
+    {
+        IsAttacking = true;     // just to avoid attacking again.
+        yield return new WaitForSeconds(0.2f);
+        IsAttacking = false;
+    }
     public void ToggleWeapon()     // incase the user wants to change weapons.
     {
 
         if(state.Weapon == null)        // if no weapon, just change attack to default attack.
         {
             // do nothing
-            state.OnAttack = PushPlayer;
+            //state.OnAttack = PushPlayer;
         }
         else
         {
+            StartCoroutine(DelayNextAttack());
             var wep = state.Weapon.GetState<IWeapon>();
             if (entity.IsOwner)
                 wep.InUse = !wep.InUse;
@@ -152,12 +194,12 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             if (wep.InUse)
             {
                 Debug.LogWarning("Attacking with item");
-                state.OnAttack = null;
+               // state.OnAttack = null;
             }
             else
             {
                 Debug.LogWarning("Attacking with fists!");
-                state.OnAttack = PushPlayer;
+              //  state.OnAttack = PushPlayer;
             }
         }
     }
@@ -190,13 +232,13 @@ public class c_Item_Types
         switch (Item)
         {
             case "1.1":
-                return BoltPrefabs.hammer;
+                return BoltPrefabs.Hammer_Final;
             case "1.2":
             //return BoltPrefabs.bat;
             case "2.1":
                 return BoltPrefabs.ElectricTrap;
             default:
-                return BoltPrefabs.hammer;
+                return BoltPrefabs.Hammer_Final;
         }
     }
 }

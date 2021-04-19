@@ -65,5 +65,6 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     public void ResetAttack()
     {
         WepManager.IsAttacking = false;
+        WepManager.StartCoroutine(WepManager.DelayNextAttack());
     }
 }
