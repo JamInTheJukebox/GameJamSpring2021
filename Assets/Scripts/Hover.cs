@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum Item_Type
 {
-    Hammer, Bat, Shield, Electric_Trap
+    Hammer, Chicken, Bat, Shield, Electric_Trap
 }
 
 public class Hover : Bolt.EntityBehaviour<IWeapon>

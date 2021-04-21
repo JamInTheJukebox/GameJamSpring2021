@@ -117,8 +117,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitJoint: {fileID: 6966907649475497600}
-  WeaponAnimator: {fileID: 1914564606119534266}
   Damage: 0.2
+  GFX: {fileID: 0}
 --- !u!114 &6601464282548622920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,7 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _sceneGuid: 
   _serializerGuid: febf3213-6aca-459a-b238-6405243deada
-  _prefabId: 4
+  _prefabId: 16
   _updateRate: 1
   _autoFreezeProxyFrames: 0
   _clientPredicted: 1

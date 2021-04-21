@@ -21,6 +21,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     public PlayerAnimation playerAnim;
 
     public Transform Hammer;
+    public Transform Chicken;
     public Transform RightArm;
     // switching weapons
     private bool CanSwitchWeaponsAgain = true;
@@ -77,6 +78,9 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
                 case "1.1":
                     SwingHammer();
                     break;
+                case "1.3":
+                    SwingChicken();
+                    break;
                 default:
                     PushPlayer();
                     break;
@@ -99,7 +103,12 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         IsAttacking = true;
     }
 
-
+    private void SwingChicken()
+    {
+        print("Swinging Chicken");
+        playerAnim.ChangeAnimation(AnimationTags.CHICKENSLAP);
+        IsAttacking = true;
+    }
 
     public void DisablePushCollider()
     {
@@ -133,7 +142,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
                 trap.InitializeTrapSystem();
                 trap.InitializeUI(this);
             }
-            else if (ItemID == "1.1")
+            else if (ItemID == "1.1" | ItemID == "1.3")
             {
                 var wep = Entity.GetComponent<WeaponAttack>();
                 wep.InitializeUI(this);
@@ -166,8 +175,12 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
             state.WeaponIndex = "0";
             return; }
-
         state.Weapon.transform.SetParent(SetWeaponParent());
+        if (state.WeaponIndex == "1.3")         // reset chicken to the size of the chicken parent.
+        {
+            state.Weapon.transform.localScale = Vector3.one;
+        }
+
     }
 
     private Transform SetWeaponParent()     // add for chicken, and trap.
@@ -176,6 +189,8 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             case "1.1":
                 return Hammer;
+            case "1.3":
+                return Chicken;
             default:
                 return RightArm;
         }
@@ -228,6 +243,7 @@ public class c_Item_Types
     // weapons
     public const string Hammer = "1.1";
     public const string Bat = "1.2";
+    public const string Chicken = "1.3";
     // 
     public const string ElectricTrap = "2.1";
 
@@ -235,7 +251,8 @@ public class c_Item_Types
     {
         [Item_Type.Bat] = Bat,
         [Item_Type.Hammer] = Hammer,
-        [Item_Type.Electric_Trap] = ElectricTrap
+        [Item_Type.Electric_Trap] = ElectricTrap,
+        [Item_Type.Chicken] = Chicken
     };
 
     public static Bolt.PrefabId GetItem(string Item)
@@ -246,6 +263,8 @@ public class c_Item_Types
                 return BoltPrefabs.Hammer_Final;
             case "1.2":
             //return BoltPrefabs.bat;
+            case "1.3":
+                return BoltPrefabs.Chicken;
             case "2.1":
                 return BoltPrefabs.ElectricTrap;
             default:

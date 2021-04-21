@@ -16,8 +16,6 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
     
     public override void Attached()
     {
-        string weaponName = gameObject.name.Substring(0, gameObject.name.IndexOf('_'));
-        gameObject.name = weaponName;       // for the animator. THIS STEP IS CRITICAL!
         //transform.localScale = Vector3.one * 10;
         /*WeaponAnimator = GetComponent<Animator>();
         WeaponAnimator.enabled = true;
