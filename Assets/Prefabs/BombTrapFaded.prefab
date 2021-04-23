@@ -120,7 +120,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7133140671713623877}
-  m_Mesh: {fileID: -462981019419857548, guid: 568e6ce08c80f024eb3c8510c848ad0e, type: 3}
+  m_Mesh: {fileID: -462981019419857548, guid: 321b03155c6b2a6459b49cdc0b3ad9c2, type: 3}
 --- !u!23 &7967702272576127205
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -172,7 +172,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8864247596795135444}
   m_Layer: 0
-  m_Name: BombTrap
+  m_Name: BombTrapFaded
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

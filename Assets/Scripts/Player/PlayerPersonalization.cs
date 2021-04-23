@@ -13,6 +13,15 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     public Renderer[] PlayerLimbs = new Renderer[10];
     Cinemachine.CinemachineFreeLook PlayerCamera;
 
+    public static int NumberOfHats = 4;
+    public static int NumberOfEyewear = 2;
+
+    [Header("Hats")]
+    public GameObject[] Hats = new GameObject[NumberOfHats];
+
+    public GameObject[] Eyes = new GameObject[NumberOfEyewear];
+    public GameObject[] SmallEyes = new GameObject[NumberOfEyewear];
+
     /// <summary>
     /// SYSTEM ERROR:
     /// When playing the game on the same system, unity will update the name if someone else has changed it. So if you try to join a game and someone else changes
@@ -25,6 +34,9 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
             MaterialCallBack();
         }
         state.AddCallback("UserColor", MaterialCallBack);            // we changed a state. When the state is changed, the server will call the callback on everyone's computer.
+        state.AddCallback("HatID", HatCallback);
+        state.AddCallback("EyeID", EyeCallback);
+
         Invoke("SearchForTarget", 0.01f);        // search for target in 0.1f seconds
     }
 
@@ -70,6 +82,34 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         PlayerIcon.SetActive(true);
     }
 
+    public void SetHat_Eye()
+    {
+        print("BRUH PEEP THIS ONE");
+        state.HatID = PlayerPrefs.GetInt("HatID");
+        state.EyeID = PlayerPrefs.GetInt("EyeID");
+    }
+
+    public void HatCallback()
+    {
+        if (state.HatID == 0)        // do nothing
+        {
+            return;
+        }
+        Hats[state.HatID - 1].SetActive(true);
+    }
+
+    public void EyeCallback()
+    {
+        if (state.HatID == 0)        // do nothing
+        {
+            return;
+        }
+        Eyes[state.EyeID - 1].SetActive(true);          
+        if(state.HatID == 1)                // enable small eyewear for small popo head.
+        {
+            SmallEyes[state.EyeID - 1].SetActive(true);
+        }
+    }
     public string GetName()
     {
         return state.Username;

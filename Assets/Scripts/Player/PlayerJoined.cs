@@ -22,6 +22,7 @@ public class PlayerJoined : Bolt.EntityBehaviour<IMasterPlayerState>
         if (entity.IsOwner)             // only activate the camera for the player. Nobody else's camera!
         {
             Personalization.SetName();
+            Personalization.SetHat_Eye();
             EntityCamera.gameObject.SetActive(true);
             CinematicCamera.SetActive(true);
             var evntPly = GetPlayerPersonalizationEvent.Create();

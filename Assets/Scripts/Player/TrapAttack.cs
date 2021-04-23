@@ -9,6 +9,8 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     [SerializeField] float GroundCheckDistance = 5f;
     [SerializeField] LayerMask GroundLayer;
     [SerializeField] int NumberOfUses = 3;
+    public GameObject GFX;
+    WeaponManager wepmanager;               // used to reset the trap after placed.
     private MeshRenderer Model;
     private GameObject m_CurrentTile;
     public GameObject CurrentTile
@@ -40,9 +42,10 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
             }
         }
     }
-    public void InitializeTrapSystem()
+    public void InitializeTrapSystem(Transform playerGroundCheck, WeaponManager wep)
     {
-        player = GetComponentInParent<Bolt_PlayerController>().GetGroundCheckTransform();
+        player = playerGroundCheck;
+        wepmanager = wep;
     }
 
     public override void Attached()
@@ -78,13 +81,13 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
                     var areaEffector = CurrentTile.GetComponent<AreaEffector>();
                     if (areaEffector)
                     {
-                        var successful = areaEffector.PlaceDownTrap(BoltPrefabs.ElectricTrapPlacement);
+                        var successful = areaEffector.PlaceDownTrap(BoltPrefabs.BombTrapPlacement);
                         if (!successful) { return; }
                         // subtract one from the count here.
                         NumberOfUses -= 1;
                         ItemUI.UpdateItemCount(NumberOfUses.ToString());
                         if (NumberOfUses <= 0) {
-                            GetComponentInParent<WeaponManager>().ResetWeapon();        // FIX THIS!!!!!
+                            wepmanager.ResetWeapon();        // FIX THIS!!!!!
                             BoltNetwork.Destroy(gameObject);
                         }      // if the item has been used more than x amount of times, destroy it.
                     }
@@ -96,7 +99,7 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     private void Toggleweapon()     // function for setting player attack visuals.
     {
         bool newVal = state.InUse;
-        Model.enabled = state.InUse;
+        GFX.SetActive(newVal);
         this.enabled = state.InUse;
         /*
         if (entity.IsOwner)

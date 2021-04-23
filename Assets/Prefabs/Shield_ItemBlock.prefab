@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d483a8ab3380a9c46a3d8fa334ba84a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TypeOfItem: 2
+  TypeOfItem: 3
   HoverAmplitude: 0.9
   HoverSpeed: 3
   torqueSpeed: 100

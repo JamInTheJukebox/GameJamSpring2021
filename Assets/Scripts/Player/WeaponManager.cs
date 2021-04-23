@@ -22,6 +22,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public Transform Hammer;
     public Transform Chicken;
+    public Transform BombTrap;
     public Transform RightArm;
     // switching weapons
     private bool CanSwitchWeaponsAgain = true;
@@ -135,11 +136,12 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             state.WeaponIndex = ItemID;
             Entity.transform.SetParent(SetWeaponParent());                         // spawn under the hammer to copy its animation.
             Entity.transform.localPosition = Vector3.zero;                         // varies from item to item.
+            Entity.transform.localRotation = new Quaternion(0,0,0,0);
 
             if (ItemID == "2.1")
             {
                 var trap = Entity.GetComponent<TrapAttack>();
-                trap.InitializeTrapSystem();
+                trap.InitializeTrapSystem(GetComponentInParent<Bolt_PlayerController>().GetGroundCheckTransform(), this);
                 trap.InitializeUI(this);
             }
             else if (ItemID == "1.1" | ItemID == "1.3")
@@ -176,7 +178,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             state.WeaponIndex = "0";
             return; }
         state.Weapon.transform.SetParent(SetWeaponParent());
-        if (state.WeaponIndex == "1.3")         // reset chicken to the size of the chicken parent.
+        if (state.WeaponIndex == "1.3" | state.WeaponIndex == "2.1")         // reset chicken to the size of the chicken parent.
         {
             state.Weapon.transform.localScale = Vector3.one;
         }
@@ -191,6 +193,8 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
                 return Hammer;
             case "1.3":
                 return Chicken;
+            case "2.1":
+                return BombTrap;
             default:
                 return RightArm;
         }
@@ -266,7 +270,7 @@ public class c_Item_Types
             case "1.3":
                 return BoltPrefabs.Chicken;
             case "2.1":
-                return BoltPrefabs.ElectricTrap;
+                return BoltPrefabs.BombTrap;
             default:
                 return BoltPrefabs.Hammer_Final;
         }
