@@ -25,7 +25,11 @@ public class ThirdPersonCamera : Bolt.EntityBehaviour<IMasterPlayerState>
 
     private void SetCamera()                // figure out a better way to do this.
     {
-
+        if(GameUI.UserInterface == null)
+        {
+            Invoke("SetCamera", 0.1f);
+            return;
+        }
         GameUI.UserInterface.CameraSettings = CameraSetting;
         
     }

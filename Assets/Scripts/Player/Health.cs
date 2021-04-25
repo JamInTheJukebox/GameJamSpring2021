@@ -15,6 +15,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     private bool AreaEffectorHit = false;
     Bolt_PlayerController PlayerController;
 
+
     public override void Attached()
     {
         PlayerController = GetComponent<Bolt_PlayerController>();
@@ -69,9 +70,10 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             if (!other.transform.IsChildOf(transform) && !Hit)          // line to not hurt yourself. Also, do not run this code if you have already been hurt.
             {
+                PlayerController.MajorDamage();
                 var evnt = SuccessfulAttackEvent.Create();      // successfully attacked!
-                evnt.WeaponDamage = other.transform.parent.GetComponent<WeaponAttack>().Damage;
-                evnt.WeaponEntity = other.transform.parent.GetComponent<BoltEntity>();
+                evnt.WeaponDamage = other.transform.parent.parent.parent.GetComponent<WeaponAttack>().Damage;
+                evnt.WeaponEntity = other.transform.parent.parent.parent.GetComponent<BoltEntity>();
                 evnt.Send();
             }
         }
@@ -81,7 +83,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
             {
                 Hit = true;
                 Invoke("ResetHit", StunTime);
-                PlayerController.PlayerStunned();
+                PlayerController.MinorDamage();
             }
         }
         else if(other.tag == Tags.SHIELD_TAG)
@@ -129,17 +131,16 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         AreaEffectorHit = false;
     }
+
     public void StunnedByTrap(float damage) // group of players can get stunned by a trap.
     {
         if (!entity.IsOwner) { return; }    // getting hit by a trap will guarantee damage to you. However, it gives you some i-frames for some other attacks such as hamemrs. YOu can't just get hit by something and try to set off all the traps!.
         Hit = true;
         ChangeHealth(-damage);
 
-        Invoke("ResetHit", StunTime);
+        Invoke("ResetHit", StunTime);       // check movement script if still stunned.
         print("GOT HIT!!");
     }
-
-
 
     public void DamagedByWeapon(float damage)
     {

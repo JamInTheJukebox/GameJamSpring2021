@@ -29,6 +29,7 @@ public class AnimationTags
     public const string FALL = "Fall";
     public const string JUMP = "Jump";
     public const string WALK = "Walk";
+    public const string TRAPSET = "TrapSet";
 }
 
 public class Tags

@@ -13,17 +13,49 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     // if you do not have a weapon, default to a push.
     // fists
     public BoxCollider Fist;   // make this a generic collider for the animations to "enable" when attacking.
-    public bool IsAttacking;         // used for preventing walking/jumping when attacking.
-    private TrapAttack trap_attack;
-    private WeaponAttack wep_attack;
+    private bool m_IsAttacking;         // used for preventing walking/jumping when attacking.
+    public bool IsAttacking
+    {
+        get { return m_IsAttacking; }
+        set
+        {
+            if (value != m_IsAttacking)
+            {
+                m_IsAttacking = value;
+                if(!m_IsAttacking)
+                {
+                    DisableAttack();
+                }
+            }
+        }
+    }
 
+    private bool CanAttackAgain = true;
+
+    private void DisableAttack()
+    {
+        if(CanAttackAgain == false) { return; }
+        CanAttackAgain = false;
+        Invoke("EnableAttack", 0.2f);
+    }
+
+    private void EnableAttack()
+    {
+        CanAttackAgain = true;
+    }
+
+    // Dependencies
+    //private TrapAttack trap_attack;
+    private WeaponAttack wep_attack;
     private Inventory PlayerInventory;
     public PlayerAnimation playerAnim;
+    private Bolt_PlayerController PlayerController;
 
     public Transform Hammer;
     public Transform Chicken;
     public Transform BombTrap;
     public Transform RightArm;
+    public float WeaponSpeedMultiplier;     // when wielding a hammer or chicken, you do not move when attacking. When punching, you have a speed of 0.7f
     // switching weapons
     private bool CanSwitchWeaponsAgain = true;
     public override void Attached()
@@ -33,8 +65,9 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             state.WeaponIndex = "0";            // spawn with nothing but fists!
             PlayerInventory = FindObjectOfType<Inventory>();
         }
+        PlayerController = GetComponentInParent<Bolt_PlayerController>();
         state.AddCallback("Weapon", SetWeapon);              // spawn the weapon when 
-        state.OnAttack = PushPlayer;
+        state.OnAttack = null;        // 
         //state.OnChangeWeapon = ToggleWeapon;
         
     }
@@ -42,18 +75,19 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     public override void SimulateOwner()
     {
         if (GameUI.UserInterface != null && GameUI.UserInterface.Paused) { return; }                            // do not attack if paused.
-
-        if (Input.GetMouseButtonDown(0) && !IsAttacking)     // do not try to punch if the player has a weapon.
+        bool SpecialCondition = !PlayerController.CheckGrounded() | PlayerController.CheckStunned();            // do not attack if you are NOT grounded or if you are stunned.
+        if (SpecialCondition) { return; }
+        if (Input.GetMouseButtonDown(0) && CanAttackAgain)     // do not try to punch if the player has a weapon.
         {
+            IsAttacking = true;
             AttackThePlayer();         // change this. No callback needed anymore.
         }
         
 
-        if (state.Weapon != null && Input.GetAxis("Mouse ScrollWheel") != 0 && CanSwitchWeaponsAgain)       // change weapons if you have one and you can switch weapons(Avoid spam).
+        if (state.Weapon != null && Input.GetAxis("Mouse ScrollWheel") != 0 && CanSwitchWeaponsAgain && CanAttackAgain && !IsAttacking)       // change weapons if you have one and you can switch weapons(Avoid spam).
         {
             PlayerInventory.ChangeItem();       // change item in UI;
-            print("SwitchingWeapon");
-            
+            CanAttackAgain = false;
             CanSwitchWeaponsAgain = false;
             Invoke("EnableSwitchingWeapons", 0.5f);            /// make this dependent on a collider.
             ToggleWeapon();
@@ -82,45 +116,74 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
                 case "1.3":
                     SwingChicken();
                     break;
+                case "2.1":
+                    SetTrapAnimation();
+                    break;
                 default:
                     PushPlayer();
                     break;
             }
         }
     }
-
+    #region Fist
     private void PushPlayer()       // push player
     {
         print("Pushing That guy");
+        WeaponSpeedMultiplier = 0.7f;
         playerAnim.ChangeAnimation(AnimationTags.PUNCH);
-        Fist.enabled = true;
-        IsAttacking = true;
     }
 
+    public void EnablePushCollider()
+    {
+        Fist.enabled = true;
+        print("enable Push");
+        Invoke("DisablePushCollider", 0.13f);
+    }
+
+    public void DisablePushCollider()
+    {
+        print("disable Push");
+        Fist.enabled = false;
+    }
+    #endregion
+
+    #region otherWeapons
     private void SwingHammer()      // swing your hammer.       // enable collider here.
     {
         print("Swinging Hammer");
+        WeaponSpeedMultiplier = 0f;
         playerAnim.ChangeAnimation(AnimationTags.SWING);
-        IsAttacking = true;
     }
 
     private void SwingChicken()
     {
         print("Swinging Chicken");
+        WeaponSpeedMultiplier = 0f;
         playerAnim.ChangeAnimation(AnimationTags.CHICKENSLAP);
-        IsAttacking = true;
     }
 
-    public void DisablePushCollider()
+    public void EnableGenericCollider()         // enable the weapon's collider
     {
-        Fist.enabled = false;
-        IsAttacking = false;    
+        print("ATTACK PLAYER!!!");
+        if(wep_attack == null) { wep_attack = state.Weapon.GetComponent<WeaponAttack>(); }
+        if(wep_attack == null) { Debug.LogError("WeaponManager.cs: There is no weapon attack found on the weapon. Please attach this behavior."); return; }
+        wep_attack.Turn_On_Attack_Joint();
     }
+    #endregion
 
+    private void SetTrapAnimation()
+    {
+        print("Setting Trap");
+        WeaponSpeedMultiplier = 0.7f;
+        playerAnim.ChangeAnimation(AnimationTags.TRAPSET);
+
+    }
     private void EnableSwitchingWeapons()
     {
         CanSwitchWeaponsAgain = true;
+        CanAttackAgain = true;
     }
+
     public void InitializeItem(string ItemID)                       // initialize only weapons and traps
     {
         if (entity.IsOwner)
@@ -162,12 +225,17 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         PlayerInventory.UpdateCounter(Count);
     }
+
     public void SetWeapon()         // used to set the weapon on the people who are not the owner of this weapon.
     {
+        if(state.WeaponIndex == "1.1" | state.WeaponIndex == "1.3")
+        {
+            if(state.Weapon != null)
+                wep_attack = state.Weapon.GetComponent<WeaponAttack>();     // call the turn on attack joint function from this.
+        }
 
-        if(entity.IsOwner)
+        if (entity.IsOwner)
             PlayerInventory.ChangeItem();
-        print("Got a new Item");
         if(state.Weapon == null | state.WeaponIndex == "0")
         {
             if (entity.IsOwner)
@@ -200,12 +268,6 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         }
     }
 
-    public IEnumerator DelayNextAttack()        // run when attacked or switching weapons.
-    {
-        IsAttacking = true;     // just to avoid attacking again.
-        yield return new WaitForSeconds(0.2f);
-        IsAttacking = false;
-    }
     public void ToggleWeapon()     // incase the user wants to change weapons.
     {
 
@@ -216,7 +278,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         }
         else
         {
-            StartCoroutine(DelayNextAttack());
+            DisableAttack();
             var wep = state.Weapon.GetState<IWeapon>();
             if (entity.IsOwner)
                 wep.InUse = !wep.InUse;
@@ -239,6 +301,10 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
         state.Weapon = null;
     }
 
+    public void DelayNextAttack()        // run when attacked or switching weapons.
+    {
+        IsAttacking = false;            // go to setter function
+    }
 }
 
 public class c_Item_Types

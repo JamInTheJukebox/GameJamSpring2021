@@ -12,6 +12,9 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     Dictionary<string, int> AnimClips = new Dictionary<string, int>();
     [Header("Gameobjects")]
     public WeaponManager WepManager;
+    public Bolt_PlayerController PlayerController;
+    public StarAnimator StarFX;
+
     private int m_currentClip;
     public int currentClip
     {
@@ -20,14 +23,23 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             if (value != m_currentClip)
             {
+                /*
+                if(m_currentClip == AnimClips[AnimationTags.CHICKENSLAP] | m_currentClip == AnimClips[AnimationTags.PUNCH] | m_currentClip == AnimClips[AnimationTags.SWING])
+                {
+                    WepManager.DelayNextAttack();
+                }*/
                 m_currentClip = value;
-                charAnim.Play(m_currentClip);
+                if(entity.IsOwner)
+                    state.AnimClip = m_currentClip;
             }
         }
     }
+
+
     public override void Attached()
     {
         charAnim = GetComponent<Animator>();
+        state.SetAnimator(charAnim);
         #region clips
         AnimClips.Add(AnimationTags.IDLE, Animator.StringToHash(AnimationTags.IDLE));
         AnimClips.Add(AnimationTags.MAJORDAMAGE, Animator.StringToHash(AnimationTags.MAJORDAMAGE));
@@ -39,6 +51,8 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
         AnimClips.Add(AnimationTags.FALL, Animator.StringToHash(AnimationTags.FALL));
         AnimClips.Add(AnimationTags.WALK, Animator.StringToHash(AnimationTags.WALK));
         AnimClips.Add(AnimationTags.JUMP, Animator.StringToHash(AnimationTags.JUMP));
+        AnimClips.Add(AnimationTags.TRAPSET, Animator.StringToHash(AnimationTags.TRAPSET));
+
         #endregion
     }
 
@@ -46,6 +60,37 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         currentClip = AnimClips[clipName];
     }
+    public void InitiateFist()
+    {
+        WepManager.EnablePushCollider();
+    }
+    public void InitiateWeapon()
+    {
+        WepManager.EnableGenericCollider();
+    }
+    public void ResetAttack()
+    {
+        //currentClip = AnimClips[AnimationTags.IDLE];
+        WepManager.DelayNextAttack();
+    }
+
+    #region Stun
+    public void PlayStars()
+    {
+        StarFX.EnableStars();
+    }
+
+    public void ResetStun()
+    {
+        PlayerController.UndoStun();
+    }
+    #endregion
+    private void Update()
+    {
+        charAnim.Play(state.AnimClip);
+    }
+
+    #region  SFX
 
     public void PlayWalkSFX()
     {
@@ -61,10 +106,5 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         charAnim.Play(AnimationTags.FALL, 0, 0.24f);
     }
-
-    public void ResetAttack()
-    {
-        WepManager.IsAttacking = false;
-        WepManager.StartCoroutine(WepManager.DelayNextAttack());
-    }
+    #endregion
 }

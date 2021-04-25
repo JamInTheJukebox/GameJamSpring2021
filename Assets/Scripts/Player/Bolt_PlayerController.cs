@@ -26,12 +26,40 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     [Header("Dependencies")]
     [SerializeField] PlayerAnimation playerAnim;
     [SerializeField] WeaponManager WepManager;
-
+    [Header("Camera Shake")]
+    public ScreenShakeController CameraScreenShake;
+    public float WeakIntensity = 4;
+    public float StrongIntensity = 7.5f;
+    public float WeakShakeTimer = 0.2f;
+    public float StrongShakeTimer = 0.4f;
     bool isGrounded;
     bool isParented = false;        // called if you are on a falling platform
     Vector3 SpawnPosition = new Vector3(0,10,0);
     bool teleporting;
-    private bool stunned = false;
+    private bool m_stunned = false;
+    public bool stunned {
+        get { return m_stunned; }
+        set
+        {
+            if(value != m_stunned)
+            {
+                m_stunned = value;
+                // start i frame count here.
+                if (!m_stunned)
+                {
+                    Invoke("Reset_I_Frames",0.3f);
+                }
+            }
+        }
+    }
+
+    private void Reset_I_Frames()
+    {
+        print("No more I frames!");
+        i_frames_Active = false;
+    }
+    [HideInInspector] public bool i_frames_Active;      // when you are hit, there is a frame of time at which you CANNOT and SHALL NOT be hit.
+
     [Header("Debug Tools")]
     public bool DrawGroundCheck;
 
@@ -52,10 +80,18 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         if (GameUI.UserInterface == null) { return; }       // when clients join the game, userinterface is sometimes not observed.
         if (!entity.IsOwner) { return; }
-        if (stunned | teleporting) { return; }    // do not move the player if they are stunned.
+        if (teleporting) { return; }    // do not move the player if they are stunned.
         // if is grounded and you are not attacking, do moveplayer. Do not attack if you are NOT on the ground.
         MovePlayer();
         HandleYAxis();      // includes gravity and Jumping;
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            MinorDamage();
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            MajorDamage();
+        }
     }
 
     private void HandleYAxis()
@@ -67,13 +103,13 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         if (isGrounded && Current_Y_Velocity.y <= 0) {
             Current_Y_Velocity.y = -2f;             // if you are grounded, keep moving down at a velocity of 2.
 
-            if (Input.GetButtonDown("Jump") && !WepManager.IsAttacking)        // if you are grounded and you press jump, JUMP!
+            if (Input.GetButtonDown("Jump") && !WepManager.IsAttacking && !stunned)        // if you are grounded and you press jump, JUMP!
             {
                 if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
                 Current_Y_Velocity.y = Mathf.Sqrt(Jump_Velocity * -2f * Gravity);
             }
         }
-        if (!isGrounded && !WepManager.IsAttacking)
+        if (!isGrounded && !WepManager.IsAttacking && !stunned)
         {
             if (Current_Y_Velocity.y > 0)
             {
@@ -91,16 +127,18 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         
     }
 
-    private void HandleFallingPlatforms()// if we are on a falling platform, we want the player to be able to jump
+    public bool CheckGrounded()
     {
-        var Platform = Physics.OverlapSphere(GroundCheck.position, GroundCheckRadius, FallingMask);
-        if(Platform.Length == 0) { return; }
-        //transform.SetParent(Platform[0].transform);
+        return isGrounded;
+    }
+    public bool CheckStunned()
+    {
+        return stunned;
     }
 
     void MovePlayer()
     {
-        if (GameUI.UserInterface.Paused) { return; }            // do not move if paused.
+        if (GameUI.UserInterface.Paused | stunned) { return; }            // do not move if paused.
         float hor = Input.GetAxisRaw(Axis.HORIZONTAL);
         float vert = Input.GetAxisRaw(Axis.VERTICAL);
         Vector3 playerMovement = new Vector3(hor, 0f, vert).normalized;
@@ -113,7 +151,10 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
             moveDir = moveDir.normalized;
             moveDir *= speed * BoltNetwork.FrameDeltaTime;
             if (WepManager.IsAttacking)
-                moveDir *= 0.7f;        // move slightly slower when attacking.
+            {
+                moveDir *= WepManager.WeaponSpeedMultiplier;        // move slightly slower when attacking.
+            }
+
             char_Controller.Move(moveDir);
             if(isGrounded && !WepManager.IsAttacking)
                     playerAnim.ChangeAnimation(AnimationTags.WALK);
@@ -133,24 +174,32 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
  
         }
     }
+    #region StunningPlayer
 
-    public void PlayerStunned()     // getting pushed back or setting off a trap. Make this an animation.
+    public void MinorDamage()           // called only when punched.
     {
         stunned = true;
-        Invoke("UndoStun", 2f);
+        CameraScreenShake.Shake(WeakIntensity, WeakShakeTimer);
+        playerAnim.ChangeAnimation(AnimationTags.MINORDAMAGE);
     }
-
-    private void UndoStun()
+    public void MajorDamage()           // called when hit with weapon or trap.
+    {
+        stunned = true;
+        CameraScreenShake.Shake(StrongIntensity, StrongShakeTimer);
+        playerAnim.ChangeAnimation(AnimationTags.MAJORDAMAGE);
+    }
+    public void UndoStun()
     {
         stunned = false;
     }
 
+    #endregion
     public void MoveToGameRoom()
     {
         Vector3 spawnPos = SpawnPositionManager.instance.GameSpawnPosition.position;
         spawnPos += new Vector3(UnityEngine.Random.Range(-8, 8), 1, UnityEngine.Random.Range(-8, 8));
         transform.position = spawnPos;
-    }
+    }               // teleport to game room when the game starts
 
     private void OnTriggerEnter(Collider other)
     {
@@ -164,7 +213,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             other.GetComponentInParent<GuardedTilePlacement>().ClaimTile(entity);
         }
-    }
+    }           // guard tile
 
     private void OnTriggerExit(Collider other)
     {

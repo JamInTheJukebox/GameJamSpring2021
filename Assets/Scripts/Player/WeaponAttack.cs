@@ -27,7 +27,8 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         state.AddCallback("InUse", Toggleweapon);
         if (entity.IsOwner)
         {
-            state.InUse = true; 
+            state.InUse = true;
+            //FindObjectOfType<Camera>().GetComponentInParent<BoltEntity>().GetState<IMasterPlayerState>().OnAttack = Turn_On_Attack_Joint;
         }
     }
 
@@ -37,7 +38,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         ItemUI.UpdateItemCount(NumberOfHitsLeft.ToString());
     }
 
-    public void UseAttacK()     // toggle only when you successfully hit someone.
+    public void UseAttacK()     // toggle only when you successfully hit someone. called by the player you hit.
     {
         if (ToggleHitsLeft) { return; }
         ToggleHitsLeft = true;
@@ -51,18 +52,16 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         ToggleHitsLeft = false;
         if (NumberOfHitsLeft <= 0)
         {
+            FindObjectOfType<Camera>().transform.parent.GetComponentInChildren<WeaponManager>().ResetWeapon();          // reset UI weapon.
             BoltNetwork.Destroy(gameObject);
         }
     }
 
-    public void ResetAttackState()                                                                              // able to attack again. Set to false when attacked or when attacking someone.
-    {
-        ReadyToAttackAgain = true;
-    }
-    
     public void Turn_On_Attack_Joint()
     {
+        print("Turning On Attack Joint");
         hitJoint.SetActive(true);
+        Invoke("Turn_Off_Attack_Joint", 0.13f);
     }
 
     public void Turn_Off_Attack_Joint()
@@ -70,12 +69,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         print("Stop Attacking");
         hitJoint.SetActive(false);
     }
-    private void AttackPlayer()
-    {
-        ReadyToAttackAgain = false;
-        //mess with animator states here.
-        // stop the player from moving if they attack.
-    }
+
 
     private void Toggleweapon()     // function for setting player attack visuals.
     {
