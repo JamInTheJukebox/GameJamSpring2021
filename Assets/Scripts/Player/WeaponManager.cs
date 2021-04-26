@@ -241,9 +241,9 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
             if (entity.IsOwner)
             {
                 PlayerInventory.DeInitializeInventory();
+                state.WeaponIndex = "0";
             }
 
-            state.WeaponIndex = "0";
             return; }
         state.Weapon.transform.SetParent(SetWeaponParent());
         if (state.WeaponIndex == "1.3" | state.WeaponIndex == "2.1")         // reset chicken to the size of the chicken parent.
