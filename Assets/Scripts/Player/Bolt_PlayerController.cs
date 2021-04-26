@@ -211,7 +211,7 @@ public class Bolt_PlayerController : Bolt.EntityBehaviour<IMasterPlayerState>
 
         else if(other.tag == Tags.BUTTON_TAG)      // if you enter a button tag object and are moving down, push the button down and claim ownership.
         {
-            other.GetComponentInParent<GuardedTilePlacement>().ClaimTile(entity);
+            other.GetComponentInParent<GuardedTilePlacement>().ClaimTile(entity,state.UserColor,state.Username);        // call event here.
         }
     }           // guard tile
 

@@ -137,6 +137,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         if (!entity.IsOwner) { return; }    // getting hit by a trap will guarantee damage to you. However, it gives you some i-frames for some other attacks such as hamemrs. YOu can't just get hit by something and try to set off all the traps!.
         Hit = true;
         ChangeHealth(-damage);
+        PlayerController.MajorDamage();
 
         Invoke("ResetHit", StunTime);       // check movement script if still stunned.
         print("GOT HIT!!");

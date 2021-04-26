@@ -71,9 +71,14 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     public void ResetAttack()
     {
         //currentClip = AnimClips[AnimationTags.IDLE];
+        WepManager.IsAttacking = true;                  // make sure this variable is true.
         WepManager.DelayNextAttack();
     }
 
+    public void ResetAttackTraps()
+    {
+
+    }
     #region Stun
     public void PlayStars()
     {
@@ -83,6 +88,7 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     public void ResetStun()
     {
         PlayerController.UndoStun();
+        ResetAttack();      // call this incase the player's attack function was interrupted.
     }
     #endregion
     private void Update()

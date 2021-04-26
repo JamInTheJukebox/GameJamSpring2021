@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
 {
     // player should walk to guarded tile to take control of it.
@@ -11,13 +11,14 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     public float Damage = 0.3f;
     public float CooldownTime = 0.1f;
     private SphereCollider AreaOfAttack;
-
+    public TextMeshProUGUI OwnerText;
     public GameObject DestroyVFX;
     public ParticleSystem BoltVFX;
     public ParticleSystem BoltVFX2;
     // add destroy method for when it has been on the board for too long.
     List<GameObject> players = new List<GameObject>();
     private IEnumerator coroutineGuardTile;
+    private float colorIntensity;
 
     public override void Attached()
     {
@@ -28,15 +29,22 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     }
 
 
-    private void InitializeGuardedTile()        // copy the owner's material.
+    private void InitializeGuardedTile()        // run when an owner is assigned to this guarded tile.
     {
         if(PlayerDetector != null)
         {
             Destroy(PlayerDetector.gameObject);
         }
+        AreaOfAttack.enabled = true;
+        PlayerDetector.enabled = false;
+        ButtonRender.material = OwnedMaterial;
+        PlayerPersonalization ownerPersonalization = state.EntityOwner.GetComponent<PlayerPersonalization>();
+        colorIntensity = Player_Colors.GetColorIntensity(ownerPersonalization.GetColor());
+        OwnerText.text = ownerPersonalization.GetName() + "'s tile";
 
         Color GuardedMaterialColor = state.EntityOwner.GetComponent<PlayerPersonalization>().PlayerGraphics.material.color;
-        ButtonRender.material.color = GuardedMaterialColor*3;
+        ButtonRender.material.color = GuardedMaterialColor;
+        ButtonRender.material.SetColor("_EmissionColor", GuardedMaterialColor * colorIntensity*0.6f); // change this multiplier.
         print("I am now claimed!");
         ButtonAnim.Play(AnimHashID);
     }
@@ -63,9 +71,9 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 // apply damage recursion function here.
                 if(state.EntityOwner == player)     // owned guard tile
                 {
-                    if (coroutineGuardTile == null)
-                        coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(Damage, CooldownTime);
-                    StartCoroutine(coroutineGuardTile);
+                    //if (coroutineGuardTile == null)
+                        //coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(Damage, CooldownTime);
+                    //StartCoroutine(coroutineGuardTile);
                     print("This is your guarded tile. Enjoy!!");        // possibly heal player here in random event?
                 }
                 else// tile that is not owned
@@ -96,7 +104,7 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 BoltEntity player = other.GetComponent<BoltEntity>();
                 if (!player.IsOwner) { return; }
                 // cancel damage here.
-                StopCoroutine(coroutineGuardTile);
+                //StopCoroutine(coroutineGuardTile);
             }
         }
     }
@@ -125,10 +133,8 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         ButtonAnim = GetComponent<Animator>();
         AnimHashID = Animator.StringToHash("Pushed");
     }
-    public void ClaimTile(BoltEntity PlayerEntity)
+    public void ClaimTile(BoltEntity PlayerEntity, string color,string playerName)
     {
-        AreaOfAttack.enabled = true;
-        PlayerDetector.enabled = false;
         if (state.EntityOwner != null) { return; }       // do not reassign ownership if someone has claimed this tile.
         print("Claiming Tile!");
         if (BoltNetwork.IsServer)            // only server can assign ownership        // handle this in the guarded tile!

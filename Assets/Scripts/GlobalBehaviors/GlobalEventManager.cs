@@ -110,4 +110,26 @@ public static class Player_Colors
         return mat;
     }
 
+    public static Dictionary<string, float> Color_Intensity_Multiplier = new Dictionary<string, float>()
+    {
+        [Color_Tags.BLUE] = 3.5f,
+        [Color_Tags.GREEN] = 4.5197f,
+        [Color_Tags.GREY] = 5.294f,
+        [Color_Tags.LIGHTBLUE] = 3.79f,
+        [Color_Tags.LIGHTGREEN] = 3.271f,
+        [Color_Tags.ORANGE] = 3.5f,
+        [Color_Tags.PURPLE] = 3.5f,
+        [Color_Tags.RED] = 3.5f,
+        [Color_Tags.WHITE] = 3.0227f,
+        [Color_Tags.YELLOW] = 3.5f
+    };
+
+    public static float GetColorIntensity(string color)
+    {
+        if (Color_Intensity_Multiplier.ContainsKey(color))
+        {
+            return Color_Intensity_Multiplier[color];
+        }
+        return 3.5f;         // if no color is found, return the default value of 3.5
+    }
 }

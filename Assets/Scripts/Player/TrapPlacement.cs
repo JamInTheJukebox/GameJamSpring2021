@@ -8,6 +8,14 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     public GameObject DestructionVFX;
     public float WaitTimeToInitializeTrap = 1f;             // time the player has to get away from the trap.
     public bool ReadyToAttack;
+    [Header("Rendering")]
+    public Color bombUnlitColor;
+    public Color bombLitColor;
+    public Renderer BombTip;
+    private float LitIntensity = 4f;
+    private Color currentColor;
+    private float Intensity;
+
     public override void Attached()
     {
         state.SetTransforms(state.WeaponPos, transform);
@@ -15,9 +23,24 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     }
     private void InitializeTrap()       // to avoid damaging the player who sets down the trap. Give them time to move away.
     {
+        currentColor = bombLitColor;
+        Intensity = LitIntensity;
+        BombTip.material.color = currentColor;
+        BombTip.material.SetColor("_EmissionColor", currentColor * Intensity); // change this multiplier.
+        Invoke("LoopMaterial", 0.4f);
+        // set color here.
         GetComponent<SphereCollider>().enabled = false;
         ReadyToAttack = true;
         GetComponent<SphereCollider>().enabled = true;  // to avoid having someone inside the trap. If they are inside the trap before readytoAttack is set to true, then the collision will not be counted and they will be standing inside of a trap that refuses to be set off!
+    }
+
+    private void LoopMaterial()
+    {
+        currentColor = (currentColor == bombUnlitColor) ? bombLitColor : bombUnlitColor;            // if the color is unlit, move to the lit color.
+        Intensity = (Intensity <= 0.1f) ? 3.5f : 0;
+        BombTip.material.color = currentColor;
+        BombTip.material.SetColor("_EmissionColor", currentColor * Intensity); // change this multiplier.
+        Invoke("LoopMaterial", 0.4f);
     }
 
     public void DestroyTrap()

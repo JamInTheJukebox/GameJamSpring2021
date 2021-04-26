@@ -10,6 +10,7 @@ public class LobbyTiles : MonoBehaviour
     public Texture MainTex;
 
     static Dictionary<GameObject, Color> PlayerMat = new Dictionary<GameObject, Color>();     // to avoid creating too many materials. Make one material for each player.
+    static Dictionary<Color, string> StringColors = new Dictionary<Color, string>();
     // dictionary between player and material
     public float ResetTimer = 1.5f;
     private float CurrentTimer;
@@ -27,7 +28,7 @@ public class LobbyTiles : MonoBehaviour
             Color PlayerCol = PlayerMat[other.gameObject];
             TileMaterial.material = GlowingMaterial;
             TileMaterial.material.color = PlayerCol;
-            TileMaterial.material.SetColor("_EmissionColor", PlayerCol * 3.5f);
+            TileMaterial.material.SetColor("_EmissionColor", PlayerCol * Player_Colors.GetColorIntensity(StringColors[PlayerCol])); // change this multiplier.
             InitiateTimer();
         }
     }
@@ -54,8 +55,9 @@ public class LobbyTiles : MonoBehaviour
         }
     }
 
-    public static void AddPlayer(GameObject obj,Color playerColor)      // adds the player so we can quickly grab an the color without using getcomponent.
+    public static void AddPlayer(GameObject obj,Color playerColor,string userColor)      // adds the player so we can quickly grab an the color without using getcomponent.
     {
         PlayerMat.Add(obj, playerColor);
+        StringColors.Add(playerColor, userColor);
     }
 }

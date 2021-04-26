@@ -127,6 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 0.1
   CooldownTime: 0.31
+  OwnerText: {fileID: 0}
   DestroyVFX: {fileID: 0}
   BoltVFX: {fileID: 0}
   BoltVFX2: {fileID: 0}

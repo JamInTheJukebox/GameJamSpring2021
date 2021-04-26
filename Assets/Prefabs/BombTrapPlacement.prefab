@@ -254,6 +254,9 @@ MonoBehaviour:
   DestructionVFX: {fileID: 3915921871996795725, guid: 3b6b88d8326a7a74b86e719a98da0175, type: 3}
   WaitTimeToInitializeTrap: 1
   ReadyToAttack: 0
+  bombUnlitColor: {r: 0.6627451, g: 0.23137257, b: 0.36862746, a: 1}
+  bombLitColor: {r: 0.8867924, g: 0, b: 0, a: 1}
+  BombTip: {fileID: 6118948422053147924}
 --- !u!1 &8355825842223506708
 GameObject:
   m_ObjectHideFlags: 0

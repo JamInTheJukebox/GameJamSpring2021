@@ -13,7 +13,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     public Renderer[] PlayerLimbs = new Renderer[10];
     Cinemachine.CinemachineFreeLook PlayerCamera;
 
-    public static int NumberOfHats = 4;
+    public static int NumberOfHats = 5;
     public static int NumberOfEyewear = 2;
 
     [Header("Hats")]
@@ -63,7 +63,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);
         }
-        LobbyTiles.AddPlayer(gameObject, PlayerGraphics.material.color);
+        LobbyTiles.AddPlayer(gameObject, PlayerGraphics.material.color,state.UserColor);
     }
     private void Update()
     {
@@ -80,6 +80,16 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     {
         state.Username = PlayerPrefs.GetString("username");
         PlayerIcon.SetActive(true);
+    }
+
+    public string GetName()
+    {
+        return state.Username;
+    }
+
+    public string GetColor()
+    {
+        return state.UserColor;
     }
 
     public void SetHat_Eye()
@@ -109,10 +119,6 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             SmallEyes[state.EyeID - 1].SetActive(true);
         }
-    }
-    public string GetName()
-    {
-        return state.Username;
     }
 
     public void SetCameraTarget(Camera target)

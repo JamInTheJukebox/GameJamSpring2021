@@ -5219,7 +5219,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4461150271881051945}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: -67.3}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1951470392}
@@ -5676,6 +5676,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 0.3
   CooldownTime: 1
+  OwnerText: {fileID: 1951470393}
   DestroyVFX: {fileID: 0}
   BoltVFX: {fileID: 6928492411007976858}
   BoltVFX2: {fileID: 2136901515526080351}
