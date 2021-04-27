@@ -118,6 +118,10 @@ public class EventManager : Bolt.GlobalEventListener
     {
         if (BoltNetwork.IsServer)       // restore colors here.
             Connections--;
+        else
+        {
+            Debug.LogWarning("What in the world am I doing");
+        }
     }
 
     public override void OnEvent(ToggleAreaEffectorEvent evnt)      // either destroy the trap, or assign a player to own the guarded tile.
