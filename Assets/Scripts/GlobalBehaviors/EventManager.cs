@@ -79,7 +79,7 @@ public class EventManager : Bolt.GlobalEventListener
         {
             FindObjectOfType<Camera>().GetComponentInParent<Health>().DamagedByWeapon(evnt.WeaponDamage);
         }
-        else if (evnt.WeaponEntity.IsOwner)
+        else if (evnt.WeaponEntity.IsOwner)                                                                             // THIS CAUSES AN ERROR.
         {
             evnt.WeaponEntity.GetComponent<WeaponAttack>().UseAttacK();     // decrease 1 from their available weapon uses.
         }

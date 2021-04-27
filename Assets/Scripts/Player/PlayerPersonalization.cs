@@ -63,7 +63,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);
         }
-        LobbyTiles.AddPlayer(gameObject, PlayerGraphics.material.color,state.UserColor);
+        LobbyTiles.AddPlayer(gameObject, PlayerGraphics.material.color,state.UserColor);            // remove this key
     }
     private void Update()
     {
