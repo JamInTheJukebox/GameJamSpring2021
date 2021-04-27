@@ -120,7 +120,8 @@ public class EventManager : Bolt.GlobalEventListener
             Connections--;
         else
         {
-            Debug.LogWarning("What in the world am I doing");
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);          // transition back to the first scene.
+            Debug.LogWarning("Disconnected from server");
         }
     }
 
