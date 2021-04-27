@@ -32,6 +32,14 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         }
     }
 
+    private void Update()       // to fix and offsync issue.
+    {
+        if(transform.localPosition != Vector3.zero)
+        {
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = new Quaternion(0, 0, 0, 0);
+        }
+    }
     public void InitializeUI(WeaponManager wepManager)
     {
         ItemUI = wepManager;

@@ -13,7 +13,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     public Renderer[] PlayerLimbs = new Renderer[10];
     Cinemachine.CinemachineFreeLook PlayerCamera;
 
-    public static int NumberOfHats = 5;
+    public static int NumberOfHats = 10;
     public static int NumberOfEyewear = 2;
 
     [Header("Hats")]
@@ -79,7 +79,7 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     public void SetName()
     {
         state.Username = PlayerPrefs.GetString("username");
-        PlayerIcon.SetActive(true);
+        //PlayerIcon.SetActive(true);       no longer used.
     }
 
     public string GetName()
@@ -105,7 +105,12 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         {
             return;
         }
-        Hats[state.HatID - 1].SetActive(true);
+        var obj = Hats[state.HatID - 1];
+        obj.SetActive(true);
+        // move the ui text up or the hat will cover it.
+        Vector3 NewPos = NameTextbox.transform.parent.localPosition;
+        NewPos.y = obj.GetComponent<TransformObject>().GetNewYPosition();
+        NameTextbox.transform.parent.localPosition = NewPos;
     }
 
     public void EyeCallback()

@@ -79,17 +79,21 @@ public class EventManager : Bolt.GlobalEventListener
         {
             FindObjectOfType<Camera>().GetComponentInParent<Health>().DamagedByWeapon(evnt.WeaponDamage);
         }
-        else if (evnt.WeaponEntity.IsOwner)                                                                             // THIS CAUSES AN ERROR.
+        else if (evnt.WeaponEntity)                                                                             // THIS CAUSES AN ERROR.
         {
-            evnt.WeaponEntity.GetComponent<WeaponAttack>().UseAttacK();     // decrease 1 from their available weapon uses.
+            if(evnt.WeaponEntity.IsOwner)
+                evnt.WeaponEntity.GetComponent<WeaponAttack>().UseAttacK();     // decrease 1 from their available weapon uses.
         }
     }
     public override void OnEvent(StartLobbyCounter evnt)
     {
         BoltLog.Info(evnt.Message);
         var countdownObj = FindObjectOfType<Countdown>();
-        countdownObj.GetComponent<CanvasGroup>().alpha = 1;
-        countdownObj.StartingGame();
+        if (countdownObj)
+        {
+            countdownObj.GetComponent<CanvasGroup>().alpha = 1;
+            countdownObj.StartingGame();
+        }
     }
 
     public override void OnEvent(StartGame evnt)            //teleport player to hub.
@@ -112,7 +116,7 @@ public class EventManager : Bolt.GlobalEventListener
     }
     public override void Disconnected(BoltConnection connection)        // either the host or a player has left the game. If The host left, disconnect everyone
     {
-        if (BoltNetwork.IsServer)
+        if (BoltNetwork.IsServer)       // restore colors here.
             Connections--;
     }
 

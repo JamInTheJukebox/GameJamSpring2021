@@ -7,7 +7,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     // CONTAINS THE HEALTH AND COLLISION MANAGER
     public float PlayerHealth = 3;
     public float MaxPlayerShield = 2;      // 
-
+    
     private float CurrentShield;
     public float StunTime = 1.5f;
     public float WeakStunTime = 0.3f;       // damage you take when you are in fields of damage.
@@ -39,11 +39,19 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
             if(CurrentShield > 0)               // shield
             {
                 CurrentShield += Delta;
+                if(CurrentShield > MaxPlayerShield)
+                {
+                    CurrentShield = MaxPlayerShield;
+                }
                 GameUI.UserInterface.UpdateShield(CurrentShield);
             }
             else
             {
                 state.Health += Delta;              // take away health with Delta < 0
+                if(state.Health > 3)
+                {
+                    state.Health = 3;       // do not go over 3 health. 3 is the max health.
+                }
                 if (state.Health <= 0)     // run this code if the health is less than 0 and the player has not lost the game yet.
                     LoseGame();
             }
