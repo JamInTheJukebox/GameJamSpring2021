@@ -20,6 +20,13 @@ public class Menu : GlobalEventListener
     private List<GameObject> JoinServerBoxes = new List<GameObject>();
     // used for initializing settings.
     public Toggle Y_Toggle;
+    [Header("Hat Icons")]
+    public Image HatContainer;
+    public List<Sprite> Hats = new List<Sprite>();
+    [Header("Eye Icons")]
+    public Image EyeContainer;
+    public List<Sprite> Eyes = new List<Sprite>();
+
     private int m_HatID;
     public int HatID                // 0: nothing, 1: Party Hat, 2: Popo Head, 3: Hat Text, 4: Thinning
     {
@@ -39,6 +46,7 @@ public class Menu : GlobalEventListener
                 }
 
                 // update hat logo.
+                HatContainer.sprite = Hats[m_HatID];
                 PlayerPrefs.SetInt("HatID", m_HatID);
                 print(m_HatID);
             }
@@ -63,6 +71,7 @@ public class Menu : GlobalEventListener
                 }
                 // update eye logo
                 // update eye ID in text.
+                EyeContainer.sprite = Eyes[m_EyeID];
                 PlayerPrefs.SetInt("EyeID", m_EyeID);
                 print(m_EyeID);
 
@@ -72,6 +81,12 @@ public class Menu : GlobalEventListener
 
     private void Start()
     {
+        HatID = PlayerPrefs.GetInt("HatID");
+        EyeID = PlayerPrefs.GetInt("EyeID");
+
+        HatContainer.sprite = Hats[HatID];
+        EyeContainer.sprite = Eyes[EyeID];
+
         Y_Toggle.isOn = PlayerSettings.Mouse_Y_Invert;
     }
     public void OnSetUserNameValueChanged(string NewName)
@@ -88,6 +103,12 @@ public class Menu : GlobalEventListener
     public override void BoltStartDone()
     {
         string newServerName = Regex.Replace(PlayerPrefs.GetString("ServerName"), @"[^a-zA-Z0-9 ]", "");
+        if (PlayerPrefs.GetString("ServerName").Length == 0)        // server names cannot be empty
+        {
+            PlayerPrefs.SetString("ServerName", "DefaultServerName" + UnityEngine.Random.Range(0, 10000000000));         // assign random server name
+            newServerName = PlayerPrefs.GetString("ServerName");
+            print(newServerName);
+        }
         if (BoltNetwork.IsServer)
             BoltMatchmaking.CreateSession(sessionID: newServerName, sceneToLoad: "Game");       // name the session ID.
     }
@@ -148,7 +169,8 @@ public class Menu : GlobalEventListener
 
     public void ShutDownBolt()
     {
-        BoltNetwork.Shutdown();
+        if(BoltNetwork.IsRunning)           // if there is a boltnetwork instance, shutdown.
+            BoltNetwork.Shutdown();
     }
 
 

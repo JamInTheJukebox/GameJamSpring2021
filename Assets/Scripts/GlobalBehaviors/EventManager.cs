@@ -5,7 +5,7 @@ public class EventManager : Bolt.GlobalEventListener
     public static EventManager Instance;
     [HideInInspector] public int Connections = 1;
 
-    private void Awake()
+    private void Awake()            // nothing special. Erase this if youd like!
     {
         if (BoltNetwork.IsServer)
         {
@@ -135,6 +135,7 @@ public class EventManager : Bolt.GlobalEventListener
 
     public override void OnEvent(GameEnded evnt)            // call this event when the winner is going to be announced
     {
-        GameUI.UserInterface.AnnounceWinner(evnt.WinnerName);
+        if(GameUI.UserInterface)
+            GameUI.UserInterface.AnnounceWinner(evnt.WinnerName);
     }
 }

@@ -315,13 +315,13 @@ public class c_Item_Types
     public const string Bat = "1.2";
     public const string Chicken = "1.3";
     // 
-    public const string ElectricTrap = "2.1";
+    public const string BombTrap = "2.1";
 
     public static Dictionary<Item_Type, string> Items = new Dictionary<Item_Type, string>
     {
         [Item_Type.Bat] = Bat,
         [Item_Type.Hammer] = Hammer,
-        [Item_Type.Electric_Trap] = ElectricTrap,
+        [Item_Type.Electric_Trap] = BombTrap,
         [Item_Type.Chicken] = Chicken
     };
 

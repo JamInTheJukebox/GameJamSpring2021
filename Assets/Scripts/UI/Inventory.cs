@@ -8,11 +8,11 @@ public class Inventory : MonoBehaviour
 {
     // inventory UI shows the player what weapon they are holding.
 
-    public Color DefaultColor = Color.white;
-    public Color PlayerColor;
+    //public Color DefaultColor = Color.white;
+    //public Color PlayerColor;
 
-    public float TimeToTransition = 2f;
-    private float CurrentChangeTime;
+    //public float TimeToTransition = 2f;
+    //private float CurrentChangeTime;
     [Header("Default Slot")]
     public GameObject Slot1;        // default slot when initialized.
     public Image Slot1ColorObj;
@@ -27,42 +27,43 @@ public class Inventory : MonoBehaviour
 
     [Header("Image Portraits")]
     public Sprite DefPNG;
-    public Sprite WeaponPNG;
-    public Sprite TrapPNG;
+    public Sprite HammerPNG;
+    public Sprite ChickenPNG;
+    public Sprite BombTrapPNG;
 
+    Dictionary<string, Sprite> WeaponIcons = new Dictionary<string, Sprite>();
     // Start is called before the first frame update
 
     private void Awake()
     {
+        #region DictionarySetup
+        WeaponIcons.Add(c_Item_Types.Default, DefPNG);
+        WeaponIcons.Add(c_Item_Types.Hammer, HammerPNG);
+        WeaponIcons.Add(c_Item_Types.Chicken, ChickenPNG);
+        WeaponIcons.Add(c_Item_Types.BombTrap, BombTrapPNG);
+        #endregion
         Inventory_Animator = GetComponent<Animator>();
         InventoryToggleHash = Animator.StringToHash("SwitchWep");
-        ItemSlotPNG.sprite = null;
+        //ItemSlotPNG.sprite = null;
     }
 
     public void InitializeInventory(Color playerColor)      // get the player color.
     {   
-        PlayerColor = playerColor;
-        Slot1ColorObj.color = PlayerColor;
-        Slot2ColorObj.color = DefaultColor;
+        //PlayerColor = playerColor;
+        //Slot1ColorObj.color = PlayerColor;
+        //Slot2ColorObj.color = DefaultColor;
     }
 
     public void InitializeInventory(string typeofItem)
     {
         Sprite item_png = null;
-        if(typeofItem == "1.1")
-        {
-            item_png = WeaponPNG;
-        }
-        else if(typeofItem == "2.1")
-        {
-            item_png = TrapPNG;
-        }
+        item_png = WeaponIcons[typeofItem];
         ItemSlotPNG.sprite = item_png;
     }
    
     public void DeInitializeInventory()
     {
-        ItemSlotPNG.sprite = null;
+        //ItemSlotPNG.sprite = null;
     }
     public void UpdateCounter(string newCount)
     {
@@ -71,7 +72,7 @@ public class Inventory : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        /*
         if(CurrentChangeTime >= 0)
         {
             var Color1 = Slot1ColorObj.color;
@@ -80,7 +81,7 @@ public class Inventory : MonoBehaviour
             var ratio1 = CurrentChangeTime / TimeToTransition;
             Slot1ColorObj.color = Color.Lerp(DefaultColor, Slot1ColorObj.color,ratio1);
             Slot2ColorObj.color = Color.Lerp(PlayerColor, Slot2ColorObj.color, ratio1);
-        }
+        }*/
     }
 
     public void ChangeItem()        // UI only.
@@ -89,11 +90,11 @@ public class Inventory : MonoBehaviour
         {
             ChangeItemPos();
         }
-        Slot1ColorObj.color = PlayerColor;
-        Slot2ColorObj.color = DefaultColor;
+        //Slot1ColorObj.color = PlayerColor;
+        //Slot2ColorObj.color = DefaultColor;
         initialized = true;
         Inventory_Animator.Play(InventoryToggleHash, -1, 0f);
-        CurrentChangeTime = TimeToTransition;
+        //CurrentChangeTime = TimeToTransition;
         
     }
 

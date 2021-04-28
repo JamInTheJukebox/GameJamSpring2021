@@ -15,9 +15,13 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     public GameObject PauseMenu;
     Button StartGameButton;
     public bool Paused = false;
-
+    [Header("Health_Shield")]
     public Image HealthUI;
     public Image ShieldUI;
+    public RectTransform HeartSprite;
+    public RectTransform ShieldSprite;
+    public float HeartDeltaError;       // Heart is placed too far without this value.
+
     [Header("Settings")]
     public float EndgameCounter = 5;            // amount of time the lobby will stay open at the end of the game until all players move to the main menu.
     public Toggle Mouse_Y_Toggle;
@@ -36,6 +40,11 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
             transform.GetChild(0).gameObject.SetActive(true);
             StartGameButton = GetComponentInChildren<Button>();
         }
+        HeartDeltaError = HealthUI.rectTransform.sizeDelta.x / 2;
+        /*
+        HeartSprite.anchorMin = new Vector2(HealthUI.rectTransform.anchorMin.x, TargetHealthRatio);
+        HeartSprite.anchorMax = new Vector2(HealthUI.rectTransform.anchorMax.x, TargetHealthRatio);
+        HeartSprite.anchoredPosition = Vector2.zero;*/
     }
 
     public override void SimulateOwner()
@@ -54,6 +63,8 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
 
     private void Update()
     {
+        HeartSprite.localPosition = new Vector2(HealthUI.fillAmount * HealthUI.rectTransform.sizeDelta.x - HeartDeltaError,
+             HeartSprite.localPosition.y);
         if (Input.GetKeyDown(KeyCode.P) && CameraSettings != null)
             PauseGame();
 
