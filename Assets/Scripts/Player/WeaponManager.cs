@@ -150,21 +150,21 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
     #region otherWeapons
     private void SwingHammer()      // swing your hammer.       // enable collider here.
     {
-        print("Swinging Hammer");
+       // print("Swinging Hammer");
         WeaponSpeedMultiplier = 0f;
         playerAnim.ChangeAnimation(AnimationTags.SWING);
     }
 
     private void SwingChicken()
     {
-        print("Swinging Chicken");
+        //print("Swinging Chicken");
         WeaponSpeedMultiplier = 0f;
         playerAnim.ChangeAnimation(AnimationTags.CHICKENSLAP);
     }
 
     public void EnableGenericCollider()         // enable the weapon's collider
     {
-        print("ATTACK PLAYER!!!");
+        //print("ATTACK PLAYER!!!");
         if(wep_attack == null) { wep_attack = state.Weapon.GetComponent<WeaponAttack>(); }
         if(wep_attack == null) { Debug.LogError("WeaponManager.cs: There is no weapon attack found on the weapon. Please attach this behavior."); return; }
         wep_attack.Turn_On_Attack_Joint();
@@ -173,7 +173,7 @@ public class WeaponManager : Bolt.EntityBehaviour<IMasterPlayerState>
 
     private void SetTrapAnimation()
     {
-        print("Setting Trap");
+      //  print("Setting Trap");
         WeaponSpeedMultiplier = 0.7f;
         playerAnim.ChangeAnimation(AnimationTags.TRAPSET);
 

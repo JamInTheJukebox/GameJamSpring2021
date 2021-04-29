@@ -13,7 +13,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     [Header("UI")]
     public TextMeshProUGUI WinnerText;
     public GameObject PauseMenu;
-    Button StartGameButton;
+    public Button StartGameButton;
     public bool Paused = false;
     [Header("Health_Shield")]
     public Image HealthUI;
@@ -40,8 +40,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         Change_MouseY_Settings(PlayerSettings.Mouse_Y_Invert);
         if (BoltNetwork.IsServer)
         {
-            transform.GetChild(0).gameObject.SetActive(true);
-            StartGameButton = GetComponentInChildren<Button>();
+            StartGameButton.gameObject.SetActive(true);
         }
         HeartDeltaError = HealthUI.rectTransform.sizeDelta.x / 2;
         ShieldDeltaError = ShieldUI.rectTransform.sizeDelta.x / 2;

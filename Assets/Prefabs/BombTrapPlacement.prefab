@@ -259,6 +259,7 @@ MonoBehaviour:
   BombTip: {fileID: 6118948422053147924}
   ExplosionSound: {fileID: 8300000, guid: 08a397fd15f86774a842d4bb2bc7bb0d, type: 3}
   TrapSet: {fileID: 8300000, guid: 16fb4f3713e70004ab47285f56dd4acc, type: 3}
+  LifeTime: 60
 --- !u!1 &8355825842223506708
 GameObject:
   m_ObjectHideFlags: 0

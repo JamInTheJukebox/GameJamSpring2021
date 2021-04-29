@@ -447,8 +447,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -190.9, y: 32.4}
-  m_SizeDelta: {x: 382, y: 300}
+  m_AnchoredPosition: {x: -216.12, y: 53.19}
+  m_SizeDelta: {x: 432.44678, y: 341.57397}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &1261911506407072746
 Animator:
@@ -1696,6 +1696,7 @@ MonoBehaviour:
   CameraSettings: {fileID: 0}
   WinnerText: {fileID: 3013779613879230306}
   PauseMenu: {fileID: 4490967210107120179}
+  StartGameButton: {fileID: 8530026131431616273}
   Paused: 0
   HealthUI: {fileID: 426288166}
   ShieldUI: {fileID: 282995432}
@@ -1832,12 +1833,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxPlayersToStart: 2
   Time_To_Start_Game: 5
-  StandByPhaseTime: 10
-  WarningPhaseTime: 4
+  StandByPhaseTime: 15
+  MinStandByPhaseTime: 6
+  WarningPhaseTime: 6
+  MinWarningPhaseTime: 3
   DangerTime: 2
+  MinDangerTime: 3
   DangerSpeed: 2
   FallSpeed: 3
   FallTime: 2
+  MinFallTime: 1.75
   AmountofTilesToDiscard: 1
   LobbyRoom: {fileID: 0}
   Game_Counter_Started: 0

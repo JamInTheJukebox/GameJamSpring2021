@@ -71,7 +71,7 @@ public class GlobalEventManager_Everyone : Bolt.GlobalEventListener
 {
     public override void OnEvent(SetPlayerPersonalizationEvent evnt)        // assign the state of each user color to the chosen player color.
     {
-        if (evnt.PlayerEntity.IsOwner)
+        if (evnt.PlayerEntity != null && evnt.PlayerEntity.IsOwner)
         {
             Debug.LogWarning(evnt.PlayerColor);
             evnt.PlayerEntity.GetState<IMasterPlayerState>().UserColor = evnt.PlayerColor;      // changes the state only on the owner's screen

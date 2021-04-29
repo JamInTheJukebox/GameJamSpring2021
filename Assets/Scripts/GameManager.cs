@@ -29,19 +29,23 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
             {
                 state.Game_State = (int)value;
                 m_Game_State = value;
+                float a = (float)TileManager.instance.AllTiles.Count;
+                if (TileManager.instance.AllTiles.Count == 0) { a = 1; }
+                a = Mathf.Clamp(a * 5, 0, 1);
                 switch ((int)Game_State)            // use a multiplier for when there are very little amount of players.
                 {
                     case 1:
-                        TemporaryTimer = StandByPhaseTime;
+
+                        TemporaryTimer = Mathf.Lerp(StandByPhaseTime,MinStandByPhaseTime,1/a);
                         break;
                     case 2:
-                        TemporaryTimer = WarningPhaseTime;
+                        TemporaryTimer = Mathf.Lerp(WarningPhaseTime,MinWarningPhaseTime,1/a);
                         break;
                     case 3:
-                        TemporaryTimer = DangerTime;
+                        TemporaryTimer = Mathf.Lerp(DangerTime,MinDangerTime,1/a);
                         break;
                     case 4:
-                        TemporaryTimer = FallTime;
+                        TemporaryTimer = Mathf.Lerp(FallTime,MinFallTime,1/a);
                         break;
                 }
             }
@@ -54,18 +58,24 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     [SerializeField] int Time_To_Start_Game = 5;             // when the host presses start, this amount of time will pass to start the game
     [Header("Stand By Phase")]
     [SerializeField] float StandByPhaseTime = 10f;                    // time that passes while the players are running around in the standbyPhase.
+    [SerializeField] float MinStandByPhaseTime = 6f;
+
     [Header("Warning Phase")]
     [SerializeField] float WarningPhaseTime = 5f;               // decreases overtime
+    [SerializeField] float MinWarningPhaseTime = 3f;               // decreases overtime
     float TemporaryTimer;
 
 
     // Other functionalities: Turn danger tiles red, spawn a crush tower above them.
     [Header("Danger Phase")]
     [SerializeField] float DangerTime = 4f;                          // decreases overtime.
+    [SerializeField] float MinDangerTime = 5f;                          // decreases overtime.
     [SerializeField] float DangerSpeed;                         // the speed at which the crushing blocks fall.
     [Header("Tiles Failling Phase")]
     [SerializeField] float FallSpeed;                          // decreases overtime.
     [SerializeField] float FallTime;
+    [SerializeField] float MinFallTime;
+
     [SerializeField] int AmountofTilesToDiscard = 1;                          // decreases overtime.
 
     [Header("Extra")]
@@ -123,13 +133,11 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
 
     public void StartCountDown()        // triggered by pressing J
     {
-        // if there are not enough players, DO NOT START THE GAME!!
-        /*
         if(EventManager.Instance.Connections < MaxPlayersToStart)
         {
+            BoltLog.Warn("There are not enough players to start the game!");
             return;
-        }*/
-        // start the lobby countdown here.
+        }
         Game_Counter_Started = true;
         var evnt = StartLobbyCounter.Create();
         evnt.Message = "Starting the game...";

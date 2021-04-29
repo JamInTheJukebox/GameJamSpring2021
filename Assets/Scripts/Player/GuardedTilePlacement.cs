@@ -12,26 +12,59 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     public float CooldownTime = 0.1f;
     private SphereCollider AreaOfAttack;
     public TextMeshProUGUI OwnerText;
+    [Header("ParticleEffects")]
     public GameObject DestroyVFX;
     public ParticleSystem BoltVFX;
     public ParticleSystem BoltVFX2;
+    public ParticleSystem HealVFX;
+
     // add destroy method for when it has been on the board for too long.
     List<GameObject> players = new List<GameObject>();
     private IEnumerator coroutineGuardTile;
     private float colorIntensity;
-    public float LifeTime = 50f;
+
+    [Header("Healing")]
+    public float HealRate = 0.1f;
+    public float LifeTime = 60f;
+    private float HealingTime = 30;     // time it takes for the tile to initialize its "heal" phase.
+    public float HealingDuration = 10f;  // the time the tile will be healing for.
+
     [Header("Audio")]
     [SerializeField] AudioClip GuardTileClaimed;
     [SerializeField] AudioClip LightningSFX;
     public override void Attached()
     {
         state.AddCallback("EntityOwner", InitializeGuardedTile);
+        state.AddCallback("Healing", HealingCallback);
         AreaOfAttack = GetComponent<SphereCollider>();
         BoltVFX.Stop();
         BoltVFX2.Stop();
+        HealVFX.Stop();
         Invoke("EndGuardLifetime", LifeTime);
+
+        if (entity.IsOwner)     // only entity owner can turn healing on. effects are observed on clients.
+        {
+            HealingTime = LifeTime / 2 + Random.Range(-5f, 10f);
+            Invoke("InitializeHeal", HealingDuration);
+        }
     }
 
+    private void InitializeHeal()
+    {
+        if (entity.IsOwner)
+        {
+            state.Healing = true;
+        }
+        Invoke("StopHeal", HealingTime);
+    }
+
+    private void StopHeal()
+    {
+        if (entity.IsOwner)
+        {
+            state.Healing = false;
+        }
+    }
     private void EndGuardLifetime()
     {
         if (entity.IsOwner)
@@ -83,9 +116,10 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 // apply damage recursion function here.
                 if(state.EntityOwner == player)     // owned guard tile
                 {
-                    //if (coroutineGuardTile == null)
-                        //coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(Damage, CooldownTime);
-                    //StartCoroutine(coroutineGuardTile);
+                    if (!state.Healing) { return; }
+                    if (coroutineGuardTile == null)
+                        coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(HealRate, CooldownTime);
+                    StartCoroutine(coroutineGuardTile);
                     print("This is your guarded tile. Enjoy!!");        // possibly heal player here in random event?
                 }
                 else// tile that is not owned
@@ -128,12 +162,24 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 BoltEntity player = other.GetComponent<BoltEntity>();
                 if (!player.IsOwner) { return; }
                 // cancel damage here.
-                StopCoroutine(coroutineGuardTile);
+                if(coroutineGuardTile != null)
+                    StopCoroutine(coroutineGuardTile);
             }
         }
     }
 
-
+    private void HealingCallback()
+    {
+        // use state.healing here.
+        if (state.Healing)
+        {
+            HealVFX.Play();
+        }
+        else
+        {
+            HealVFX.Stop();
+        }
+    }
 
     public void DestroyGuardedTile()
     {

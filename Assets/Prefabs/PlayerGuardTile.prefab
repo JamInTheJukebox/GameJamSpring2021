@@ -5670,6 +5670,10 @@ MonoBehaviour:
   DestroyVFX: {fileID: 0}
   BoltVFX: {fileID: 6928492411007976858}
   BoltVFX2: {fileID: 2136901515526080351}
+  HealVFX: {fileID: 887792549900650334}
+  HealRate: 0.1
+  LifeTime: 60
+  HealingDuration: 6.5
   GuardTileClaimed: {fileID: 8300000, guid: d4ba486e89ecc7e4698769fd56c8c005, type: 3}
   LightningSFX: {fileID: 8300000, guid: 9f8e613c626dacc479cbc1c4247c73fd, type: 3}
   ButtonRender: {fileID: 5889996468167760986}
@@ -5749,14 +5753,14 @@ PrefabInstance:
       objectReference: {fileID: 2024205180}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
---- !u!4 &6928492411007976857 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9043579589097298109, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
-  m_PrefabInstance: {fileID: 2136901515124727076}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &6928492411007976858 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 9043579589097298110, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
+  m_PrefabInstance: {fileID: 2136901515124727076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &6928492411007976857 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9043579589097298109, guid: 7959550b2b590374fa4d37fda75932ba, type: 3}
   m_PrefabInstance: {fileID: 2136901515124727076}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4282517862154657134
@@ -5863,6 +5867,11 @@ PrefabInstance:
 --- !u!4 &5686916886990165329 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8468301708630837311, guid: 02474ada2adab0c44a22ed91d03b119e, type: 3}
+  m_PrefabInstance: {fileID: 4282517862154657134}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &887792549900650334 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3980229690033920560, guid: 02474ada2adab0c44a22ed91d03b119e, type: 3}
   m_PrefabInstance: {fileID: 4282517862154657134}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5745468345140491460

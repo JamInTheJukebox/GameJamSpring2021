@@ -7,7 +7,7 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
     [SerializeField] GameObject hitJoint;  // the location where the collider is expected to spawn.
     bool ReadyToAttackAgain = true;
     // in case you hit more than 1 person with one attack.
-    int NumberOfHitsLeft = 2;
+    [SerializeField] int NumberOfHitsLeft = 2;
     bool ToggleHitsLeft = false;
     float HitCoolDown = 0.1f;
     public float Damage = 2;

@@ -373,7 +373,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitJoint: {fileID: 7926881360962833496}
-  Damage: 0.2
+  NumberOfHitsLeft: 2
+  Damage: 0.6
   GFX: {fileID: 7482768545373444279}
   WeaponGetSFX: {fileID: 8300000, guid: 00d3c95648833f046affae5dc77a2fb3, type: 3}
   WeaponUseSFX: {fileID: 11400000, guid: 14bcbe44305e1f448b5cabab1722ab63, type: 2}

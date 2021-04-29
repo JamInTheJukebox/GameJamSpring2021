@@ -131,3 +131,4 @@ MonoBehaviour:
     m_Bits: 256
   NumberOfUses: 3
   GFX: {fileID: 0}
+  TrapGetSFX: {fileID: 0}

@@ -142,3 +142,9 @@ MonoBehaviour:
   DestructionVFX: {fileID: 3915921871996795725, guid: 3b6b88d8326a7a74b86e719a98da0175, type: 3}
   WaitTimeToInitializeTrap: 1
   ReadyToAttack: 0
+  bombUnlitColor: {r: 0, g: 0, b: 0, a: 0}
+  bombLitColor: {r: 0, g: 0, b: 0, a: 0}
+  BombTip: {fileID: 0}
+  ExplosionSound: {fileID: 0}
+  TrapSet: {fileID: 0}
+  LifeTime: 50

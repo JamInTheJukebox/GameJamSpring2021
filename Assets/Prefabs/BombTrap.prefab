@@ -276,4 +276,3 @@ MonoBehaviour:
   NumberOfUses: 3
   GFX: {fileID: 734657579572961221}
   TrapGetSFX: {fileID: 8300000, guid: 8753f45325d0b304b8c6b4e96b1e724d, type: 3}
-  TrapSetSFX: {fileID: 0}

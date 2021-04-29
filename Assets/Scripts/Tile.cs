@@ -55,7 +55,9 @@ public class Tile : MonoBehaviour
 
     public void SpawnDanger()
     {
-        if(EnableDamage)
+        if(TheTile.material != Danger_Tile_Material)
+            SetDanger();
+        if (EnableDamage)
             RangedAttackCollider.enabled = true;
         DangerVFX.Play();
     }

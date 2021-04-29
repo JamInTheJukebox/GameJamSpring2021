@@ -297,6 +297,7 @@ MonoBehaviour:
   HoverAmplitude: 0.9
   HoverSpeed: 3
   torqueSpeed: 100
+  WeaponLifeTime: 30
 --- !u!114 &4999670950303585446
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -126,11 +126,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Damage: 0.1
+  HealRate: 0.1
   CooldownTime: 0.31
   OwnerText: {fileID: 0}
   DestroyVFX: {fileID: 0}
   BoltVFX: {fileID: 0}
   BoltVFX2: {fileID: 0}
+  LifeTime: 50
+  HealingTime: 0
+  GuardTileClaimed: {fileID: 0}
+  LightningSFX: {fileID: 0}
   ButtonRender: {fileID: 0}
   PlayerDetector: {fileID: 0}
   OwnedMaterial: {fileID: 0}

@@ -44,7 +44,7 @@ public class TileManager : MonoBehaviour
 
     public string SelectIndicesToMarkSafe()               // selects indices fo keep Safe.
     {
-
+        if(AllTiles.Count == 1) { return ""; }      // hurt all players at the 0th tile.
         int NumberOfIndicesToReturn = AllTiles.Count / 7 + 1;// add one to ensure this number is never 0.
         if (AllTiles.Count >= 8)
         {
@@ -71,6 +71,12 @@ public class TileManager : MonoBehaviour
 
     public void WarnPlayers(string SafePieces)
     {
+        if(SafePieces == "")
+        {
+            SafeTileDelegate += AllTiles[0].SetSafe;
+            DangerTileDelegate += AllTiles[0].SpawnDanger;
+            return;
+        }
         string[] SafeChar = SafePieces.Split(':');
         List<int> SafeIndices = new List<int>();
         foreach (string val in SafeChar)
@@ -125,11 +131,11 @@ public class TileManager : MonoBehaviour
         int NumberOfIndicesToReturn = AllTiles.Count / 64 + 1;// add one to ensure this number is never 0.
         if (AllTiles.Count >= 10)
         {
-            NumberOfIndicesToReturn += Random.Range(0, 3);        // random chance for more spots if there are plenty of blocks
+            NumberOfIndicesToReturn += Random.Range(0, 5);        // random chance for more spots if there are plenty of blocks
         }
         if (AllTiles.Count >= 50)
         {
-            NumberOfIndicesToReturn += 1;
+            NumberOfIndicesToReturn += 2;                       // remove tiles asp
         }
         NumberOfIndicesToReturn = Mathf.Clamp(NumberOfIndicesToReturn, 1, AllTiles.Count);
         return NumberOfIndicesToReturn;

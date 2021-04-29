@@ -119,6 +119,8 @@ MonoBehaviour:
   hitJoint: {fileID: 6966907649475497600}
   Damage: 0.2
   GFX: {fileID: 0}
+  WeaponGetSFX: {fileID: 0}
+  WeaponUseSFX: {fileID: 0}
 --- !u!114 &6601464282548622920
 MonoBehaviour:
   m_ObjectHideFlags: 0
