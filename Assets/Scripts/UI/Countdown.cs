@@ -44,13 +44,13 @@ public class Countdown : Bolt.EntityBehaviour<GameManager>
             CounterText.text = "GO!!";
             CountdownAnimation.Play("StartGame");
             StartCoroutine(ShakeText());
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlayMusicwithCrossFade(BattleMusic, 2f);
             if (BoltNetwork.IsServer)
             {
                 GameManager.instance.Game_State = GameManager.e_GamePhases.StandBy;
                 Invoke("DisableCountdown", 5f);
                 var evnt = StartGame.Create();
-                if (AudioManager.Instance != null)
-                    AudioManager.Instance.PlayMusicwithCrossFade(BattleMusic,2f);
                 evnt.Message = "Game Has Started!!!";
                 evnt.Send();
                 // teleport players here

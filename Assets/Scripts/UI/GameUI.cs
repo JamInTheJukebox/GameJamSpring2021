@@ -51,12 +51,12 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     public override void SimulateOwner()
     {
         if (Manager.Game_Counter_Started) { return; }       // if the game has started, do not run the code below.
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.KeypadEnter) | Input.GetKeyDown(KeyCode.Return))
         {
             FadeToColor(StartGameButton.colors.pressedColor);
             StartGameButton.onClick.Invoke();
         }
-        else if (Input.GetKeyUp(KeyCode.KeypadEnter))
+        else if (Input.GetKeyUp(KeyCode.KeypadEnter) | Input.GetKeyDown(KeyCode.Return))
         {
             FadeToColor(StartGameButton.colors.normalColor);
         }
@@ -87,7 +87,6 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
                 ShieldSprite.gameObject.SetActive(false);
                 HeartSprite.gameObject.SetActive(true);
             }
-
         }
     }
 

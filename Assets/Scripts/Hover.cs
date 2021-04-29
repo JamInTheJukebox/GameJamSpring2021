@@ -17,6 +17,7 @@ public class Hover : Bolt.EntityBehaviour<IWeapon>
     public float torqueSpeed = 100f;
     float TimeSinceStartup;
     Vector3 StartPosition;
+    public float WeaponLifeTime = 20f;
     #endregion
 
     public override void Attached()
@@ -25,7 +26,14 @@ public class Hover : Bolt.EntityBehaviour<IWeapon>
         state.SetTransforms(state.WeaponPos, transform);
 
         if (entity.IsOwner)
+        {
             StartPosition = transform.position;
+            Invoke("GetRidOfItem", WeaponLifeTime);         // delete the item after 20s if nobody picks it up.
+        }
+    }
+    private void GetRidOfItem()
+    {
+        BoltNetwork.Destroy(entity);
     }
     public override void SimulateOwner()
     {

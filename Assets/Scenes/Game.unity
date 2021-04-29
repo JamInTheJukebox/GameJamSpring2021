@@ -3487,6 +3487,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1311745306022653052, guid: 1ec635115370146449ab56cc9675b541, type: 3}
+      propertyPath: DefaultMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 669d6f9539859d34387b57f104ca7331, type: 2}
+    - target: {fileID: 1311745306022653052, guid: 1ec635115370146449ab56cc9675b541, type: 3}
+      propertyPath: GlowingMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 688a31addda88c64b8e5bfbc798572dd, type: 2}
     - target: {fileID: 1832900621442800104, guid: 1ec635115370146449ab56cc9675b541, type: 3}
       propertyPath: m_Name
       value: LobbyPlat (6)
@@ -13258,6 +13266,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1311745306022653052, guid: 1ec635115370146449ab56cc9675b541, type: 3}
+      propertyPath: DefaultMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 669d6f9539859d34387b57f104ca7331, type: 2}
+    - target: {fileID: 1311745306022653052, guid: 1ec635115370146449ab56cc9675b541, type: 3}
+      propertyPath: GlowingMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 688a31addda88c64b8e5bfbc798572dd, type: 2}
     - target: {fileID: 1832900621442800104, guid: 1ec635115370146449ab56cc9675b541, type: 3}
       propertyPath: m_Name
       value: LobbyPlat (39)
@@ -14712,6 +14728,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1311745306022653052, guid: 1ec635115370146449ab56cc9675b541, type: 3}
+      propertyPath: DefaultMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 669d6f9539859d34387b57f104ca7331, type: 2}
+    - target: {fileID: 1311745306022653052, guid: 1ec635115370146449ab56cc9675b541, type: 3}
+      propertyPath: GlowingMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: 688a31addda88c64b8e5bfbc798572dd, type: 2}
     - target: {fileID: 1832900621442800104, guid: 1ec635115370146449ab56cc9675b541, type: 3}
       propertyPath: m_Name
       value: LobbyPlat (2)
@@ -19066,6 +19090,10 @@ PrefabInstance:
       propertyPath: Safe_Tile_Material
       value: 
       objectReference: {fileID: 2100000, guid: d48f438b772f2724b8534b1a89199fd4, type: 2}
+    - target: {fileID: 5744669359910471158, guid: 92162be0a04f40047a08fb7b1dc51986, type: 3}
+      propertyPath: Danger_Tile_Material
+      value: 
+      objectReference: {fileID: 2100000, guid: c6880381618af5c48a08b051e6a4786b, type: 2}
     - target: {fileID: 5927022448789983187, guid: 92162be0a04f40047a08fb7b1dc51986, type: 3}
       propertyPath: m_RootOrder
       value: 5

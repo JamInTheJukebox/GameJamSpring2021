@@ -28,7 +28,8 @@ public class EventManager : Bolt.GlobalEventListener
     {
         if (BoltNetwork.IsServer)
         {
-            BoltNetwork.Destroy(evnt.ItemEntity);                   // only the server can spawn item entities
+            if(evnt.ItemEntity != null)
+                BoltNetwork.Destroy(evnt.ItemEntity);                   // only the server can spawn item entities
         }
 
         if (evnt.FromSelf)

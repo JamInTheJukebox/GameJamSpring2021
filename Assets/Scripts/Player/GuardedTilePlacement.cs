@@ -19,7 +19,7 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     List<GameObject> players = new List<GameObject>();
     private IEnumerator coroutineGuardTile;
     private float colorIntensity;
-
+    public float LifeTime = 50f;
     [Header("Audio")]
     [SerializeField] AudioClip GuardTileClaimed;
     [SerializeField] AudioClip LightningSFX;
@@ -29,9 +29,16 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         AreaOfAttack = GetComponent<SphereCollider>();
         BoltVFX.Stop();
         BoltVFX2.Stop();
+        Invoke("EndGuardLifetime", LifeTime);
     }
 
-
+    private void EndGuardLifetime()
+    {
+        if (entity.IsOwner)
+        {
+            BoltNetwork.Destroy(entity);
+        }
+    }
     private void InitializeGuardedTile()        // run when an owner is assigned to this guarded tile.
     {
         if(PlayerDetector != null)
@@ -100,7 +107,7 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         if(BoltVFX.isPlaying)     // if it is still playing, play the sfx again and loop
         {
             if (AudioManager.Instance != null)
-                AudioManager.Instance.PlaySFX(LightningSFX);
+                AudioManager.Instance.PlaySFX(LightningSFX,1.2f);
             Invoke("PlayBoltSFX", 4f);
         }
     }

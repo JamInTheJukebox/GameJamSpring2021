@@ -18,10 +18,13 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     [Header("Audio")]
     public AudioClip ExplosionSound;
     public AudioClip TrapSet;
+    public float LifeTime = 50f;
+
     public override void Attached()
     {
         state.SetTransforms(state.WeaponPos, transform);
         Invoke("InitializeTrap", WaitTimeToInitializeTrap);
+        Invoke("EndTrapLifeTime", LifeTime);
     }
     private void InitializeTrap()       // to avoid damaging the player who sets down the trap. Give them time to move away.
     {
@@ -34,6 +37,15 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
         GetComponent<SphereCollider>().enabled = false;
         ReadyToAttack = true;
         GetComponent<SphereCollider>().enabled = true;  // to avoid having someone inside the trap. If they are inside the trap before readytoAttack is set to true, then the collision will not be counted and they will be standing inside of a trap that refuses to be set off!
+    }
+
+    private void EndTrapLifeTime()
+    {
+        DestroyTrapEffects();
+        if (entity.IsOwner)
+        {
+            BoltNetwork.Destroy(entity);
+        }
     }
 
     private void LoopMaterial()
@@ -59,12 +71,17 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     {
         if (!ReadyToAttack) { return; }     // if not ready to attack, go back
         if (!other.GetComponentInParent<Health>()) { return; }
-        Instantiate(DestructionVFX, transform.position + new Vector3(0,2.5f,0), Quaternion.identity);
+        DestroyTrapEffects();
         GetComponent<SphereCollider>().radius = 2;
-        print("In blast Range. Taking Damage!");
         other.GetComponentInParent<Health>().StunnedByTrap(Damage);
+
+        DestroyTrap();
+    }
+
+    private void DestroyTrapEffects()
+    {
+        Instantiate(DestructionVFX, transform.position + new Vector3(0, 2.5f, 0), Quaternion.identity);
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(ExplosionSound);              // play explosion sfx
-        DestroyTrap();
     }
 }

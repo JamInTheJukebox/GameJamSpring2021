@@ -210,7 +210,7 @@ public class TileManager : MonoBehaviour
             Transform tile = AllTiles[Random.Range(0, AllTiles.Count)].transform;
             Quaternion ItemRot = GetitemRotation(item);
 
-            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 5, 0), ItemRot);       // get a spawn function in the tile itself.
+            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 10, 0), ItemRot);       // get a spawn function in the tile itself.
         }
     }
 
@@ -218,7 +218,9 @@ public class TileManager : MonoBehaviour
     {
         if (item == BoltPrefabs.Hammer_ItemBlock_Final)
             return Quaternion.Euler(22.383f, 0,0);
-        else
+        if(item == BoltPrefabs.Shield_ItemBlock)
             return Quaternion.Euler(-90, 0, 0);
+        else
+            return Quaternion.Euler(0, 0, 0);
     }
 }
