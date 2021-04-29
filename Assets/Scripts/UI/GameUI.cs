@@ -22,6 +22,8 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     public RectTransform ShieldSprite;
     private float HeartDeltaError;       // Heart is placed too far without this value.
     private float ShieldDeltaError;       // Shield is placed too far without this value.
+    [Header("Sound Effects")]
+    public AudioClip EndgameSound;
 
     [Header("Settings")]
     public float EndgameCounter = 5;            // amount of time the lobby will stay open at the end of the game until all players move to the main menu.
@@ -49,12 +51,12 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     public override void SimulateOwner()
     {
         if (Manager.Game_Counter_Started) { return; }       // if the game has started, do not run the code below.
-        if (Input.GetKeyDown(KeyCode.J))
+        if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             FadeToColor(StartGameButton.colors.pressedColor);
             StartGameButton.onClick.Invoke();
         }
-        else if (Input.GetKeyUp(KeyCode.J))
+        else if (Input.GetKeyUp(KeyCode.KeypadEnter))
         {
             FadeToColor(StartGameButton.colors.normalColor);
         }
@@ -125,6 +127,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
 
     public void PauseGame()
     {
+        if (Paused) { return; }
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         CameraSettings.enabled = false;             // disables free look
@@ -145,6 +148,9 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     {       
         WinnerText.transform.parent.gameObject.SetActive(true);
         WinnerText.text = winnerName;
+        // make character dance here.
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(EndgameSound);
         StartCoroutine(endgameCounter());
         // initiate EndGame Counter here.
     }

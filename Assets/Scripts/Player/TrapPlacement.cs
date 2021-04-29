@@ -15,7 +15,9 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
     private float LitIntensity = 4f;
     private Color currentColor;
     private float Intensity;
-
+    [Header("Audio")]
+    public AudioClip ExplosionSound;
+    public AudioClip TrapSet;
     public override void Attached()
     {
         state.SetTransforms(state.WeaponPos, transform);
@@ -45,13 +47,13 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
 
     public void DestroyTrap()
     {
-
-        // instantiate destruction vfx
+        // instantiate destruction vfx        
         if (entity.IsOwner)
         {
             BoltNetwork.Destroy(gameObject);    // only owner can destroy this entity.
         }
     }
+
 
     private void OnTriggerEnter(Collider other)         // test with other.
     {
@@ -61,6 +63,8 @@ public class TrapPlacement : Bolt.EntityBehaviour<IWeapon>      // in charge of 
         GetComponent<SphereCollider>().radius = 2;
         print("In blast Range. Taking Damage!");
         other.GetComponentInParent<Health>().StunnedByTrap(Damage);
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(ExplosionSound);              // play explosion sfx
         DestroyTrap();
     }
 }

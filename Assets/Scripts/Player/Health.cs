@@ -15,6 +15,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     private bool AreaEffectorHit = false;
     Bolt_PlayerController PlayerController;
 
+    public AudioClip ShieldGetSFX;
 
     public override void Attached()
     {
@@ -55,8 +56,6 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
                 if (state.Health <= 0)     // run this code if the health is less than 0 and the player has not lost the game yet.
                     LoseGame();
             }
-
-            print("LOSING HEALTH!!");
         }
     }
 
@@ -96,12 +95,14 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         }
         else if(other.tag == Tags.SHIELD_TAG)
         {
-            print("Got ITEM!!");
+            //print("Got ITEM!!");
             var new_Item = ItemPickedUpEvent.Create();
             new_Item.PlayerEntity = GetComponent<BoltEntity>();     
             new_Item.ItemEntity = other.GetComponent<BoltEntity>();
             new_Item.Send();
             CurrentShield = MaxPlayerShield;
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(ShieldGetSFX);
             GameUI.UserInterface.InitializeShield(CurrentShield);
             // add callback here.
             // run shield here.
@@ -109,7 +110,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 
         else if(other.tag == Tags.WEAPON_TAG && state.Weapon == null)               // pick up an item if you have no weapon or trap.
         {
-            print("Got ITEM!!");
+            //print("Got ITEM!!");
             var new_Item = ItemPickedUpEvent.Create();
             new_Item.PlayerEntity = GetComponent<BoltEntity>();                                     // get the player who picked up the  entity.
             new_Item.ItemEntity = other.GetComponent<BoltEntity>();                                 // get Itembox for the host to destroy
@@ -128,7 +129,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         if (!entity.IsOwner) { return; }
         if (other.tag == Tags.AREA_EFF_TAG && !AreaEffectorHit)
         {
-            print("Getting Hurt by tiles");
+            //print("Getting Hurt by tiles");
             AreaEffectorHit = true;
             ChangeHealth(-0.1f);
             Invoke("ResetEffectorHit", WeakStunTime);       // reset hit variable to get attacked again
@@ -148,7 +149,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         PlayerController.MajorDamage();
 
         Invoke("ResetHit", StunTime);       // check movement script if still stunned.
-        print("GOT HIT!!");
+        //print("GOT HIT!!");
     }
 
     public void DamagedByWeapon(float damage)
@@ -156,7 +157,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         Hit = true;
         ChangeHealth(-1);
         Invoke("ResetHit", StunTime);
-        print("GOT HIT!!");
+        //print("GOT HIT!!");
     }
 
     private void ResetHit()     // reset invisibility-frames.
@@ -167,7 +168,7 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
     public void LoseGame()
     {
         if (!entity.IsOwner) { return; }
-        print("LOST THE GAME!");
+        //print("LOST THE GAME!");
         state.LostGame = true;
         // disable the UI here.
         GameUI.UserInterface.HealthUI.transform.parent.gameObject.SetActive(false);                 // disable the health bar if you lost!
@@ -179,8 +180,10 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
 
     public IEnumerator AreaEffectorDeltaHealth(float delta, float restTime)         // can be used to heal or damage players. Depends on what the guarded tile placement says! Fixed when you leave the collider.
     {
+        if (!entity.IsOwner) { yield return null; }
         while (true)
         {
+
             ChangeHealth(delta);
             yield return new WaitForSeconds(restTime);
         }

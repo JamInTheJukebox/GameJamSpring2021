@@ -81,8 +81,8 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
     public float MinWaitTimeForItems = 25;
     private float WaitCounterForItems = 3;          // depends on # of players
     public int MaxItems;
-    private Bolt.PrefabId[] ItemBox = new Bolt.PrefabId[3]{
-        BoltPrefabs.Hammer_ItemBlock_Final, BoltPrefabs.Trap_ItemBox,BoltPrefabs.Shield_ItemBlock           // left to change: Trap and add chicken
+    private Bolt.PrefabId[] ItemBox = new Bolt.PrefabId[4]{
+        BoltPrefabs.Hammer_ItemBlock_Final, BoltPrefabs.Chicken_ItemBlock, BoltPrefabs.Trap_ItemBox,BoltPrefabs.Shield_ItemBlock           // left to change: Trap and add chicken
     };
     // only 3 items so far: hammer, shield, and trap
     public float ProbabilityToSpawnGuardedTile = 0.3f;
@@ -117,6 +117,7 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
             var evnt = GameEnded.Create();
             evnt.WinnerName = name;
             evnt.Send();
+
         }
     }
 

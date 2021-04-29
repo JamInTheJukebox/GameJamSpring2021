@@ -45,4 +45,5 @@ public class Tags
     public const string AREA_EFF_TAG = "AreaEffector";
     public const string PUSH_TAG = "Push";
     public const string BUTTON_TAG = "Button";
+    public const string SOUND_TAG = "Sound";
 }

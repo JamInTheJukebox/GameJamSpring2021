@@ -20,6 +20,9 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
     private IEnumerator coroutineGuardTile;
     private float colorIntensity;
 
+    [Header("Audio")]
+    [SerializeField] AudioClip GuardTileClaimed;
+    [SerializeField] AudioClip LightningSFX;
     public override void Attached()
     {
         state.AddCallback("EntityOwner", InitializeGuardedTile);
@@ -35,6 +38,8 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         {
             Destroy(PlayerDetector.gameObject);
         }
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(GuardTileClaimed);
         AreaOfAttack.enabled = true;
         PlayerDetector.enabled = false;
         ButtonRender.material = OwnedMaterial;
@@ -79,12 +84,24 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 else// tile that is not owned
                 {
                     if (coroutineGuardTile == null)
+                    {
                         coroutineGuardTile = player.GetComponent<Health>().AreaEffectorDeltaHealth(-Damage, CooldownTime);
+                    }
+                    Invoke("PlayBoltSFX", 4f);
                     StartCoroutine(coroutineGuardTile);
                     
                 }
             }
             // cancel the invoke with on-trigger-exit.
+        }
+    }
+    private void PlayBoltSFX()
+    {
+        if(BoltVFX.isPlaying)     // if it is still playing, play the sfx again and loop
+        {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(LightningSFX);
+            Invoke("PlayBoltSFX", 4f);
         }
     }
 

@@ -12,6 +12,8 @@ public class Countdown : Bolt.EntityBehaviour<GameManager>
     public AudioClip CountingDownSFX;
     public AudioClip StartedSFX;
 
+    public AudioClip BattleMusic;
+    // Final Battle music
     private void Awake()
     {
         if(CountdownAnimation == null)
@@ -29,14 +31,16 @@ public class Countdown : Bolt.EntityBehaviour<GameManager>
         CounterText.text = StartCounterInteger.ToString();
         if(StartCounterInteger > 0)
         {
-            AudioManager.Instance.PlaySFX(CountingDownSFX, 1f);
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(CountingDownSFX, 1f);
             CountdownAnimation.Play("CountDownTimer", -1, 0);
             StartCounterInteger--;                                 // animation plays first when we enable it, then this function is called which is why we shift this variable by one.
         }
 
         else if (StartCounterInteger == 0)
         {
-            AudioManager.Instance.PlaySFX(StartedSFX, 1f);
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(StartedSFX, 1f);
             CounterText.text = "GO!!";
             CountdownAnimation.Play("StartGame");
             StartCoroutine(ShakeText());
@@ -45,6 +49,8 @@ public class Countdown : Bolt.EntityBehaviour<GameManager>
                 GameManager.instance.Game_State = GameManager.e_GamePhases.StandBy;
                 Invoke("DisableCountdown", 5f);
                 var evnt = StartGame.Create();
+                if (AudioManager.Instance != null)
+                    AudioManager.Instance.PlayMusicwithCrossFade(BattleMusic,2f);
                 evnt.Message = "Game Has Started!!!";
                 evnt.Send();
                 // teleport players here

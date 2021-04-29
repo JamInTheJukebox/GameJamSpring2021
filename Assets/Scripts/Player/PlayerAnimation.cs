@@ -99,21 +99,31 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
         ResetAttack();      // call this incase the player's attack function was interrupted.
     }
     #endregion
+
+
     private void Update()
     {
-        charAnim.Play(state.AnimClip);
+        charAnim.Play(state.AnimClip);          // always animate the player
     }
 
     #region  SFX
 
     public void PlayWalkSFX()
     {
-        Walk.PlayRandomSFX();
+        if (entity.IsOwner)
+            Walk.PlayRandomSFX();           // everyone can hear you walk.
+        else
+            Walk.PlayRandomQuietSFX();
     }
 
     public void PlayJumpSFX()
     {
-        Jump.PlayRandomSFX();
+        if(entity.IsOwner)
+            Jump.PlayRandomSFX();       // do not play jump sfx for other players.
+        else
+        {
+            Jump.PlayRandomQuietSFX();          // play quiet sfx for other players.
+        }
     }
 
     public void ContinueFall()      // used to skip the beginning of the fall animation.

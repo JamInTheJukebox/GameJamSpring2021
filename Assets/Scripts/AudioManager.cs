@@ -24,10 +24,28 @@ public class AudioManager : MonoBehaviour
     private AudioSource musicsource;                                // song 1 in case we want to crossfade from one song to another
     private AudioSource musicsource2;                               // song 2 to crossfade from song 1 to 2.
     private AudioSource sfxsource;                                  // sound Effect Source.
-
     private bool firstMusicSourceIsPlaying = true;
     //unity fix
     public AudioClip musicClip;
+
+    [Header("Universal Sounds")]
+    public AudioClip Select;
+    public AudioClip Deselect;
+    public AudioClip LightClickSound;
+    #region Universal Sound Functions
+    public void PlaySelectSFX()
+    {
+        PlaySFX(Select,0.6f);
+    }
+    public void PlayDeselectSFX()
+    {
+        PlaySFX(Deselect,0.6f);
+    }
+    public void PlayLightClickSFX()
+    {
+        PlaySFX(LightClickSound);
+    }
+    #endregion
     //public static AudioMixer audioMixer = null;
     #endregion
     private float GlobalVolume;
@@ -127,10 +145,12 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(AudioClip clip)
     {
+        if(clip == null) { return; }
         sfxsource.PlayOneShot(clip);
     }
     public void PlaySFX(AudioClip clip, float volume)
     {
+        if (clip == null) { return; }
         sfxsource.PlayOneShot(clip, volume);
     }
 

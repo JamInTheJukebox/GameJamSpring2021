@@ -21,6 +21,12 @@ public class AudioSFX : ScriptableObject            // used to manage each type 
 
     public void PlayRandomSFX()
     {
-        AudioManager.Instance.PlaySFX(GetRandomSFXsound(), GetSourceVolume());
+        if(AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(GetRandomSFXsound(), GetSourceVolume());
+    }
+    public void PlayRandomQuietSFX()
+    {
+        if (AudioManager.Instance != null)
+            AudioManager.Instance.PlaySFX(GetRandomSFXsound(), GetSourceVolume()/2);
     }
 }

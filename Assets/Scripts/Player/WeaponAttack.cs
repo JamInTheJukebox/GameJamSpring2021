@@ -13,7 +13,11 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
     public float Damage = 2;
     public GameObject GFX;
     private WeaponManager ItemUI;
-    
+
+    [Header("Sounds")]
+    public AudioClip WeaponGetSFX;
+    public AudioSFX WeaponUseSFX;
+
     public override void Attached()
     {
         //transform.localScale = Vector3.one * 10;
@@ -27,6 +31,8 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         state.AddCallback("InUse", Toggleweapon);
         if (entity.IsOwner)
         {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(WeaponGetSFX);
             state.InUse = true;
             //FindObjectOfType<Camera>().GetComponentInParent<BoltEntity>().GetState<IMasterPlayerState>().OnAttack = Turn_On_Attack_Joint;
         }
@@ -51,6 +57,10 @@ public class WeaponAttack : Bolt.EntityBehaviour<IWeapon>
         if (ToggleHitsLeft) { return; }
         ToggleHitsLeft = true;
         NumberOfHitsLeft -= 1;
+        if(WeaponUseSFX != null)
+        {
+            WeaponUseSFX.PlayRandomSFX();
+        }
         ItemUI.UpdateItemCount(NumberOfHitsLeft.ToString());
         Invoke("ResetHitsLeft", HitCoolDown);
     }

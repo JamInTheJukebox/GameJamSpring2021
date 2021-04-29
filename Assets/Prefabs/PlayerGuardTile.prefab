@@ -5670,6 +5670,8 @@ MonoBehaviour:
   DestroyVFX: {fileID: 0}
   BoltVFX: {fileID: 6928492411007976858}
   BoltVFX2: {fileID: 2136901515526080351}
+  GuardTileClaimed: {fileID: 8300000, guid: d4ba486e89ecc7e4698769fd56c8c005, type: 3}
+  LightningSFX: {fileID: 8300000, guid: 9f8e613c626dacc479cbc1c4247c73fd, type: 3}
   ButtonRender: {fileID: 5889996468167760986}
   PlayerDetector: {fileID: 797401749726292286}
   OwnedMaterial: {fileID: 2100000, guid: 704a06d98572da443a6c05ba46430532, type: 2}

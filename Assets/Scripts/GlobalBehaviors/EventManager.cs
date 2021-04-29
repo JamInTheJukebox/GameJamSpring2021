@@ -5,6 +5,7 @@ public class EventManager : Bolt.GlobalEventListener
     public static EventManager Instance;
     [HideInInspector] public int Connections = 1;
 
+
     private void Awake()            // nothing special. Erase this if youd like!
     {
         if (BoltNetwork.IsServer)

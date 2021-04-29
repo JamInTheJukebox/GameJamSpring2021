@@ -31,6 +31,8 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     }
 
     private WeaponManager ItemUI;
+    [Header("Sounds")]
+    public AudioClip TrapGetSFX;
     private void ToggleAreaEntity(bool entitystate)         // Turns on and off the hologram so the player knows where they will place a trap.
     {
         if(CurrentTile != null)
@@ -57,6 +59,8 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
         if (entity.IsOwner)
         {
             state.InUse = true;
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySFX(TrapGetSFX);
         }
     }
 
@@ -67,7 +71,7 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
     }
     public override void SimulateOwner()
     {
-        if (!player) { return; }
+        if (!player | GameUI.UserInterface.Paused) { return; }          // do not plant a trap when you are paused.
 
         RaycastHit GroundTile;
         if (Physics.Raycast(player.position, Vector3.down, out GroundTile, GroundCheckDistance,GroundLayer))       // use a raycast instead of a spherecast
@@ -96,6 +100,14 @@ public class TrapAttack : Bolt.EntityBehaviour<IWeapon>
         }
     }
 
+    private void Update()
+    {
+        if (transform.localPosition != Vector3.zero)
+        {
+            transform.localPosition = Vector3.zero;
+            transform.localRotation = new Quaternion(0, 0, 0, 0);
+        }
+    }
     private void Toggleweapon()     // function for setting player attack visuals.
     {
         bool newVal = state.InUse;

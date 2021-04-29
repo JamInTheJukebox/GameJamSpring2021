@@ -44,3 +44,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   musicClip: {fileID: 8300000, guid: 324b7c0e927cc5d4c866dff44f26fe99, type: 3}
+  Select: {fileID: 8300000, guid: ea5061779960d724baf188c4939eea33, type: 3}
+  Deselect: {fileID: 8300000, guid: 20832ac2d5df15d45874f33c2a91a840, type: 3}
+  LightClickSound: {fileID: 8300000, guid: 660891428b09198429ec77fe76d2c2ef, type: 3}
