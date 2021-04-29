@@ -15,6 +15,8 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     public Bolt_PlayerController PlayerController;
     public StarAnimator StarFX;
 
+    public ParticleSystem HitFX;
+
     private int m_currentClip;
     public int currentClip
     {
@@ -82,7 +84,13 @@ public class PlayerAnimation : Bolt.EntityBehaviour<IMasterPlayerState>
     #region Stun
     public void PlayStars()
     {
+        PlayHitVFX();
         StarFX.EnableStars();
+    }
+
+    public void PlayHitVFX()
+    {
+        HitFX.Play();
     }
 
     public void ResetStun()
