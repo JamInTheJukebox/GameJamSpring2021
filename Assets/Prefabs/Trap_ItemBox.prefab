@@ -76,9 +76,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   TypeOfItem: 4
-  HoverAmplitude: 2
+  HoverAmplitude: 1.6
   HoverSpeed: 1
   torqueSpeed: 80
+  WeaponLifeTime: 20
 --- !u!65 &497121679509281229
 BoxCollider:
   m_ObjectHideFlags: 0

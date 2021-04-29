@@ -183,7 +183,6 @@ public class Health : Bolt.EntityBehaviour<IMasterPlayerState>
         if (!entity.IsOwner) { yield return null; }
         while (true)
         {
-
             ChangeHealth(delta);
             yield return new WaitForSeconds(restTime);
         }

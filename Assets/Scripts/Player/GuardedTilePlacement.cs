@@ -128,7 +128,7 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
                 BoltEntity player = other.GetComponent<BoltEntity>();
                 if (!player.IsOwner) { return; }
                 // cancel damage here.
-                //StopCoroutine(coroutineGuardTile);
+                StopCoroutine(coroutineGuardTile);
             }
         }
     }

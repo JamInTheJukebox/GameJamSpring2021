@@ -11,21 +11,20 @@ public class GlobalEventManager : Bolt.GlobalEventListener
 {
     static int MAX_PLAYERS = 10;
 
-    List<string> PlayerMaterials = new List<string>();
-
     public override void OnEvent(GetPlayerPersonalizationEvent evnt)        // HANDLE ALL COSMETICS HERE!!
     {
-        if (PlayerMaterials.Count == 0)     // no materials assigned.        Get a  list of all the possible colors. Remove them as you go.
+        var playermat = Player_Colors.PlayerMaterials;
+        if (playermat.Count == 0)     // no materials assigned.        Get a  list of all the possible colors. Remove them as you go.
         {
-            PlayerMaterials.Add(Color_Tags.BLUE); PlayerMaterials.Add(Color_Tags.GREEN);
-            PlayerMaterials.Add(Color_Tags.GREY); PlayerMaterials.Add(Color_Tags.LIGHTBLUE);
-            PlayerMaterials.Add(Color_Tags.LIGHTGREEN); PlayerMaterials.Add(Color_Tags.ORANGE);
-            PlayerMaterials.Add(Color_Tags.PURPLE); PlayerMaterials.Add(Color_Tags.RED);
-            PlayerMaterials.Add(Color_Tags.WHITE); PlayerMaterials.Add(Color_Tags.YELLOW);
+            playermat.Add(Color_Tags.BLUE); playermat.Add(Color_Tags.GREEN);
+            playermat.Add(Color_Tags.GREY); playermat.Add(Color_Tags.LIGHTBLUE);
+            playermat.Add(Color_Tags.LIGHTGREEN); playermat.Add(Color_Tags.ORANGE);
+            playermat.Add(Color_Tags.PURPLE); playermat.Add(Color_Tags.RED);
+            playermat.Add(Color_Tags.WHITE); playermat.Add(Color_Tags.YELLOW);
         }
-        int chosenIndex = Random.Range(0, PlayerMaterials.Count);
-        string chosenColor = PlayerMaterials[chosenIndex];
-        PlayerMaterials.RemoveAt(chosenIndex);        // index has been chosen.
+        int chosenIndex = Random.Range(0, playermat.Count);
+        string chosenColor = playermat[chosenIndex];        // if its a problem, use the delete function in player_materials.
+        playermat.RemoveAt(chosenIndex);        // index has been chosen.
 
         var Set_Evnt = SetPlayerPersonalizationEvent.Create();
         Set_Evnt.PlayerEntity = evnt.PlayerEntity;
@@ -64,8 +63,7 @@ public class GlobalEventManager : Bolt.GlobalEventListener
 
     public override void SessionConnected(UdpSession session, IProtocolToken token)
     {
-        BoltLog.Warn("WHAT");
-        Debug.LogWarning("VOILLA!");
+        BoltLog.Warn("Connected to Game!");
     }
 }
 [BoltGlobalBehaviour(BoltNetworkModes.Client)]
@@ -100,6 +98,7 @@ public static class Color_Tags
 
 public static class Player_Colors
 {
+
     public static Material GetColor(string Color)
     {
         var mat = Resources.Load(Color_Tags.Directory + Color, typeof(Material)) as Material;
@@ -109,6 +108,8 @@ public static class Player_Colors
         }
         return mat;
     }
+
+    public static List<string> PlayerMaterials = new List<string>();
 
     public static Dictionary<string, float> Color_Intensity_Multiplier = new Dictionary<string, float>()
     {
@@ -124,6 +125,17 @@ public static class Player_Colors
         [Color_Tags.YELLOW] = 3.5f
     };
 
+    public static void RemoveMaterial(string color)
+    {
+        if (PlayerMaterials.Contains(color))
+            PlayerMaterials.Remove(color);
+    }
+
+    public static void AddMaterial(string color)
+    {
+        if (!PlayerMaterials.Contains(color))
+            PlayerMaterials.Add(color);
+    }
     public static float GetColorIntensity(string color)
     {
         if (Color_Intensity_Multiplier.ContainsKey(color))

@@ -57,11 +57,12 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         var mat = Player_Colors.GetColor(state.UserColor);        // player colors gets any color material based off a string
         foreach(var limb in PlayerLimbs)
         {
-            limb.material = mat;
+            limb.material = mat;                    // paint the characters
         }
         if (entity.IsOwner)
         {
-            FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);
+            //FindObjectOfType<Inventory>().InitializeInventory(PlayerGraphics.material.color);
+            state.UserColorData = mat.color;
         }
         LobbyTiles.AddPlayer(gameObject, PlayerGraphics.material.color,state.UserColor);            // remove this key
     }
@@ -92,9 +93,13 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
         return state.UserColor;
     }
 
+    public Color GetColorData()
+    {
+        return state.UserColorData;
+    }
+
     public void SetHat_Eye()
     {
-        print("BRUH PEEP THIS ONE");
         state.HatID = PlayerPrefs.GetInt("HatID");
         state.EyeID = PlayerPrefs.GetInt("EyeID");
     }
@@ -134,5 +139,19 @@ public class PlayerPersonalization : Bolt.EntityBehaviour<IMasterPlayerState>
     private void OnTriggerEnter(Collider other)
     {
         print(gameObject.name);
+    }
+
+    public override void Detached()         // when a user is detached, restore their color back to the list of all colors.
+    {
+        RestoreColorData();
+    }
+
+    private void RestoreColorData()
+    {
+        if (BoltNetwork.IsServer)
+        {
+            BoltLog.Info("adding " + GetColor());
+            Player_Colors.AddMaterial(GetColor());
+        }
     }
 }

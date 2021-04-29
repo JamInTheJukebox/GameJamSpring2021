@@ -57,7 +57,15 @@ public class LobbyTiles : MonoBehaviour
 
     public static void AddPlayer(GameObject obj,Color playerColor,string userColor)      // adds the player so we can quickly grab an the color without using getcomponent.
     {
-        PlayerMat.Add(obj, playerColor);
-        StringColors.Add(playerColor, userColor);
+        if(!PlayerMat.ContainsKey(obj))
+            PlayerMat.Add(obj, playerColor);
+        if (!StringColors.ContainsKey(playerColor)) 
+            StringColors.Add(playerColor, userColor);
+    }
+
+    public static void ResetStaticLists()
+    {
+        PlayerMat.Clear();
+        StringColors.Clear();
     }
 }

@@ -83,6 +83,8 @@ public class Menu : GlobalEventListener
     {
         HatID = PlayerPrefs.GetInt("HatID");
         EyeID = PlayerPrefs.GetInt("EyeID");
+        LobbyTiles.ResetStaticLists();
+        Player_Colors.PlayerMaterials.Clear();
 
         HatContainer.sprite = Hats[HatID];
         EyeContainer.sprite = Eyes[EyeID];

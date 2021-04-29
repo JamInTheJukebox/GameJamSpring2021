@@ -147,6 +147,7 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     {       
         WinnerText.transform.parent.gameObject.SetActive(true);
         WinnerText.text = winnerName;
+        print("playing SFX");
         // make character dance here.
         if (AudioManager.Instance != null)
             AudioManager.Instance.PlaySFX(EndgameSound);

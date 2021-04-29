@@ -210,7 +210,7 @@ public class TileManager : MonoBehaviour
             Transform tile = AllTiles[Random.Range(0, AllTiles.Count)].transform;
             Quaternion ItemRot = GetitemRotation(item);
 
-            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 10, 0), ItemRot);       // get a spawn function in the tile itself.
+            BoltNetwork.Instantiate(item, tile.position + new Vector3(0, 7, 0), ItemRot);       // get a spawn function in the tile itself.
         }
     }
 
