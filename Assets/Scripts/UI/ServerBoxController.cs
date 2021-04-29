@@ -5,10 +5,11 @@ using TMPro;
 public class ServerBoxController : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI ServerNameText;
-    [SerializeField] TextMeshProUGUI ServerCountText;
+    [SerializeField] TextMeshProUGUI ServerCountNumerator;
+    [SerializeField] TextMeshProUGUI ServerCountDenominator;
 
     private Color ServerFull = Color.red;           // full
-    private Color CoolServer = Color.white;         // not full
+    public Color CoolServer = Color.white;         // not full
 
     private string m_serverName;
     public string serverName
@@ -33,8 +34,9 @@ public class ServerBoxController : MonoBehaviour
         set
         {
             m_serverCount = value;
-            ServerCountText.text = m_serverCount;
-            ServerCountText.color = (ServerCountText.text == "10/10") ? ServerFull : CoolServer;
+            ServerCountNumerator.text = m_serverCount;
+            ServerCountNumerator.color = (ServerCountNumerator.text == "10") ? ServerFull : CoolServer;
+            ServerCountDenominator.color = (ServerCountNumerator.text == "10") ? ServerFull : CoolServer;
         }
     }
 
@@ -46,6 +48,6 @@ public class ServerBoxController : MonoBehaviour
 
     public void SetServerCount(int count)
     {
-        serverCount = count.ToString() + "/10";
+        serverCount = count.ToString();
     }
 }

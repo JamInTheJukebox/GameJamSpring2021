@@ -129,8 +129,9 @@ public class Menu : GlobalEventListener
             
             joinButtonClone.SetActive(true);
             joinButtonClone.GetComponentInChildren<Button>().onClick.AddListener(() => JoinGame(PhotonSession));
-            joinButtonClone.GetComponent<ServerBoxController>().SetServerName(PhotonSession.HostName);
-            joinButtonClone.GetComponent<ServerBoxController>().SetServerCount(PhotonSession.ConnectionsCurrent);
+            var ButtonClone = joinButtonClone.GetComponent<ServerBoxController>();
+            ButtonClone.SetServerName(PhotonSession.HostName);
+            ButtonClone.SetServerCount(PhotonSession.ConnectionsCurrent);
             JoinServerBoxes.Add(joinButtonClone);
             /*
             if(PhotonSession.Source == UdpSessionSource.Photon)

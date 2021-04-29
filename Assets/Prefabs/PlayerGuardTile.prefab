@@ -5202,6 +5202,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2800370021169377498}
   - component: {fileID: 859390131338604198}
+  - component: {fileID: 1317988593447078044}
   m_Layer: 5
   m_Name: Bolt
   m_TagString: Untagged
@@ -5237,6 +5238,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4461150271881051945}
   m_CullTransparentMesh: 0
+--- !u!114 &1317988593447078044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4461150271881051945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2c494e5654f7c548bb39957c5f49278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4506631798279955252
 GameObject:
   m_ObjectHideFlags: 0
@@ -5931,14 +5944,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 59ca6b9acd8a2134dbcc78e6c4e08242, type: 3}
---- !u!4 &5203549251902427951 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 59ca6b9acd8a2134dbcc78e6c4e08242, type: 3}
-  m_PrefabInstance: {fileID: 5745468345140491460}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &4863158436672866709 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 59ca6b9acd8a2134dbcc78e6c4e08242, type: 3}
+  m_PrefabInstance: {fileID: 5745468345140491460}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5203549251902427951 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 59ca6b9acd8a2134dbcc78e6c4e08242, type: 3}
   m_PrefabInstance: {fileID: 5745468345140491460}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6928492412213075937

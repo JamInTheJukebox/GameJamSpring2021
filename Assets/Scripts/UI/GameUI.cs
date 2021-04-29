@@ -20,7 +20,8 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     public Image ShieldUI;
     public RectTransform HeartSprite;
     public RectTransform ShieldSprite;
-    public float HeartDeltaError;       // Heart is placed too far without this value.
+    private float HeartDeltaError;       // Heart is placed too far without this value.
+    private float ShieldDeltaError;       // Shield is placed too far without this value.
 
     [Header("Settings")]
     public float EndgameCounter = 5;            // amount of time the lobby will stay open at the end of the game until all players move to the main menu.
@@ -41,10 +42,8 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
             StartGameButton = GetComponentInChildren<Button>();
         }
         HeartDeltaError = HealthUI.rectTransform.sizeDelta.x / 2;
-        /*
-        HeartSprite.anchorMin = new Vector2(HealthUI.rectTransform.anchorMin.x, TargetHealthRatio);
-        HeartSprite.anchorMax = new Vector2(HealthUI.rectTransform.anchorMax.x, TargetHealthRatio);
-        HeartSprite.anchoredPosition = Vector2.zero;*/
+        ShieldDeltaError = ShieldUI.rectTransform.sizeDelta.x / 2;
+
     }
 
     public override void SimulateOwner()
@@ -61,10 +60,10 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
         }
     }
 
-    private void Update()
+    private void Update()           // update shield and health Icon and fill amount.
     {
-        HeartSprite.localPosition = new Vector2(HealthUI.fillAmount * HealthUI.rectTransform.sizeDelta.x - HeartDeltaError,
-             HeartSprite.localPosition.y);
+        UpdateIconPosition();           // update shield and heart PNG position
+
         if (Input.GetKeyDown(KeyCode.P) && CameraSettings != null)
             PauseGame();
 
@@ -74,17 +73,30 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
             if (ShieldUI.fillAmount > 0 | TargetShieldRatio > 0)
             {
                 float Current_Ratio = Mathf.MoveTowards(ShieldUI.fillAmount, TargetShieldRatio, Health_Fade_Time * BoltNetwork.FrameDeltaTime);
-                HealthUI.fillAmount = TargetHealthRatio;        // incase you get hit.
+                HealthUI.fillAmount = TargetHealthRatio;        // incase you get hit. Update health as fast as possible.
                 ShieldUI.fillAmount = Current_Ratio;
-
+                ShieldSprite.gameObject.SetActive(true);
+                HeartSprite.gameObject.SetActive(false);
             }
             else
             {
                 float Current_Ratio = Mathf.MoveTowards(HealthUI.fillAmount, TargetHealthRatio, Health_Fade_Time * BoltNetwork.FrameDeltaTime);
                 HealthUI.fillAmount = Current_Ratio;
+                ShieldSprite.gameObject.SetActive(false);
+                HeartSprite.gameObject.SetActive(true);
             }
 
         }
+    }
+
+    private void UpdateIconPosition()
+    {
+        if (HeartSprite.gameObject.activeSelf)
+            HeartSprite.localPosition = new Vector2(HealthUI.fillAmount * HealthUI.rectTransform.sizeDelta.x - HeartDeltaError,
+             HeartSprite.localPosition.y);
+        if (ShieldSprite.gameObject.activeSelf)
+            ShieldSprite.localPosition = new Vector2(ShieldUI.fillAmount * ShieldUI.rectTransform.sizeDelta.x - ShieldDeltaError,
+ ShieldSprite.localPosition.y);
     }
     #endregion
 
