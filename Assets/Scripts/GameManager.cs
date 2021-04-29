@@ -31,21 +31,21 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
                 m_Game_State = value;
                 float a = (float)TileManager.instance.AllTiles.Count;
                 if (TileManager.instance.AllTiles.Count == 0) { a = 1; }
-                a = Mathf.Clamp(a * 5, 0, 1);
+                //a = Mathf.Clamp(a / 2, 0, 1);
                 switch ((int)Game_State)            // use a multiplier for when there are very little amount of players.
                 {
                     case 1:
 
-                        TemporaryTimer = Mathf.Lerp(StandByPhaseTime,MinStandByPhaseTime,1/a);
+                        TemporaryTimer = Mathf.Lerp(StandByPhaseTime,MinStandByPhaseTime,1/a*2);
                         break;
                     case 2:
-                        TemporaryTimer = Mathf.Lerp(WarningPhaseTime,MinWarningPhaseTime,1/a);
+                        TemporaryTimer = Mathf.Lerp(WarningPhaseTime,MinWarningPhaseTime,1/a*2);
                         break;
                     case 3:
-                        TemporaryTimer = Mathf.Lerp(DangerTime,MinDangerTime,1/a);
+                        TemporaryTimer = Mathf.Lerp(DangerTime,MinDangerTime,1/a * 2);
                         break;
                     case 4:
-                        TemporaryTimer = Mathf.Lerp(FallTime,MinFallTime,1/a);
+                        TemporaryTimer = Mathf.Lerp(FallTime,MinFallTime,1/a * 2);
                         break;
                 }
             }
