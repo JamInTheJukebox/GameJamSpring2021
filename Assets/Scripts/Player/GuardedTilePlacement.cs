@@ -40,10 +40,11 @@ public class GuardedTilePlacement : Bolt.EntityBehaviour<IWeapon>
         BoltVFX.Stop();
         BoltVFX2.Stop();
         HealVFX.Stop();
-        Invoke("EndGuardLifetime", LifeTime);
+        
 
         if (entity.IsOwner)     // only entity owner can turn healing on. effects are observed on clients.
         {
+            Invoke("EndGuardLifetime", LifeTime);
             HealingTime = LifeTime / 2 + Random.Range(-5f, 10f);
             Invoke("InitializeHeal", HealingDuration);
         }

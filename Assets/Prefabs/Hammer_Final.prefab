@@ -376,7 +376,7 @@ MonoBehaviour:
   NumberOfHitsLeft: 2
   Damage: 0.6
   GFX: {fileID: 7482768545373444279}
-  WeaponGetSFX: {fileID: 8300000, guid: 00d3c95648833f046affae5dc77a2fb3, type: 3}
+  WeaponGetSFX: {fileID: 8300000, guid: d6a6f9c539d388f4198b99439ad8f508, type: 3}
   WeaponUseSFX: {fileID: 11400000, guid: 14bcbe44305e1f448b5cabab1722ab63, type: 2}
 --- !u!114 &7926881360029460938
 MonoBehaviour:

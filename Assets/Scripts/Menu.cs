@@ -81,6 +81,8 @@ public class Menu : GlobalEventListener
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;  
         HatID = PlayerPrefs.GetInt("HatID");
         EyeID = PlayerPrefs.GetInt("EyeID");
         LobbyTiles.ResetStaticLists();

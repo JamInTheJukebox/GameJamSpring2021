@@ -1849,8 +1849,8 @@ MonoBehaviour:
   Game_Started: 0
   AllPlayers: []
   MaxWaitTimeForItems: 60
-  MinWaitTimeForItems: 25
-  MaxItems: 3
+  MinWaitTimeForItems: 15
+  MaxItems: 5
   ProbabilityToSpawnGuardedTile: 0.3
 --- !u!114 &3494651620193103478
 MonoBehaviour:

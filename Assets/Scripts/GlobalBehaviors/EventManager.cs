@@ -15,10 +15,10 @@ public class EventManager : Bolt.GlobalEventListener
             
             var entity = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock_Final, new Vector3(0, 0.2f, 0), Quaternion.identity);
             var entity2 = BoltNetwork.Instantiate(BoltPrefabs.Hammer_ItemBlock_Final, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(5, 0, 5), Quaternion.identity);
-            var entity3 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90,0,0));
-            var entity4 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90, 0, 0));
-            var entity5 = BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(10 , 0, 10), Quaternion.Euler(-90, 0, 0));
-            BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(10, 0, 10), Quaternion.Euler(-90, 0, 0));
+            //var entity3 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90,0,0));
+            //var entity4 = BoltNetwork.Instantiate(BoltPrefabs.Shield_ItemBlock, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(-5, 0, -5), Quaternion.Euler(-90, 0, 0));
+            //var entity5 = BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(10 , 0, 10), Quaternion.Euler(-90, 0, 0));
+            //BoltNetwork.Instantiate(BoltPrefabs.Trap_ItemBox, SpawnPositionManager.instance.GameSpawnPosition.position + new Vector3(10, 0, 10), Quaternion.Euler(-90, 0, 0));
 
             BoltNetwork.Instantiate(BoltPrefabs.Chicken_ItemBlock, SpawnPositionManager.instance.LobbySpawnPosition.position + new Vector3(-15, 0, -15), Quaternion.identity);
 

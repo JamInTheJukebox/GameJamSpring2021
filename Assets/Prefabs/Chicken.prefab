@@ -402,7 +402,7 @@ MonoBehaviour:
   NumberOfHitsLeft: 3
   Damage: 0.5
   GFX: {fileID: 2165636880053318663}
-  WeaponGetSFX: {fileID: 8300000, guid: 00d3c95648833f046affae5dc77a2fb3, type: 3}
+  WeaponGetSFX: {fileID: 8300000, guid: d6a6f9c539d388f4198b99439ad8f508, type: 3}
   WeaponUseSFX: {fileID: 0}
 --- !u!1 &5127215760849007563
 GameObject:
