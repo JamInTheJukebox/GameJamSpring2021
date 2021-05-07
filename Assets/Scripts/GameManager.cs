@@ -153,8 +153,14 @@ public class GameManager : Bolt.EntityBehaviour<IGameManager>
             HandleGameState();
             if(WaitCounterForItems <= 0)
             {
+                int minNumber = 1;
+                minNumber = TileManager.instance.AllTiles.Count / 10 + 1;
+                int MaxNumber = minNumber + MaxItems;
+                int NumItems = Random.Range(minNumber, MaxNumber);
+
+
                 // spawn item
-                int NumItems = Random.Range(1, MaxItems);
+
                 Bolt.PrefabId[] randomItems = new Bolt.PrefabId[NumItems];
                 for(int i = 0; i < NumItems; i++)
                 {

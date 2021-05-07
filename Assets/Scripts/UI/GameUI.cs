@@ -183,6 +183,11 @@ public class GameUI : Bolt.EntityBehaviour<IGameManager>
     {
         MouseY = newValue;
     }
+
+    public void DisableStartGameUI()
+    {
+        StartGameButton.gameObject.SetActive(false);
+    }
     /*
     void InitializePlayerSettings()
     {

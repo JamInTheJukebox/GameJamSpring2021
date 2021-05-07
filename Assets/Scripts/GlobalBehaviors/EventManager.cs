@@ -107,6 +107,7 @@ public class EventManager : Bolt.GlobalEventListener
         GameManager.instance.Game_Started = true;
         if (BoltNetwork.IsServer)
         {
+            FindObjectOfType<GameUI>().DisableStartGameUI();
             GameManager.instance.InitializePlayerList();
         }
     }
